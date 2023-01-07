@@ -1,6 +1,4 @@
-
-local IterableMap = require("include/IterableMap")
-local util = require("include/util")
+
 
 --local EffectDefs = util.LoadDefDirectory("effects")
 local NewPlayerShip = require("objects/playerShip")
@@ -8,19 +6,16 @@ local NewPlayerShip = require("objects/playerShip")
 local self = {}
 local api = {}
 
-function api.SpawnComponent(name, pos, data)
-	--local def = EffectDefs[name]
-	data = data or {}
-	data.pos = pos
-	self.playerShip = NewPlayerShip(data, self.world.GetPhysicsWorld())
-end
-
 function api.Update(dt)
-	IterableMap.ApplySelf(self.components, "Update", dt)
+	if self.playerShip then
+		self.playerShip.Update(dt)
+	end
 end
 
 function api.Draw(drawQueue)
-	IterableMap.ApplySelf(self.components, "Draw", drawQueue)
+	if self.playerShip then
+		self.playerShip.Draw(drawQueue)
+	end
 end
 
 function api.Initialize(world)
@@ -29,6 +24,11 @@ function api.Initialize(world)
 		animationTimer = 0,
 		world = world,
 	}
+	
+	local initPlayerData = {
+		pos = {500, 200}
+	}
+	self.playerShip = NewPlayerShip(initPlayerData, self.world.GetPhysicsWorld())
 end
 
 return api

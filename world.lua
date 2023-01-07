@@ -1,16 +1,16 @@
 
-local ModuleTest = require("moduleTest")
+--local ModuleTest = require("moduleTest")
 EffectsHandler = require("effectsHandler")
 ComponentHandler = require("componentHandler")
 DialogueHandler = require("dialogueHandler")
-LevelHandler = require("levelHandler")
-ModuleTest = require("moduleTest")
+TerrainHandler = require("terrainHandler")
+
+PlayerHandler = require("playerHandler")
 
 Camera = require("utilities/cameraUtilities")
 InterfaceUtil = require("utilities/interfaceUtilities")
 Delay = require("utilities/delay")
 
-local ShadowHandler = require("shadowHandler")
 local PhysicsHandler = require("physicsHandler")
 ChatHandler = require("chatHandler")
 DeckHandler = require("deckHandler")
@@ -53,7 +53,7 @@ function api.TakeScreenshot()
 end
 
 function api.SetGameOver(hasWon, overType)
-	if self.gameWon or self.gameLost or LevelHandler.InEditMode() then
+	if self.gameWon or self.gameLost or TerrainHandler.InEditMode() then
 		return
 	end
 	
@@ -70,8 +70,12 @@ function api.SetPaused(newPause, force)
 	self.forcePaused = force
 end
 
+--------------------------------------------------
+-- Input
+--------------------------------------------------
+
 function api.KeyPressed(key, scancode, isRepeat)
-	if LevelHandler.KeyPressed(key, scancode, isRepeat) then
+	if TerrainHandler.KeyPressed and TerrainHandler.KeyPressed(key, scancode, isRepeat) then
 		return
 	end
 	if key == "escape" or key == "return" or key == "kpenter" then
@@ -98,7 +102,7 @@ function api.KeyPressed(key, scancode, isRepeat)
 	if api.GetGameOver() then
 		return -- No doing actions
 	end
-	if GameHandler.KeyPressed(key, scancode, isRepeat) then
+	if GameHandler.KeyPressed and GameHandler.KeyPressed(key, scancode, isRepeat) then
 		return
 	end
 end
@@ -109,9 +113,6 @@ function api.MousePressed(x, y, button)
 	end
 	local uiX, uiY = self.interfaceTransform:inverse():transformPoint(x, y)
 	
-	if LevelHandler.MousePressed(x, y, button) then
-		return
-	end
 	if GameHandler.MousePressed(x, y, button) then
 		return
 	end
@@ -141,6 +142,10 @@ end
 function api.MouseMoved(x, y, dx, dy)
 	
 end
+
+--------------------------------------------------
+-- Transforms
+--------------------------------------------------
 
 function api.WorldToScreen(pos)
 	local x, y = self.cameraTransform:transformPoint(pos[1], pos[2])
@@ -191,10 +196,18 @@ end
 local function UpdateCamera()
 	local cameraX, cameraY, cameraScale = Camera.UpdateCameraToViewPoints(dt, 
 		{
-			{pos = {0, 0}, radius = 30 + (LevelHandler.InEditMode() and 180 or 0)},
-			{pos = {Global.VIEW_WIDTH, Global.VIEW_HEIGHT}, radius = 30 + (LevelHandler.InEditMode() and 180 or 0)}
-		}, 0, 0)
+			{pos = {Global.WORLD_WIDTH/2, Global.WORLD_HEIGHT/2}, xOff = Global.WORLD_WIDTH/2 + 80, yOff = Global.WORLD_HEIGHT/2 + 80},
+		}
+		, 0, 0
+	)
 	Camera.UpdateTransform(self.cameraTransform, cameraX, cameraY, cameraScale)
+end
+
+--------------------------------------------------
+-- Updates
+--------------------------------------------------
+
+function api.ViewResize(width, height)
 end
 
 function api.Update(dt)
@@ -208,10 +221,10 @@ function api.Update(dt)
 	Delay.Update(dt)
 	InterfaceUtil.Update(dt)
 	ComponentHandler.Update(dt)
+	PlayerHandler.Update(dt)
 	--ModuleTest.Update(dt)
 	
 	PhysicsHandler.Update(dt)
-	--ShadowHandler.Update(dt)
 
 	ChatHandler.Update(dt)
 	EffectsHandler.Update(dt)
@@ -235,6 +248,8 @@ function api.Draw()
 	
 	ComponentHandler.Draw(drawQueue)
 	EffectsHandler.Draw(drawQueue)
+	PlayerHandler.Draw(drawQueue)
+	TerrainHandler.Draw(drawQueue)
 	
 	love.graphics.replaceTransform(self.cameraTransform)
 	while true do
@@ -252,17 +267,12 @@ function api.Draw()
 	love.graphics.replaceTransform(self.emptyTransform)
 	
 	-- Draw interface
-	LevelHandler.DrawInterface()
 	GameHandler.DrawInterface()
 	EffectsHandler.DrawInterface()
 	DialogueHandler.DrawInterface()
 	ChatHandler.DrawInterface()
 	
 	love.graphics.replaceTransform(self.emptyTransform)
-end
-
-function api.ViewResize(width, height)
-	--ShadowHandler.ViewResize(width, height)
 end
 
 function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
@@ -277,7 +287,6 @@ function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	
 	Delay.Initialise()
 	InterfaceUtil.Initialize()
-	--ShadowHandler.Initialize(api)
 	EffectsHandler.Initialize(api)
 	SoundHandler.Initialize()
 	MusicHandler.Initialize(api)
@@ -287,7 +296,8 @@ function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	ChatHandler.Initialize(api)
 	DialogueHandler.Initialize(api)
 	
-	LevelHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
+	TerrainHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
+	PlayerHandler.Initialize(api)
 	
 	DeckHandler.Initialize(api)
 	GameHandler.Initialize(api)

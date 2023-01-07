@@ -56,7 +56,7 @@ function api.KeyPressed(key, scancode, isRepeat)
 	if key == "p" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
 		-- Do level switching/handling here
 	end
-	return World.MousePressed(x, y, button)
+	return World.KeyPressed(key, scancode, isRepeat)
 end
 
 function api.MousePressed(x, y, button)
@@ -68,7 +68,7 @@ function api.MouseReleased(x, y, button)
 end
 
 function api.MouseMoved(x, y, dx, dy)
-	World.MousePressed(x, y, dx, dy)
+	World.MouseMoved(x, y, dx, dy)
 end
 
 --------------------------------------------------

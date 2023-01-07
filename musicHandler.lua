@@ -1,6 +1,4 @@
 
-local IterableMap = require("include/IterableMap")
-local util = require("include/util")
 
 local SoundHandler = require("soundHandler")
 local soundFiles = util.LoadDefDirectory("sounds/defs")
