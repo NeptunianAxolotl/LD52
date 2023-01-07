@@ -2,6 +2,16 @@
 local Resources = require("resourceHandler")
 local Font = require("include/font")
 
+local ageNames = {
+	"Dead",
+	"Stone",
+	"Bronze",
+	"Iron",
+	"Classical",
+	"Invention",
+	"Modern",
+	"Space",
+}
 
 local function New(self, physicsWorld)
 	-- pos
@@ -16,6 +26,10 @@ local function New(self, physicsWorld)
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
 	end
 	self.body:setUserData(self)
+	self.fixture:setFriction(0.6)
+	
+	self.age = self.def.age
+	self.ageProgress = 0
 	
 	function self.Destroy()
 		if self.isDead then
@@ -43,6 +57,16 @@ local function New(self, physicsWorld)
 		end
 		self.animTime = self.animTime + dt
 		
+		if self.age > 1 and self.age < self.def.maxAge then
+			self.ageProgress = self.ageProgress + dt * self.def.ageSpeed
+			if self.ageProgress > 1 then
+				self.age = self.age + 1
+				self.ageProgress = self.ageProgress - 1
+			end
+		else
+			self.ageProgress = 0
+		end
+		
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
 		TerrainHandler.UpdateSpeedLimit(self.body)
@@ -59,7 +83,15 @@ local function New(self, physicsWorld)
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
+				love.graphics.setColor(1, 1, 1, 1)
 				love.graphics.circle("line", 0, 0, self.def.radius)
+				
+				love.graphics.setColor(0.5, 0.5, 0.5, 0.8)
+				love.graphics.arc("fill", "pie", 0, 0, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+				
+				Font.SetSize(3)
+				love.graphics.setColor(1, 1, 1, 1)
+				love.graphics.printf(ageNames[self.age], -100, -24, 200, "center")
 			love.graphics.pop()
 		end})
 		if DRAW_DEBUG then

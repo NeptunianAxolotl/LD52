@@ -11,7 +11,9 @@ local function New(self, physicsWorld)
 	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "static")
 	self.shape = love.physics.newCircleShape(self.def.radius)
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
+	
 	self.body:setUserData(self)
+	self.fixture:setFriction(0.8)
 	
 	function self.Update(dt)
 		self.animTime = self.animTime + dt
@@ -28,7 +30,11 @@ local function New(self, physicsWorld)
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
+				love.graphics.setColor(1, 1, 1, 1)
 				love.graphics.circle("line", 0, 0, self.def.radius)
+				
+				Font.SetSize(2)
+				love.graphics.printf("Sun (hot)", -100, -50, 200, "center")
 			love.graphics.pop()
 		end})
 		if DRAW_DEBUG then

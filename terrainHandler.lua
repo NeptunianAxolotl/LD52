@@ -58,13 +58,13 @@ local function GetCircularOrbitVelocity(pos, factor)	factor = factor or 1
 end
 
 local function SetupLevel()
-	-- TODO self.map = {}	self.sunGravity = Global.GRAVITY_MULT * 150	
+	-- TODO self.map = {}	self.sunGravity = Global.GRAVITY_MULT * 15	
 	local pos = {self.sunX - 1100, self.sunY}
 	local planetData = {
 		pos = pos,
-		velocity = GetCircularOrbitVelocity(pos, 0.2),
+		velocity = GetCircularOrbitVelocity(pos),
 		radius = 80,
-		density = 150
+		density = 150,		age = 2,		maxAge = 5,		ageSpeed = 1/15,
 	}
 	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX - 200, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = GetCircularOrbitVelocity(pos, -0.8)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end

@@ -23,6 +23,7 @@ local function New(self, physicsWorld)
 	
 	self.body:setAngularDamping(9)
 	self.body:setUserData(self)
+	self.fixture:setFriction(0.45)
 	
 	if self.def.velocity then
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
@@ -72,6 +73,7 @@ local function New(self, physicsWorld)
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
+				love.graphics.setColor(1, 1, 1, 1)
 				for i = 1, #coords do
 					local other = coords[(i < #coords and (i + 1)) or 1]
 					love.graphics.line(coords[i][1], coords[i][2], other[1], other[2])
