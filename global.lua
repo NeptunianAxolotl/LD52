@@ -21,7 +21,7 @@ local globals = {
 	BRAKE_MULT = 250,
 	TURN_MULT = 1750,
 	
-	PLANET_RADIUS = 5,
+	PLANET_RADIUS = 15,
 	SUN_RADIUS = 200,
 }
 
