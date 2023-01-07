@@ -15,9 +15,11 @@ local globals = {
 	WORLD_WIDTH = 5400,
 	WORLD_HEIGHT = 3000,
 	
-	GRAVITY_MULT = 900,
+	GRAVITY_MULT = 700,
 	SPEED_LIMIT = 1800,
-	TURN_MULT = 175,
+	ACCEL_MULT = 100,
+	BRAKE_MULT = 250,
+	TURN_MULT = 1750,
 }
 
 return globals

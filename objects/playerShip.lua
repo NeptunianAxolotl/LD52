@@ -3,7 +3,7 @@ local Resources = require("resourceHandler")
 local Font = require("include/font")
 
 local DEF = {
-	density = 1,
+	density = 10,
 }
 
 local function NewComponent(self, physicsWorld)
@@ -39,15 +39,13 @@ local function NewComponent(self, physicsWorld)
 		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 			local angle = self.body:getAngle()
-			local force = 6
-			local forceVec = util.PolarToCart(force, angle)
+			local forceVec = util.PolarToCart(Global.ACCEL_MULT, angle)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end
 		
 		if love.keyboard.isDown("s") or love.keyboard.isDown("down") or love.keyboard.isDown("space") then
 			local vx, vy = self.body:getLinearVelocity()
-			local force = -12
-			local forceVec = util.Mult(force, util.Unit({vx, vy}))
+			local forceVec = util.Mult(-1 * Global.BRAKE_MULT, util.Unit({vx, vy}))
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end
 		

@@ -221,6 +221,7 @@ function api.Update(dt)
 	Delay.Update(dt)
 	InterfaceUtil.Update(dt)
 	ComponentHandler.Update(dt)
+	TerrainHandler.Update(dt)
 	PlayerHandler.Update(dt)
 	--ModuleTest.Update(dt)
 	

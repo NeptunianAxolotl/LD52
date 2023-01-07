@@ -2,21 +2,10 @@
 local Font = require("include/font")
 
 local MapDefs = util.LoadDefDirectory("defs/maps")
+local NewPlanet = require("objects/planet")
 
 local self = {}
 local api = {}
-
-function api.Width()
-	return self.width
-end
-
-function api.Height()
-	return self.height
-end
-
-function api.GetMapData()
-	return self.map
-end
 
 function api.WrapBody(body)
 	local bx, by = body:getPosition()
@@ -58,16 +47,40 @@ function api.UpdateSpeedLimit(body)
 	body:setLinearDamping((speed - Global.SPEED_LIMIT) / Global.SPEED_LIMIT)
 end
 
+local function AddPlanet(data)
+	IterableMap.Add(self.planets, NewPlanet({def = data}, self.world.GetPhysicsWorld()))
+end
+
+local function GetCircularOrbitVelocity(pos)
+	local toSun, dist = util.Unit({pos[1] - self.sunX, pos[2] - self.sunY})
+	local speed = math.sqrt(self.sunGravity / dist)
+	print("speed", speed, "dist", dist)
+	return {0, speed}
+end
+
 local function SetupLevel()
 	-- TODO self.map = {}
-	
-	
+	for i = 1, 25 do
+		local pos = {1300 + i * 50, Global.WORLD_HEIGHT/2}
+		local planetData = {
+			pos = pos,
+			velocity = GetCircularOrbitVelocity(pos),
+			radius = 15,
+			density = 100
+		}
+		AddPlanet(planetData)
+	end
+end
+
+function api.Update(dt)
+	IterableMap.ApplySelf(self.planets, "Update", dt)
 end
 
 function api.Draw(drawQueue)
 	drawQueue:push({y=0; f=function()
 		love.graphics.rectangle("line", 0, 0, self.width, self.height)
 	end})
+	IterableMap.ApplySelf(self.planets, "Draw", drawQueue)
 end
 
 function api.Initialize(world, levelIndex, mapDataOverride)
@@ -76,6 +89,7 @@ function api.Initialize(world, levelIndex, mapDataOverride)
 		width = Global.WORLD_WIDTH,
 		height = Global.WORLD_HEIGHT,
 		sunGravity = Global.GRAVITY_MULT * 100000,
+		planets = IterableMap.New(),
 	}
 	self.sunX = self.width / 2
 	self.sunY = self.height / 2
