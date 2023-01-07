@@ -6,7 +6,7 @@ local NewPlanet = require("objects/planet")local NewSun = require("objects/sun"
 
 local self = {}
 local api = {}
-
+---------------------------------------------------------------------------------------------------------------------------------------------- Update utilities
 function api.WrapBody(body)
 	local bx, by = body:getPosition()
 	local nx, ny = false, false
@@ -46,7 +46,7 @@ function api.UpdateSpeedLimit(body)
 	local speed = math.sqrt(speedSq)
 	body:setLinearDamping((speed - Global.SPEED_LIMIT) / Global.SPEED_LIMIT)
 end
-
+---------------------------------------------------------------------------------------------------------------------------------------------- Collisionfunction api.Collision(aData, bData)	if aData.objType == "planet" and bData.objType == "sun" then		aData.Destroy()	endend---------------------------------------------------------------------------------------------------------------------------------------------- Setup and creation
 local function AddPlanet(data)
 	IterableMap.Add(self.planets, NewPlanet({def = data}, self.world.GetPhysicsWorld()))
 end
@@ -58,17 +58,17 @@ local function GetCircularOrbitVelocity(pos, factor)	factor = factor or 1
 end
 
 local function SetupLevel()
-	-- TODO self.map = {}	self.sunGravity = Global.GRAVITY_MULT * 15	
-	local pos = {1800, Global.WORLD_HEIGHT/2}
+	-- TODO self.map = {}	self.sunGravity = Global.GRAVITY_MULT * 150	
+	local pos = {self.sunX - 1100, self.sunY}
 	local planetData = {
 		pos = pos,
-		velocity = GetCircularOrbitVelocity(pos),
+		velocity = GetCircularOrbitVelocity(pos, 0.2),
 		radius = 80,
 		density = 150
 	}
-	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {2500, 1200}	local initPlayerData = {		pos = pos,		velocity = GetCircularOrbitVelocity(pos, -0.8)	}	PlayerHandler.SpawnPlayer(initPlayerData)
+	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX - 200, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = GetCircularOrbitVelocity(pos, -0.8)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end
-
+---------------------------------------------------------------------------------------------------------------------------------------------- Callins
 function api.Update(dt)
 	IterableMap.ApplySelf(self.planets, "Update", dt)	IterableMap.ApplySelf(self.suns, "Update", dt)
 end

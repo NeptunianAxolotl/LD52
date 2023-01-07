@@ -11,9 +11,10 @@ local function NewEffect(self, def)
 	if not maxLife then
 		print(maxLife, def.image, def.actual_image)
 	end
-	self.life = maxLife
+	self.life = maxLife / (self.animSpeed or 1)
 	self.animTime = 0
 	self.direction = (def.randomDirection and math.random()*2*math.pi) or 0
+	self.delay = self.delay or 0
 	
 	self.pos = (def.spawnOffset and util.Add(self.pos, def.spawnOffset)) or self.pos
 	
@@ -31,7 +32,11 @@ local function NewEffect(self, def)
 	end
 	
 	function self.Update(dt)
-		self.animTime = self.animTime + dt
+		if self.delay > 0 then
+			self.delay = self.delay - dt
+			return
+		end
+		self.animTime = self.animTime + dt*(self.animSpeed or 1)
 		self.life = self.life - dt
 		if self.life <= 0 then
 			return true
@@ -43,6 +48,9 @@ local function NewEffect(self, def)
 	end
 	
 	function self.Draw(drawQueue)
+		if self.delay > 0 then
+			return
+		end
 		drawQueue:push({y=self.pos[2] + self.inFront; f=function()
 			if def.fontSize and self.text then
 				local col = def.color
@@ -66,6 +74,9 @@ local function NewEffect(self, def)
 	end
 	
 	function self.DrawInterface()
+		if self.delay > 0 then
+			return
+		end
 		if self.actualImageOverride or def.actual_image then
 			Resources.DrawImage(self.actualImageOverride or def.actual_image, self.pos[1], self.pos[2], self.direction, GetAlpha(),
 					(self.scale or 1)*((def.lifeScale and (1 - 0.5*self.life/maxLife)) or 1),

@@ -211,8 +211,17 @@ function api.ViewResize(width, height)
 end
 
 function api.Collision(a, b, colObject, normal, tangent)
-	print(a:getBody():getUserData())
-	print(b:getBody():getUserData())
+	local aData, bData = a:getBody():getUserData(), b:getBody():getUserData()
+	if not (aData and bData) then
+		return
+	end
+	local checkSwap = not (aData.objType == bData.objType)
+	if PlayerHandler.Collision(aData, bData) or (checkSwap and PlayerHandler.Collision(bData, aData)) then
+		return
+	end
+	if TerrainHandler.Collision(aData, bData) or (checkSwap and TerrainHandler.Collision(aData, bData)) then
+		return
+	end
 end
 
 function api.Update(dt)

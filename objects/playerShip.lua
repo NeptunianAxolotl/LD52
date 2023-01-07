@@ -5,6 +5,7 @@ local Font = require("include/font")
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
+	self.objType = "playerShip"
 	
 	local coords = {{0, 0.35}, {0, -0.35}, {1, 0}}
 	local scaleFactor = 50

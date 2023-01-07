@@ -6,6 +6,7 @@ local Font = require("include/font")
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
+	self.objType = "sun"
 	
 	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "static")
 	self.shape = love.physics.newCircleShape(self.def.radius)

@@ -11,6 +11,10 @@ function api.SpawnPlayer(initPlayerData)
 	self.playerShip = NewPlayerShip({def = initPlayerData}, self.world.GetPhysicsWorld())
 end
 
+function api.Collision(aData, bData)
+
+end
+
 function api.Update(dt)
 	if self.playerShip then
 		self.playerShip.Update(dt)
