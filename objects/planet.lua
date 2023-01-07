@@ -14,6 +14,7 @@ local function New(self, physicsWorld)
 	if self.def.velocity then
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
 	end
+	self.body:setUserData(self)
 	
 	function self.Update(dt)
 		self.animTime = self.animTime + dt

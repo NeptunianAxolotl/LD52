@@ -51,25 +51,22 @@ local function AddPlanet(data)
 	IterableMap.Add(self.planets, NewPlanet({def = data}, self.world.GetPhysicsWorld()))
 end
 local function AddSun(data)	IterableMap.Add(self.suns, NewSun({def = data}, self.world.GetPhysicsWorld()))end
-local function GetCircularOrbitVelocity(pos)
+local function GetCircularOrbitVelocity(pos, factor)	factor = factor or 1
 	local toSun, dist = util.Unit({pos[1] - self.sunX, pos[2] - self.sunY})
 	local speed = math.sqrt(self.sunGravity / dist)
-	print("speed", speed, "dist", dist)
-	return {0, speed}
+	return util.RotateVector({0, -1*factor*speed}, util.Angle(toSun))
 end
 
 local function SetupLevel()
-	-- TODO self.map = {}
-	for i = 1, 45 do
-		local pos = {1300 + i * 25, Global.WORLD_HEIGHT/2}
-		local planetData = {
-			pos = pos,
-			velocity = GetCircularOrbitVelocity(pos),
-			radius = Global.PLANET_RADIUS,
-			density = 100
-		}
-		AddPlanet(planetData)
-	end		local sunData = {		pos = {self.sunX, self.sunY},		radius = Global.SUN_RADIUS,		density = 1000	}	AddSun(sunData)
+	-- TODO self.map = {}	self.sunGravity = Global.GRAVITY_MULT * 15	
+	local pos = {1800, Global.WORLD_HEIGHT/2}
+	local planetData = {
+		pos = pos,
+		velocity = GetCircularOrbitVelocity(pos),
+		radius = 80,
+		density = 150
+	}
+	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {2500, 1200}	local initPlayerData = {		pos = pos,		velocity = GetCircularOrbitVelocity(pos, -0.8)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end
 
 function api.Update(dt)
@@ -88,7 +85,6 @@ function api.Initialize(world, levelIndex, mapDataOverride)
 		world = world,
 		width = Global.WORLD_WIDTH,
 		height = Global.WORLD_HEIGHT,
-		sunGravity = Global.GRAVITY_MULT * 100000,
 		planets = IterableMap.New(),		suns = IterableMap.New(),
 	}
 	self.sunX = self.width / 2

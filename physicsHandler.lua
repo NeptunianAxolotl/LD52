@@ -31,8 +31,8 @@ end
 local function preSolve(a, b, coll)
 end
 
-local function postSolve(a, b, coll,  normalimpulse, tangentimpulse)
-	--world.postSolve(a, b, coll,  normalimpulse, tangentimpulse)
+local function postSolve(a, b, coll, normalimpulse, tangentimpulse)
+	world.Collision(a, b, coll, normalimpulse, tangentimpulse)
 end
 
 --------------------------------------------------

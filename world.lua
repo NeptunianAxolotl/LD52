@@ -210,6 +210,11 @@ end
 function api.ViewResize(width, height)
 end
 
+function api.Collision(a, b, colObject, normal, tangent)
+	print(a:getBody():getUserData())
+	print(b:getBody():getUserData())
+end
+
 function api.Update(dt)
 	GameHandler.Update(dt)
 	if api.GetPaused() then
@@ -297,8 +302,8 @@ function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	ChatHandler.Initialize(api)
 	DialogueHandler.Initialize(api)
 	
-	TerrainHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
 	PlayerHandler.Initialize(api)
+	TerrainHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
 	
 	DeckHandler.Initialize(api)
 	GameHandler.Initialize(api)

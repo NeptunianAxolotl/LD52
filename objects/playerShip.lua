@@ -2,14 +2,9 @@
 local Resources = require("resourceHandler")
 local Font = require("include/font")
 
-local DEF = {
-	density = 10,
-}
-
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
-	self.def = DEF
 	
 	local coords = {{0, 0.35}, {0, -0.35}, {1, 0}}
 	local scaleFactor = 50
@@ -21,21 +16,25 @@ local function New(self, physicsWorld)
 		coords[i] = pos
 	end
 	
-	self.body = love.physics.newBody(physicsWorld, self.pos[1], self.pos[2], "dynamic")
+	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "dynamic")
 	self.shape = love.physics.newPolygonShape(unpack(modCoords))
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
 	self.body:setAngularDamping(9)
+	self.body:setUserData(self)
 	
-	if self.initVelocity then
-		self.body:setLinearVelocity(self.initVelocity[1], self.initVelocity[2])
+	if self.def.velocity then
+		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
 	end
 	
 	function self.Update(dt)
 		self.animTime = self.animTime + dt
+		
+		self.body:setLinearDamping(0)
+		TerrainHandler.UpdateSpeedLimit(self.body)
+	
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
-		TerrainHandler.UpdateSpeedLimit(self.body)
 		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 			local angle = self.body:getAngle()
@@ -47,6 +46,7 @@ local function New(self, physicsWorld)
 			local vx, vy = self.body:getLinearVelocity()
 			local forceVec = util.Mult(-1 * Global.BRAKE_MULT, util.Unit({vx, vy}))
 			self.body:applyForce(forceVec[1], forceVec[2])
+			self.body:setLinearDamping(Global.BRAKE_DAMPEN)
 		end
 		
 		local turnAmount = false
@@ -59,7 +59,7 @@ local function New(self, physicsWorld)
 			local vx, vy = self.body:getLinearVelocity()
 			local speed = util.Dist(0, 0, vx, vy)
 			turnAmount = turnAmount * Global.TURN_MULT
-			turnAmount = turnAmount * (0.2 + 0.8 * (1 - speed / (speed + 600)))
+			turnAmount = turnAmount * (0.15 + 0.85 * (1 - speed / (speed + 600)))
 			self.body:applyTorque(turnAmount)
 		end
 	end

@@ -10,6 +10,7 @@ local function New(self, physicsWorld)
 	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "static")
 	self.shape = love.physics.newCircleShape(self.def.radius)
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
+	self.body:setUserData(self)
 	
 	function self.Update(dt)
 		self.animTime = self.animTime + dt

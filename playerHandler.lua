@@ -6,6 +6,11 @@ local NewPlayerShip = require("objects/playerShip")
 local self = {}
 local api = {}
 
+function api.SpawnPlayer(initPlayerData)
+	initPlayerData.density = 10
+	self.playerShip = NewPlayerShip({def = initPlayerData}, self.world.GetPhysicsWorld())
+end
+
 function api.Update(dt)
 	if self.playerShip then
 		self.playerShip.Update(dt)
@@ -24,11 +29,6 @@ function api.Initialize(world)
 		animationTimer = 0,
 		world = world,
 	}
-	
-	local initPlayerData = {
-		pos = {500, 200}
-	}
-	self.playerShip = NewPlayerShip(initPlayerData, self.world.GetPhysicsWorld())
 end
 
 return api
