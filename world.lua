@@ -229,7 +229,6 @@ function api.Update(dt, realDt)
 	PhysicsHandler.Update(dt)
 	--ShadowHandler.Update(dt)
 
-	ModuleTest.Update(dt)
 	ChatHandler.Update(dt)
 	EffectsHandler.Update(dt)
 	UpdateCamera()
@@ -251,7 +250,6 @@ function api.Draw()
 	end
 	
 	ComponentHandler.Draw(drawQueue)
-	ModuleTest.Draw(drawQueue)
 	EffectsHandler.Draw(drawQueue)
 	
 	if not Global.DEBUG_NO_SHADOW and not (Global.DEBUG_SPACE_ZOOM_OUT and love.keyboard.isDown("space")) then
@@ -316,7 +314,7 @@ function api.Initialize(levelIndex, levelTableOverride, musicEnabled)
 	
 	DeckHandler.Initialize(api)
 	GameHandler.Initialize(api)
-	ModuleTest.Initialize(api)
+	--ModuleTest.Initialize(api)
 	
 	-- Note that the camera pins only function for these particular second entries.
 	Camera.Initialize({
