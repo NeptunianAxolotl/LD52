@@ -57,15 +57,15 @@ function api.GetCircularOrbitVelocity(pos, factor, angleTweak)	factor = factor 
 end
 
 local function SetupLevel()
-	self.map = {		asteroidTimeMin = 1,		asteroidTimeRand = 2,	}	self.sunGravity = Global.GRAVITY_MULT * 20	
-	local pos = {self.sunX - 1100, self.sunY}
+	self.map = {		asteroidTimeMin = 4,		asteroidTimeRand = 2,	}	self.sunGravity = Global.GRAVITY_MULT * 20	
+	local pos = {self.sunX - 1000, self.sunY}
 	local planetData = {
 		pos = pos,
 		velocity = api.GetCircularOrbitVelocity(pos),
 		radius = 80,
 		density = 150,		age = 3,		maxAge = 5,		ageSpeed = 1/25,
 	}
-	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX + 1100, self.sunY - 750}		local asteroidParams = {		{			pos = {self.sunX + 1100, self.sunY - 750},			mult = 0.65,		},		{			pos = {self.sunX + 500, self.sunY + 360},			mult = -1.15,		},	}		for i = 1, #asteroidParams do		local data = asteroidParams[i]		local asteroidData = {			pos = data.pos,			velocity = api.GetCircularOrbitVelocity(data.pos, data.mult, data.angle),			radius = 45,			density = 5		}		EnemyHandler.AddAsteroid(asteroidData)	end		pos = {self.sunX - 300, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = api.GetCircularOrbitVelocity(pos, -0.95)	}	PlayerHandler.SpawnPlayer(initPlayerData)
+	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX + 1100, self.sunY - 750}		local asteroidParams = {		{			pos = {self.sunX + 1100, self.sunY - 750},			mult = 0.65,		},		{			pos = {self.sunX + 500, self.sunY + 360},			mult = -1.15,		},	}		for i = 1, #asteroidParams do		local data = asteroidParams[i]		local asteroidData = {			pos = data.pos,			velocity = api.GetCircularOrbitVelocity(data.pos, data.mult, data.angle),			typeName = "asteroid_big",		}		EnemyHandler.AddAsteroid(asteroidData)	end		pos = {self.sunX - 300, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = api.GetCircularOrbitVelocity(pos, -0.95)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------- Callins
 function api.Update(dt)
@@ -73,7 +73,7 @@ function api.Update(dt)
 end
 
 function api.Draw(drawQueue)
-	drawQueue:push({y=0; f=function()
+	drawQueue:push({y=0; f=function()		love.graphics.setColor(1, 1, 1, 1)
 		love.graphics.rectangle("line", 0, 0, self.width, self.height)
 	end})
 	IterableMap.ApplySelf(self.planets, "Draw", drawQueue)	IterableMap.ApplySelf(self.suns, "Draw", drawQueue)

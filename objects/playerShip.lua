@@ -11,13 +11,36 @@ local function GetStopVectors(body)
 	local travel, speed = util.Unit(vel)
 	local tooShort = (speed < 250)
 	
-	local leftStart = util.Add(pos, util.RotateVector(util.Mult(35, travel), 0.5*math.pi))
+	local leftStart = util.Add(pos, util.RotateVector(util.Mult(30, travel), 0.5*math.pi))
 	local leftEnd = util.Add(leftStart, util.Mult(0.3, vel))
 	
-	local rightStart = util.Add(pos, util.RotateVector(util.Mult(35, travel), -0.5*math.pi))
+	local rightStart = util.Add(pos, util.RotateVector(util.Mult(30, travel), -0.5*math.pi))
 	local rightEnd = util.Add(rightStart, util.Mult(0.3, vel))
 	
 	return leftStart, leftEnd, rightStart, rightEnd, tooShort
+end
+
+local function SpawnBullet(physicsWorld, body)
+	local bx, by = body:getPosition()
+	local vx, vy = body:getLinearVelocity()
+	local angle = body:getAngle()
+	
+	local spawnPos = util.Add({bx, by}, util.PolarToCart(60, angle))
+	local spawnVel = util.Add({vx, vy}, util.PolarToCart(Global.SHOOT_SPEED, angle))
+	local recolForce = util.PolarToCart(-120, angle)
+	
+	body:applyForce(recolForce[1], recolForce[2])
+	
+	local bulletData = {
+		pos = spawnPos,
+		velocity = spawnVel,
+		radius = 10,
+		density = 4,
+		life = 7,
+		damage = 1,
+		planetDamage = 0.08,
+	}
+	EnemyHandler.AddBullet(bulletData)
 end
 
 local function CheckEmergencyStop(physicsWorld, body)
@@ -63,9 +86,11 @@ local function New(self, physicsWorld)
 	self.shape = love.physics.newPolygonShape(unpack(modCoords))
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
-	self.body:setAngularDamping(9)
+	self.body:setAngularDamping(10)
 	self.body:setUserData(self)
 	self.fixture:setFriction(0.45)
+	
+	self.shootCooldown = 0
 	
 	if self.def.velocity then
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
@@ -86,12 +111,20 @@ local function New(self, physicsWorld)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end
 		
+		if self.shootCooldown >= 0 then
+			self.shootCooldown = self.shootCooldown - dt
+		end
+		if self.shootCooldown < 0 and (love.keyboard.isDown("space") or love.keyboard.isDown("return") or love.keyboard.isDown("kpenter")) then
+			SpawnBullet(physicsWorld, self.body)
+			self.shootCooldown = Global.SHOOT_COOLDOWN
+		end
+		
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)
-		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") or love.keyboard.isDown("space") then
+		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") then
 			local vx, vy = self.body:getLinearVelocity()
 			local force = -1 * Global.BRAKE_MULT
 			if emergencyStop then
-				force = -1 * Global.ACCEL_MULT
+				force = -1 * Global.EMERGENCY_BRAKE_MULT
 			end
 			local forceVec = util.Mult(force, util.Unit({vx, vy}))
 			self.body:applyForce(forceVec[1], forceVec[2])
@@ -108,7 +141,7 @@ local function New(self, physicsWorld)
 			local vx, vy = self.body:getLinearVelocity()
 			local speed = util.Dist(0, 0, vx, vy)
 			turnAmount = turnAmount * Global.TURN_MULT
-			turnAmount = turnAmount * (0.15 + 0.85 * (1 - speed / (speed + 600)))
+			turnAmount = math.min(1200, turnAmount * (0.15 + 0.85 * (1 - speed / (speed + 750))))
 			self.body:applyTorque(turnAmount)
 		end
 	end

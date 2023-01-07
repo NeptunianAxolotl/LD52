@@ -44,6 +44,9 @@ local function New(self, physicsWorld)
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
 	end
 	self.body:setUserData(self)
+	
+	self.body:setAngle(math.random()*math.pi*2)
+	self.body:setAngularVelocity(0.28)
 	self.fixture:setFriction(0.6)
 	
 	self.age = self.def.age
@@ -70,6 +73,35 @@ local function New(self, physicsWorld)
 			)
 		end
 		self.isDead = true
+	end
+	
+	function self.AddDamage(damage)
+		if self.age <= 1 then
+			return
+		end
+		self.ageProgress = self.ageProgress - damage
+		if self.ageProgress < 0 then
+			 -- Can only go down one age per damage instance.
+			self.age = self.age - 1
+			self.ageProgress = math.max(0, self.ageProgress + 1)
+			if self.age <= 1 then
+				self.age = 1
+				self.ageProgress = 0
+			end
+			
+			local bx, by = self.body:getPosition()
+			for i = 1, 15 do
+				EffectsHandler.SpawnEffect(
+					"fireball_explode",
+					util.Add({bx, by}, util.RandomPointInCircle(self.def.radius*0.6)),
+					{
+						delay = math.random()*0.4,
+						scale = 0.2 + 0.3*math.random(),
+						animSpeed = 1 + 0.5*math.random()
+					}
+				)
+			end
+		end
 	end
 	
 	function self.Update(dt)
@@ -113,13 +145,14 @@ local function New(self, physicsWorld)
 					love.graphics.setColor(1, 1, 1, 1)
 					love.graphics.circle("line", 0, 0, self.def.radius)
 				end
-				love.graphics.setColor(0.5, 0.5, 0.5, 0.8)
-				love.graphics.arc("fill", "pie", 0, 0, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
-				
-				Font.SetSize(3)
-				love.graphics.setColor(1, 1, 1, 1)
-				love.graphics.printf(ageNames[self.age], -100, -24, 200, "center")
 			love.graphics.pop()
+			
+			love.graphics.setColor(1, 1, 1, 0.6)
+			love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			
+			Font.SetSize(3)
+			love.graphics.setColor(1, 1, 1, 1)
+			love.graphics.printf(ageNames[self.age], x - 100, y - 24, 200, "center")
 		end})
 		if DRAW_DEBUG then
 			love.graphics.circle('line',self.pos[1], self.pos[2], def.radius)

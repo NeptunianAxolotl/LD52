@@ -8,7 +8,9 @@ local toAdd = {
 	"stone1",
 	"stone2",
 	"stone3",
-	"asteroid",
+	"asteroid_damage_0",
+	"asteroid_damage_1",
+	"asteroid_damage_2",
 }
 
 for i = 1, #toAdd do
