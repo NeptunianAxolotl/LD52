@@ -46,7 +46,7 @@ end
 local longFrames = 0
 local frames = 0
 local missingDt = 0
-local MAX_DT = 0.1
+local MAX_DT = 0.05
 function love.update(dt)
 	local realDt = dt
 	frames = frames + 1

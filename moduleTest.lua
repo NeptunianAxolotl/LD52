@@ -7,6 +7,8 @@ local ComponentHandler = require("componentHandler")
 local util = require("include/util")
 local ShadowHandler = require("shadowHandler")
 
+local TEST_SHADOW = false
+
 local api = {}
 local self = {}
 local animDt = 0
@@ -38,7 +40,9 @@ function api.Draw(drawQueue)
 	drawQueue:push({y=0; f=function()
 		Resources.DrawAnimation("test_anim", 500, 500, animDt)
 	end})
-	--ShadowHandler.UpdateShadowParams(self.guyShadow, {500, 500}, 16)
+	if TEST_SHADOW then
+		ShadowHandler.UpdateShadowParams(self.guyShadow, {500, 500}, 16)
+	end
 end
 
 function api.Initialize()
@@ -46,13 +50,15 @@ function api.Initialize()
 	data = {
 		initVelocity = {140, 20}
 	}
-	--ComponentHandler.SpawnComponent("", {200, 200}, data)
+	ComponentHandler.SpawnComponent("", {200, 200}, data)
 	data = {
 		initVelocity = {-140, 20}
 	}
-	--ComponentHandler.SpawnComponent("", {600, 200}, data)
+	ComponentHandler.SpawnComponent("", {600, 200}, data)
 	
-	--self.guyShadow = ShadowHandler.AddCircleShadow(8)
+	if TEST_SHADOW then
+		self.guyShadow = ShadowHandler.AddCircleShadow(8)
+	end
 end
 
 return api

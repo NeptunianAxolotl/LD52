@@ -112,7 +112,7 @@ function api.KeyPressed(key, scancode, isRepeat)
 	if api.GetGameOver() then
 		return -- No doing actions
 	end
-	if GameHandler.KeyPressed and GameHandler.KeyPressed(key, scancode, isRepeat) then
+	if GameHandler.KeyPressed(key, scancode, isRepeat) then
 		return
 	end
 end
@@ -226,7 +226,7 @@ function api.Update(dt, realDt)
 	ComponentHandler.Update(dt)
 	--ModuleTest.Update(dt)
 	
-	--PhysicsHandler.Update(math.min(0.04, dt))
+	PhysicsHandler.Update(dt)
 	--ShadowHandler.Update(dt)
 
 	ModuleTest.Update(dt)
@@ -250,6 +250,7 @@ function api.Draw()
 		d.f()
 	end
 	
+	ComponentHandler.Draw(drawQueue)
 	ModuleTest.Draw(drawQueue)
 	EffectsHandler.Draw(drawQueue)
 	
@@ -306,17 +307,16 @@ function api.Initialize(levelIndex, levelTableOverride, musicEnabled)
 	SoundHandler.Initialize()
 	MusicHandler.Initialize(api)
 	
-	ModuleTest.Initialize(api)
+	PhysicsHandler.Initialize(api)
+	ComponentHandler.Initialize(api)
 	ChatHandler.Initialize(api)
 	DialogueHandler.Initialize(api)
-	--PhysicsHandler.Initialize(api)
 	
 	LevelHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
 	
-	ComponentHandler.Initialize(api)
 	DeckHandler.Initialize(api)
 	GameHandler.Initialize(api)
-	--ModuleTest.Initialize(api)
+	ModuleTest.Initialize(api)
 	
 	-- Note that the camera pins only function for these particular second entries.
 	Camera.Initialize({
