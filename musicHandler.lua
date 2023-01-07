@@ -1,7 +1,7 @@
 
 
 local SoundHandler = require("soundHandler")
-local soundFiles = util.LoadDefDirectory("sounds/defs")
+local soundFiles = util.LoadDefDirectory("resources/soundDefs")
 
 local self = {}
 local api = {}

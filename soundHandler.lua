@@ -3,7 +3,7 @@
 local api = {}
 local sounds = IterableMap.New()
 
-local soundFiles = util.LoadDefDirectory("sounds/defs")
+local soundFiles = util.LoadDefDirectory("resources/soundDefs")
 
 function AddSource(name)
 	local def = soundFiles[name]
