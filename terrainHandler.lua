@@ -64,7 +64,7 @@ local function SetupLevel()
 		pos = pos,
 		velocity = GetCircularOrbitVelocity(pos),
 		radius = 80,
-		density = 150,		age = 2,		maxAge = 5,		ageSpeed = 1/15,
+		density = 150,		age = 3,		maxAge = 5,		ageSpeed = 1/25,
 	}
 	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX - 200, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = GetCircularOrbitVelocity(pos, -0.8)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end
