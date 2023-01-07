@@ -1,6 +1,6 @@
 
 local globals = {
-	BACK_COL = {130/255, 162/255, 58/255},
+	BACK_COL = {0/255, 0/255, 0/255},
 	PANEL_COL = {0.53, 0.53, 0.55},
 	
 	MASTER_VOLUME = 0.75,
@@ -21,6 +21,8 @@ local globals = {
 	BRAKE_MULT = 12,
 	BRAKE_DAMPEN = 2.5,
 	TURN_MULT = 1750,
+	
+	DRAW_PHYSICS = true,
 }
 
 return globals

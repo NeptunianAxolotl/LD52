@@ -5,7 +5,7 @@ local soundFiles = util.LoadDefDirectory("resources/soundDefs")
 
 local self = {}
 local api = {}
-local world
+local cosmos
 
 local font = love.graphics.newFont(70)
 
@@ -72,7 +72,7 @@ function api.Update(dt)
 	end
 	currentTrackRemaining = (currentTrackRemaining or 0) - dt
 	if currentTrackRemaining < 0 then
-		if world.GetCosmos().MusicEnabled() then
+		if cosmos.MusicEnabled() then
 			if trackRunning then
 				for i = 1, #currentTrack do
 					SoundHandler.StopSound(currentTrack[i].sound, trackParity)
@@ -98,9 +98,9 @@ function api.Update(dt)
 	end
 end
 
-function api.Initialize(newWorld)
+function api.Initialize(newCosmos)
 	self = {}
-	world = newWorld
+	cosmos = newCosmos
 	api.StopCurrentTrack()
 	initialDelay = 0
 	for i = 1, #trackList do

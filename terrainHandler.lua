@@ -46,27 +46,26 @@ function api.UpdateSpeedLimit(body)
 	local speed = math.sqrt(speedSq)
 	body:setLinearDamping((speed - Global.SPEED_LIMIT) / Global.SPEED_LIMIT)
 end
----------------------------------------------------------------------------------------------------------------------------------------------- Collisionfunction api.Collision(aData, bData)	if aData.objType == "planet" and bData.objType == "sun" then		aData.Destroy()	endend---------------------------------------------------------------------------------------------------------------------------------------------- Setup and creation
+---------------------------------------------------------------------------------------------------------------------------------------------- Collisionfunction api.Collision(aData, bData)	if aData.objType == "planet" and bData.objType == "sun" then		aData.Destroy()	endend---------------------------------------------------------------------------------------------------------------------------------------------- Level utilsfunction api.GetMapData()	return self.mapendfunction api.GetHeight()	return self.heightend---------------------------------------------------------------------------------------------------------------------------------------------- Setup and creation
 local function AddPlanet(data)
 	IterableMap.Add(self.planets, NewPlanet({def = data}, self.world.GetPhysicsWorld()))
-end
-local function AddSun(data)	IterableMap.Add(self.suns, NewSun({def = data}, self.world.GetPhysicsWorld()))end
-local function GetCircularOrbitVelocity(pos, factor)	factor = factor or 1
+endlocal function AddSun(data)	IterableMap.Add(self.suns, NewSun({def = data}, self.world.GetPhysicsWorld()))end
+function api.GetCircularOrbitVelocity(pos, factor, angleTweak)	factor = factor or 1
 	local toSun, dist = util.Unit({pos[1] - self.sunX, pos[2] - self.sunY})
 	local speed = math.sqrt(self.sunGravity / dist)
-	return util.RotateVector({0, -1*factor*speed}, util.Angle(toSun))
+	return util.RotateVector({0, -1*factor*speed}, util.Angle(toSun) + (angleTweak or 0))
 end
 
 local function SetupLevel()
-	-- TODO self.map = {}	self.sunGravity = Global.GRAVITY_MULT * 15	
+	self.map = {		asteroidTimeMin = 1,		asteroidTimeRand = 2,	}	self.sunGravity = Global.GRAVITY_MULT * 20	
 	local pos = {self.sunX - 1100, self.sunY}
 	local planetData = {
 		pos = pos,
-		velocity = GetCircularOrbitVelocity(pos),
+		velocity = api.GetCircularOrbitVelocity(pos),
 		radius = 80,
 		density = 150,		age = 3,		maxAge = 5,		ageSpeed = 1/25,
 	}
-	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX - 200, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = GetCircularOrbitVelocity(pos, -0.8)	}	PlayerHandler.SpawnPlayer(initPlayerData)
+	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX + 1100, self.sunY - 750}		local asteroidParams = {		{			pos = {self.sunX + 1100, self.sunY - 750},			mult = 0.65,		},		{			pos = {self.sunX + 500, self.sunY + 360},			mult = -1.15,		},	}		for i = 1, #asteroidParams do		local data = asteroidParams[i]		local asteroidData = {			pos = data.pos,			velocity = api.GetCircularOrbitVelocity(data.pos, data.mult, data.angle),			radius = 45,			density = 5		}		EnemyHandler.AddAsteroid(asteroidData)	end		pos = {self.sunX - 300, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = api.GetCircularOrbitVelocity(pos, -0.95)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------- Callins
 function api.Update(dt)

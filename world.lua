@@ -5,6 +5,7 @@ ComponentHandler = require("componentHandler")
 DialogueHandler = require("dialogueHandler")
 TerrainHandler = require("terrainHandler")
 
+EnemyHandler = require("enemyHandler")
 PlayerHandler = require("playerHandler")
 
 Camera = require("utilities/cameraUtilities")
@@ -222,6 +223,9 @@ function api.Collision(a, b, colObject, normal, tangent)
 	if TerrainHandler.Collision(aData, bData) or (checkSwap and TerrainHandler.Collision(aData, bData)) then
 		return
 	end
+	if EnemyHandler.Collision(aData, bData) or (checkSwap and EnemyHandler.Collision(aData, bData)) then
+		return
+	end
 end
 
 function api.Update(dt)
@@ -236,6 +240,7 @@ function api.Update(dt)
 	InterfaceUtil.Update(dt)
 	ComponentHandler.Update(dt)
 	TerrainHandler.Update(dt)
+	EnemyHandler.Update(dt)
 	PlayerHandler.Update(dt)
 	--ModuleTest.Update(dt)
 	
@@ -264,6 +269,7 @@ function api.Draw()
 	ComponentHandler.Draw(drawQueue)
 	EffectsHandler.Draw(drawQueue)
 	PlayerHandler.Draw(drawQueue)
+	EnemyHandler.Draw(drawQueue)
 	TerrainHandler.Draw(drawQueue)
 	
 	love.graphics.replaceTransform(self.cameraTransform)
@@ -304,7 +310,6 @@ function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	InterfaceUtil.Initialize()
 	EffectsHandler.Initialize(api)
 	SoundHandler.Initialize()
-	MusicHandler.Initialize(api)
 	
 	PhysicsHandler.Initialize(api)
 	ComponentHandler.Initialize(api)
@@ -312,6 +317,7 @@ function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	DialogueHandler.Initialize(api)
 	
 	PlayerHandler.Initialize(api)
+	EnemyHandler.Initialize(api)
 	TerrainHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
 	
 	DeckHandler.Initialize(api)

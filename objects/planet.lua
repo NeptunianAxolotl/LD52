@@ -13,6 +13,24 @@ local ageNames = {
 	"Space",
 }
 
+local planetImageList = {
+	"planet1",
+	"planet2",
+	"planet3",
+	"planet4",
+}
+
+local ageImages = {
+	"stone3",
+	"stone1",
+	"stone2",
+	"stone3",
+	"stone3",
+	"stone3",
+	"stone3",
+	"stone3",
+}
+
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
@@ -30,6 +48,10 @@ local function New(self, physicsWorld)
 	
 	self.age = self.def.age
 	self.ageProgress = 0
+	
+	self.baseDrawRotation = math.pi*2
+	self.ageDrawRotation = math.pi*2
+	self.planetDrawBase = util.SampleList(planetImageList)
 	
 	function self.Destroy()
 		if self.isDead then
@@ -83,9 +105,14 @@ local function New(self, physicsWorld)
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
-				love.graphics.setColor(1, 1, 1, 1)
-				love.graphics.circle("line", 0, 0, self.def.radius)
 				
+				Resources.DrawImage(self.planetDrawBase, 0, 0, self.baseDrawRotation, false, self.def.radius)
+				Resources.DrawImage(ageImages[self.age], 0, 0, self.ageDrawRotation, false, self.def.radius)
+				
+				if Global.DRAW_PHYSICS then
+					love.graphics.setColor(1, 1, 1, 1)
+					love.graphics.circle("line", 0, 0, self.def.radius)
+				end
 				love.graphics.setColor(0.5, 0.5, 0.5, 0.8)
 				love.graphics.arc("fill", "pie", 0, 0, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
 				

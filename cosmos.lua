@@ -85,6 +85,7 @@ function api.Initialize()
 	self = {
 		levelIndex = 0
 	}
+	MusicHandler.Initialize(api)
 	World.Initialize(api, self.levelIndex)
 end
 
