@@ -9,7 +9,7 @@ local function GetStopVectors(body)
 	local pos = {bx, by}
 	local vel = {vx, vy}
 	local travel, speed = util.Unit(vel)
-	local tooShort = (speed < 350)
+	local tooShort = (speed < 250)
 	
 	local leftStart = util.Add(pos, util.RotateVector(util.Mult(35, travel), 0.5*math.pi))
 	local leftEnd = util.Add(leftStart, util.Mult(0.3, vel))
