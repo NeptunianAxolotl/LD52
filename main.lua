@@ -1,7 +1,7 @@
 
 local Font = require("include/font")
 Global = require("global")
-local World = require("world")
+local Cosmos = require("cosmos")
 Resources = require("resourceHandler")
 util = require("include/util")
 
@@ -12,11 +12,11 @@ local api = {}
 --------------------------------------------------
 
 function love.draw()
-	World.Draw()
+	Cosmos.Draw()
 end
 
 function love.resize(width, height)
-	World.ViewResize(width, height)
+	Cosmos.ViewResize(width, height)
 end
 
 --------------------------------------------------
@@ -24,19 +24,19 @@ end
 --------------------------------------------------
 
 function love.mousemoved(x, y, dx, dy, istouch)
-	World.MouseMoved(x, y, dx, dy)
+	Cosmos.MouseMoved(x, y, dx, dy)
 end
 
 function love.mousereleased(x, y, button, istouch, presses)
-	World.MouseReleased(x, y, button, istouch, presses)
+	Cosmos.MouseReleased(x, y, button, istouch, presses)
 end
 
 function love.keypressed(key, scancode, isRepeat)
-	World.KeyPressed(key, scancode, isRepeat)
+	Cosmos.KeyPressed(key, scancode, isRepeat)
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-	World.MousePressed(x, y, button, istouch, presses)
+	Cosmos.MousePressed(x, y, button, istouch, presses)
 end
 
 --------------------------------------------------
@@ -68,7 +68,7 @@ function love.update(dt)
 		dt = dt + toReturn
 		missingDt = missingDt - toReturn
 	end
-	World.Update(dt, realDt)
+	Cosmos.Update(dt, realDt)
 end
 
 function Global.ResetMissingDt()
@@ -92,7 +92,7 @@ function love.load(arg)
 	love.keyboard.setKeyRepeat(true)
 	math.randomseed(os.clock())
 	Resources.LoadResources()
-	World.Initialize()
+	Cosmos.Initialize()
 	
 	love.filesystem.setIdentity("RegularRailway", true)
 	love.window.maximize() -- Do not fullscreen since we lack an exit button.

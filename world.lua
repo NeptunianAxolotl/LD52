@@ -1,7 +1,5 @@
 
 local ModuleTest = require("moduleTest")
-SoundHandler = require("soundHandler")
-MusicHandler = require("musicHandler")
 EffectsHandler = require("effectsHandler")
 ComponentHandler = require("componentHandler")
 DialogueHandler = require("dialogueHandler")
@@ -27,36 +25,24 @@ function api.SetMenuState(newState)
 	self.menuState = newState
 end
 
-function api.ToggleMusic()
-	self.musicEnabled = not self.musicEnabled
-	if not self.musicEnabled then
-		MusicHandler.StopCurrentTrack()
-	end
-end
-
 function api.GetPaused()
 	return self.paused or self.menuState
-end
-
-function api.MusicEnabled()
-	return self.musicEnabled
 end
 
 function api.GetGameOver()
 	return self.gameWon or self.gameLost, self.gameWon, self.gameLost, self.overType
 end
 
-function api.Restart()
-	--PhysicsHandler.Destroy()
-	api.Initialize(self.levelIndex, self.levelTableOverride, self.musicEnabled)
-end
-
-function api.LoadLevelByTable(levelTable)
-	api.Initialize(self.levelIndex, levelTable, self.musicEnabled)
-end
-
 function api.GetLifetime()
 	return self.lifetime
+end
+
+function api.Restart()
+	self.cosmos.RestartWorld()
+end
+
+function api.GetCosmos()
+	return self.cosmos
 end
 
 function api.TakeScreenshot()
@@ -211,9 +197,7 @@ local function UpdateCamera()
 	Camera.UpdateTransform(self.cameraTransform, cameraX, cameraY, cameraScale)
 end
 
-function api.Update(dt, realDt)
-	MusicHandler.Update(realDt)
-	SoundHandler.Update(realDt)
+function api.Update(dt)
 	GameHandler.Update(dt)
 	if api.GetPaused() then
 		UpdateCamera()
@@ -252,17 +236,11 @@ function api.Draw()
 	ComponentHandler.Draw(drawQueue)
 	EffectsHandler.Draw(drawQueue)
 	
-	if not Global.DEBUG_NO_SHADOW and not (Global.DEBUG_SPACE_ZOOM_OUT and love.keyboard.isDown("space")) then
-		--ShadowHandler.DrawGroundShadow(self.cameraTransform)
-	end
 	love.graphics.replaceTransform(self.cameraTransform)
 	while true do
 		local d = drawQueue:pop()
 		if not d then break end
 		d.f()
-	end
-	if not Global.DEBUG_NO_SHADOW and not (Global.DEBUG_SPACE_ZOOM_OUT and love.keyboard.isDown("space")) then
-		--ShadowHandler.DrawVisionShadow(self.cameraTransform)
 	end
 	
 	--local windowX, windowY = love.window.getMode()
@@ -287,16 +265,15 @@ function api.ViewResize(width, height)
 	--ShadowHandler.ViewResize(width, height)
 end
 
-function api.Initialize(levelIndex, levelTableOverride, musicEnabled)
+function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	self = {}
+	self.cosmos = cosmos
 	self.cameraTransform = love.math.newTransform()
 	self.interfaceTransform = love.math.newTransform()
 	self.emptyTransform = love.math.newTransform()
 	self.paused = false
 	self.musicEnabled = false
 	self.lifetime = Global.DEBUG_START_LIFETIME or 0
-	self.levelIndex = levelIndex or Global.INIT_LEVEL
-	self.levelTableOverride = levelTableOverride
 	
 	Delay.Initialise()
 	InterfaceUtil.Initialize()

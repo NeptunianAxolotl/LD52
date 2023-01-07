@@ -74,7 +74,7 @@ function api.Update(dt)
 	end
 	currentTrackRemaining = (currentTrackRemaining or 0) - dt
 	if currentTrackRemaining < 0 then
-		if world.MusicEnabled() then
+		if world.GetCosmos().MusicEnabled() then
 			if trackRunning then
 				for i = 1, #currentTrack do
 					SoundHandler.StopSound(currentTrack[i].sound, trackParity)
