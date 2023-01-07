@@ -7,20 +7,12 @@ local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
 	
-	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "dynamic")
+	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "static")
 	self.shape = love.physics.newCircleShape(self.def.radius)
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
-	if self.def.velocity then
-		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
-	end
-	
 	function self.Update(dt)
 		self.animTime = self.animTime + dt
-		
-		TerrainHandler.WrapBody(self.body)
-		TerrainHandler.ApplyGravity(self.body)
-		TerrainHandler.UpdateSpeedLimit(self.body)
 		
 		--local vx, vy = self.body:getLinearVelocity()
 		--local speed = util.Dist(0, 0, vx, vy)

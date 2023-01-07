@@ -6,7 +6,7 @@ local DEF = {
 	density = 10,
 }
 
-local function NewComponent(self, physicsWorld)
+local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
 	self.def = DEF
@@ -89,4 +89,4 @@ local function NewComponent(self, physicsWorld)
 	return self
 end
 
-return NewComponent
+return New

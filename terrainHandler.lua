@@ -2,7 +2,7 @@
 local Font = require("include/font")
 
 local MapDefs = util.LoadDefDirectory("defs/maps")
-local NewPlanet = require("objects/planet")
+local NewPlanet = require("objects/planet")local NewSun = require("objects/sun")
 
 local self = {}
 local api = {}
@@ -50,7 +50,7 @@ end
 local function AddPlanet(data)
 	IterableMap.Add(self.planets, NewPlanet({def = data}, self.world.GetPhysicsWorld()))
 end
-
+local function AddSun(data)	IterableMap.Add(self.suns, NewSun({def = data}, self.world.GetPhysicsWorld()))end
 local function GetCircularOrbitVelocity(pos)
 	local toSun, dist = util.Unit({pos[1] - self.sunX, pos[2] - self.sunY})
 	local speed = math.sqrt(self.sunGravity / dist)
@@ -60,27 +60,27 @@ end
 
 local function SetupLevel()
 	-- TODO self.map = {}
-	for i = 1, 25 do
-		local pos = {1300 + i * 50, Global.WORLD_HEIGHT/2}
+	for i = 1, 45 do
+		local pos = {1300 + i * 25, Global.WORLD_HEIGHT/2}
 		local planetData = {
 			pos = pos,
 			velocity = GetCircularOrbitVelocity(pos),
-			radius = 15,
+			radius = Global.PLANET_RADIUS,
 			density = 100
 		}
 		AddPlanet(planetData)
-	end
+	end		local sunData = {		pos = {self.sunX, self.sunY},		radius = Global.SUN_RADIUS,		density = 1000	}	AddSun(sunData)
 end
 
 function api.Update(dt)
-	IterableMap.ApplySelf(self.planets, "Update", dt)
+	IterableMap.ApplySelf(self.planets, "Update", dt)	IterableMap.ApplySelf(self.suns, "Update", dt)
 end
 
 function api.Draw(drawQueue)
 	drawQueue:push({y=0; f=function()
 		love.graphics.rectangle("line", 0, 0, self.width, self.height)
 	end})
-	IterableMap.ApplySelf(self.planets, "Draw", drawQueue)
+	IterableMap.ApplySelf(self.planets, "Draw", drawQueue)	IterableMap.ApplySelf(self.suns, "Draw", drawQueue)
 end
 
 function api.Initialize(world, levelIndex, mapDataOverride)
@@ -89,7 +89,7 @@ function api.Initialize(world, levelIndex, mapDataOverride)
 		width = Global.WORLD_WIDTH,
 		height = Global.WORLD_HEIGHT,
 		sunGravity = Global.GRAVITY_MULT * 100000,
-		planets = IterableMap.New(),
+		planets = IterableMap.New(),		suns = IterableMap.New(),
 	}
 	self.sunX = self.width / 2
 	self.sunY = self.height / 2

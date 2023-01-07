@@ -20,6 +20,9 @@ local globals = {
 	ACCEL_MULT = 100,
 	BRAKE_MULT = 250,
 	TURN_MULT = 1750,
+	
+	PLANET_RADIUS = 5,
+	SUN_RADIUS = 200,
 }
 
 return globals
