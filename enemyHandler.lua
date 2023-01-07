@@ -12,7 +12,10 @@ local api = {}
 -- Collision
 
 function api.Collision(aData, bData)
-	
+	if aData.objType == "asteroid" and bData.objType == "sun" then
+		aData.Destroy()
+		return true
+	end
 end
 
 ----------------------------------------------------------------------
@@ -29,12 +32,15 @@ local function SpawnEnemiesUpdate(dt)
 		self.asteroidTimer = mapData.asteroidTimeMin + math.random()*mapData.asteroidTimeRand
 	end
 	self.asteroidTimer = self.asteroidTimer - dt
-	print(self.asteroidTimer)
 	if self.asteroidTimer < 0 then
 		local pos = {0, math.random()*TerrainHandler.GetHeight()}
+		local velocity = util.RandomPointInAnnulus(80, 350)
+		if velocity[1] < 0 then
+			pos[1] = TerrainHandler.GetWidth()
+		end
 		local asteroidData = {
 			pos = pos,
-			velocity = util.RandomPointInAnnulus(80, 350),
+			velocity = velocity,
 			radius = 45,
 			density = 5
 		}

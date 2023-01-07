@@ -8,6 +8,7 @@ local toAdd = {
 	"stone1",
 	"stone2",
 	"stone3",
+	"asteroid",
 }
 
 for i = 1, #toAdd do

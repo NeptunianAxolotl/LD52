@@ -220,10 +220,10 @@ function api.Collision(a, b, colObject, normal, tangent)
 	if PlayerHandler.Collision(aData, bData) or (checkSwap and PlayerHandler.Collision(bData, aData)) then
 		return
 	end
-	if TerrainHandler.Collision(aData, bData) or (checkSwap and TerrainHandler.Collision(aData, bData)) then
+	if TerrainHandler.Collision(aData, bData) or (checkSwap and TerrainHandler.Collision(bData, aData)) then
 		return
 	end
-	if EnemyHandler.Collision(aData, bData) or (checkSwap and EnemyHandler.Collision(aData, bData)) then
+	if EnemyHandler.Collision(aData, bData) or (checkSwap and EnemyHandler.Collision(bData, aData)) then
 		return
 	end
 end

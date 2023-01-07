@@ -59,8 +59,12 @@ local function New(self, physicsWorld)
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
-				love.graphics.setColor(1, 1, 1, 1)
-				love.graphics.circle("line", 0, 0, self.def.radius)
+				
+				Resources.DrawImage("asteroid", 0, 0, 0, false, self.def.radius)
+				if Global.DRAW_PHYSICS then
+					love.graphics.setColor(1, 1, 1, 1)
+					love.graphics.circle("line", 0, 0, self.def.radius)
+				end
 			love.graphics.pop()
 		end})
 		if DRAW_DEBUG then
