@@ -13,6 +13,17 @@ local ageNames = {
 	"Space",
 }
 
+local ageGuys = {
+	false,
+	false,
+	false,
+	false,
+	"philosopher",
+	"inventor",
+	"scientist",
+	false,
+}
+
 local planetImageList = {
 	"planet1",
 	"planet2",
@@ -51,6 +62,7 @@ local function New(self, physicsWorld)
 	
 	self.age = self.def.age
 	self.ageProgress = 0
+	self.guyProgress = 0
 	
 	self.baseDrawRotation = math.pi*2
 	self.ageDrawRotation = math.pi*2

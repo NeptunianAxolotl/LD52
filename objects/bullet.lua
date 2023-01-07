@@ -49,7 +49,7 @@ local function New(self, physicsWorld)
 		
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
-		TerrainHandler.UpdateSpeedLimit(self.body)
+		TerrainHandler.UpdateSpeedLimit(self.body, Global.BULLET_SPEED_LIMIT)
 	end
 	
 	function self.Draw(drawQueue)

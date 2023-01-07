@@ -18,7 +18,7 @@ local function New(self, physicsWorld)
 	
 	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "dynamic")
 	self.shape = love.physics.newCircleShape(self.def.radius)
-	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
+	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density * Global.ASTEROID_WEIGHT_MULT)
 	
 	if self.def.velocity then
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])

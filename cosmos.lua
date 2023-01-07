@@ -29,11 +29,11 @@ end
 --------------------------------------------------
 
 function api.RestartWorld()
-	World.Initialize(self.levelIndex)
+	World.Initialize(api, self.levelIndex)
 end
 
 function api.LoadLevelByTable(levelTable)
-	World.Initialize(self.levelIndex, levelTable)
+	World.Initialize(api, self.levelIndex, levelTable)
 end
 
 --------------------------------------------------
