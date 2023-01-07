@@ -35,7 +35,7 @@ local function SpawnBullet(physicsWorld, body)
 		pos = spawnPos,
 		velocity = spawnVel,
 		radius = 10,
-		density = 12,
+		density = 10,
 		life = 7,
 		damage = 1,
 		planetDamage = 0.035,
@@ -94,6 +94,10 @@ local function New(self, physicsWorld)
 	
 	if self.def.velocity then
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
+	end
+	
+	function self.GetBody()
+		return self.body
 	end
 	
 	function self.Update(dt)

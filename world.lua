@@ -288,6 +288,7 @@ function api.Draw()
 	love.graphics.replaceTransform(self.emptyTransform)
 	
 	-- Draw interface
+	PlayerHandler.DrawInterface()
 	GameHandler.DrawInterface()
 	EffectsHandler.DrawInterface()
 	DialogueHandler.DrawInterface()

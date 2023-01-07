@@ -96,6 +96,10 @@ local function New(self, physicsWorld)
 			 -- Can only go down one age per damage instance.
 			self.age = self.age - 1
 			self.ageProgress = math.max(0, self.ageProgress + 1)
+			if self.guyProgress > 0.95 and ageGuys[self.age] then
+				self.guyGapTime = self.def.guyGap
+			end
+			self.guyProgress = 0
 			if self.age <= 1 then
 				self.age = 1
 				self.ageProgress = 0
@@ -124,13 +128,44 @@ local function New(self, physicsWorld)
 		self.animTime = self.animTime + dt
 		
 		if self.age > 1 and self.age < self.def.maxAge then
-			self.ageProgress = self.ageProgress + dt * self.def.ageSpeed
+			local ageSpeed = self.def.ageSpeed
+			if self.guyProgress >= 1 and ageGuys[self.age] then
+				ageSpeed = ageSpeed * self.def.guyAgeBoost
+			end
+			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
 				self.age = self.age + 1
 				self.ageProgress = self.ageProgress - 1
 			end
 		else
 			self.ageProgress = 0
+		end
+		
+		if self.guyGapTime and self.guyGapTime >= 0 then
+			self.guyGapTime = self.guyGapTime - dt
+		end
+		
+		if ageGuys[self.age] and (self.guyGapTime or 0) <= 0 then
+			if self.guyProgress < 1 then
+				self.guyProgress = self.guyProgress + dt * self.def.guySpeed
+			end
+		else
+			self.guyProgress = 0
+		end
+		
+		if self.guyProgress >= 1 and ageGuys[self.age] then
+			local playerBody = PlayerHandler.GetPlayerShipBody()
+			local bx, by = self.body:getPosition()
+			local myVx, myVy = self.body:getLinearVelocity()
+			local pVx, pVy = playerBody:getLinearVelocity()
+			if util.DistSq(myVx, myVy, pVx, pVy) < Global.ABDUCT_VEL_MATCH_SQ + self.def.radius then
+				if PlayerHandler.GetDistanceToPlayer({bx, by}) < Global.ABDUCT_DIST_REQUIRE then
+					if PlayerHandler.SetAbducting(ageGuys[self.age], self.body, self.def.radius) then
+						self.guyProgress = 0
+						self.guyGapTime = self.def.guyGap
+					end
+				end
+			end
 		end
 		
 		TerrainHandler.WrapBody(self.body)
@@ -158,6 +193,10 @@ local function New(self, physicsWorld)
 					love.graphics.circle("line", 0, 0, self.def.radius)
 				end
 			love.graphics.pop()
+		
+			if self.guyProgress > 0.95 and ageGuys[self.age] then
+				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (self.guyProgress - 0.95)/0.05), self.def.radius)
+			end
 			
 			love.graphics.setColor(1, 1, 1, 0.6)
 			love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)

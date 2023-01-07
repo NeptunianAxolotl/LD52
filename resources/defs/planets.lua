@@ -11,6 +11,9 @@ local toAdd = {
 	"asteroid_damage_0",
 	"asteroid_damage_1",
 	"asteroid_damage_2",
+	"philosopher",
+	"inventor",
+	"scientist",
 }
 
 for i = 1, #toAdd do
