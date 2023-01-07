@@ -41,7 +41,14 @@ local function NewComponent(self, physicsWorld)
 			local angle = self.body:getAngle()
 			local force = 6
 			local forceVec = util.PolarToCart(force, angle)
-			self.body:applyForce(unpack(forceVec))
+			self.body:applyForce(forceVec[1], forceVec[2])
+		end
+		
+		if love.keyboard.isDown("s") or love.keyboard.isDown("down") or love.keyboard.isDown("space") then
+			local vx, vy = self.body:getLinearVelocity()
+			local force = -12
+			local forceVec = util.Mult(force, util.Unit({vx, vy}))
+			self.body:applyForce(forceVec[1], forceVec[2])
 		end
 		
 		local turnAmount = false
@@ -51,7 +58,10 @@ local function NewComponent(self, physicsWorld)
 			turnAmount = 1
 		end
 		if turnAmount then
-			turnAmount = turnAmount * 110
+			local vx, vy = self.body:getLinearVelocity()
+			local speed = util.Dist(0, 0, vx, vy)
+			turnAmount = turnAmount * Global.TURN_MULT
+			turnAmount = turnAmount * (0.2 + 0.8 * (1 - speed / (speed + 600)))
 			self.body:applyTorque(turnAmount)
 		end
 	end
