@@ -128,11 +128,23 @@ local function SpawnAsteroidsUpdate(spawnData, spawnIndex, dt)
 		end
 		
 		if leftRightSpawn then
-			if velocity[1] < 0 then
+			if forceLeft then
+				pos[1] = 0
+				velocity[1] = math.abs(velocity[1])
+			elseif forceRight then
+				pos[1] = TerrainHandler.GetWidth()
+				velocity[1] = -1*math.abs(velocity[1])
+			elseif velocity[1] < 0 then
 				pos[1] = TerrainHandler.GetWidth()
 			end
 		else
-			if velocity[2] < 0 then
+			if forceTop then
+				pos[2] = 0
+				velocity[2] = math.abs(velocity[2])
+			elseif forceBottom then
+				pos[2] = TerrainHandler.GetWidth()
+				velocity[2] = -1*math.abs(velocity[2])
+			elseif velocity[2] < 0 then
 				pos[2] = TerrainHandler.GetHeight()
 			end
 		end

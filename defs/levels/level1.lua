@@ -2,7 +2,7 @@
 local def = {
 	name = "Tutorial?",
 	prevLevel = "testLevel",
-	nextLeve = "drainCircling",
+	nextLevel = "drainCircling",
 	gravity = 20,
 	asteroidSpawn = {
 		{
