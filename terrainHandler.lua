@@ -67,7 +67,7 @@ function api.Update(dt)
 end
 
 function api.Draw(drawQueue)
-	drawQueue:push({y=0; f=function()		love.graphics.setColor(1, 1, 1, 1)
+	drawQueue:push({y=-100; f=function()		love.graphics.setColor(1, 1, 1, 0.2)
 		love.graphics.rectangle("line", 0, 0, self.width, self.height)
 	end})
 	IterableMap.ApplySelf(self.planets, "Draw", drawQueue)	IterableMap.ApplySelf(self.suns, "Draw", drawQueue)

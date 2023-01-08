@@ -11,7 +11,7 @@ local function AddIfExists(v1, v2)
 	return util.Add(v1, v2)
 end
 
-local function PoliceBehaviour(self)
+local function DoMovement(self)
 	local netForce = false
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -5000, 500, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -4000, 280, true))
@@ -19,6 +19,7 @@ local function PoliceBehaviour(self)
 	
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320, false, false))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -600, 250, true))
 	elseif (not netForce) or util.AbsVal(netForce) < 3000 then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320, false, false, self.dodgeAngle))
 	end
@@ -30,14 +31,24 @@ local function PoliceBehaviour(self)
 	end
 end
 
+local function DoShooting(self, dt)
+
+end
+
+local function PoliceBehaviour(self, dt)
+	DoMovement(self)
+	DoShooting(self, dt)
+end
+
 local def = {
 	density = 5,
 	coords = {{-0.25, 0.25}, {-0.25, -0.25}, {0.18, -0.43}, {0.75, -0.41}, {0.94, 0}, {0.75, 0.41}, {0.18, 0.43}},
 	scaleFactor = 110,
-	health = 5,
+	health = 3,
 	image = "police",
+	angleDampen = 16,
 	minDampening = 1.2,
-	turnRate = 50000,
+	turnRate = 60000,
 	
 	DoBehaviour = PoliceBehaviour,
 }

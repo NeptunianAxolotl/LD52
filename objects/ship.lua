@@ -7,7 +7,7 @@ local ShipDefs = util.LoadDefDirectory("defs/ship")
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
-	self.objType = self.def.objectType
+	self.objType = "enemyShip"
 	self.def = util.CopyTable(ShipDefs[self.def.typeName], false, self.def)
 	
 	local modCoords = {}
@@ -23,7 +23,7 @@ local function New(self, physicsWorld)
 	self.shape = love.physics.newPolygonShape(unpack(modCoords))
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
-	self.body:setAngularDamping(8.6)
+	self.body:setAngularDamping(self.def.angleDampen)
 	self.body:setUserData(self)
 	self.fixture:setFriction(0.45)
 	
@@ -86,7 +86,7 @@ local function New(self, physicsWorld)
 		TerrainHandler.ApplyGravity(self.body)
 		TerrainHandler.UpdateSpeedLimit(self.body, false, self.def.minDampening)
 		
-		self.def.DoBehaviour(self)
+		self.def.DoBehaviour(self, dt)
 		
 		if self.targetAngle then
 			local turnAngle = util.AngleSubtractShortest(self.targetAngle, self.body:getAngle())
@@ -96,9 +96,6 @@ local function New(self, physicsWorld)
 				self.body:applyTorque(-1*self.def.turnRate * math.min(1, math.abs(turnAngle)))
 			end
 		end
-		--local vx, vy = self.body:getLinearVelocity()
-		--local speed = util.Dist(0, 0, vx, vy)
-		--print(speed)
 	end
 	
 	function self.Draw(drawQueue)

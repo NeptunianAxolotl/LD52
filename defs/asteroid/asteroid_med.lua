@@ -5,6 +5,7 @@ local def = {
 	splitCount = 2,
 	density = 2.4,
 	health = 1,
+	shipDamage = 1,
 }
 
 return def

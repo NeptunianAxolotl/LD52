@@ -34,6 +34,7 @@ local def = {
 	scaleFactor = 120,
 	health = 5,
 	image = "police",
+	angleDampen = 16,
 	minDampening = 1.2,
 	turnRate = 50000,
 	

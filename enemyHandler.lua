@@ -13,13 +13,18 @@ local api = {}
 -- Collision
 
 function api.Collision(aData, bData)
-	if (aData.objType == "asteroid" or aData.objType == "bullet") and bData.objType == "sun" then
+	if (aData.objType == "asteroid" or aData.objType == "bullet" or aData.objType == "enemyShip") and bData.objType == "sun" then
 		aData.Destroy()
 		return true
 	end
-	if aData.objType == "asteroid" and bData.objType == "bullet" then
+	if (aData.objType == "asteroid" or aData.objType == "enemyShip") and bData.objType == "bullet" then
 		aData.AddDamage(bData.def.damage)
 		bData.Destroy()
+		return true
+	end
+	if (aData.objType == "asteroid" and bData.objType == "enemyShip") then
+		aData.AddDamage(1)
+		bData.AddDamage(aData.def.shipDamage)
 		return true
 	end
 	if aData.objType == "planet" and bData.objType == "bullet" then
