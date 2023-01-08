@@ -38,6 +38,19 @@ function api.GetClosestBullet(bx, by, maxDist)
 	return other
 end
 
+local function IsSmuggler(data)
+	return data.def.abductRange
+end
+
+function api.GetClosestSmuggler(bx, by, maxDist)
+	local other = IterableMap.GetMinimum(EnemyHandler.GetShips(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by, IsSmuggler)
+	if not other then
+		return
+	end
+	return other
+end
+
+
 function api.GetClosestPlanet(bx, by, maxDist, filterFunc)
 	local other = IterableMap.GetMinimum(TerrainHandler.GetPlanets(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by, filterFunc)
 	if not other then

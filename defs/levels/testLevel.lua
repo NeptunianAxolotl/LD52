@@ -23,7 +23,7 @@ local def = {
 	},
 	shipSpawn = {
 		{
-			timeMin = 2.5 * SPAWN_TIME_MULT,
+			timeMin = 22.5 * SPAWN_TIME_MULT,
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
@@ -36,6 +36,20 @@ local def = {
 			spawnOffset = -0.15,
 			typeName = "smuggler",
 		},
+		{
+			timeMin = 22.5 * SPAWN_TIME_MULT,
+			timeRand = 0.8 * SPAWN_TIME_MULT,
+			speedMin = 0,
+			speedMax = 20,
+			orbitMult = 0.8,
+			orbitMultRand = 0.1,
+			orbitMultBothDirections = 0,
+			topBotChance = 0,
+			avoidOrbitOverWrap = true,
+			spawnRange = 0.3,
+			spawnOffset = -0.15,
+			typeName = "police",
+		},
 	},
 	planets = {
 		{
@@ -47,7 +61,7 @@ local def = {
 			shootRateMult = 2,
 			earlyAgeSpeed = 1/10,
 			lateAgeSpeed = 1/50,
-			guySpeed = 1/10,
+			guySpeed = 1/2,
 			guyGap = 0,
 			guyAgeBoost = 6,
 			fillLastAge = false,

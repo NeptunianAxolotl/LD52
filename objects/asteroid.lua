@@ -6,8 +6,9 @@ local AsteroidDefs = util.LoadDefDirectory("defs/asteroid")
 
 local asteroidDamageImages = {
 	[0] = "asteroid_damage_0",
+	[0.5] = "asteroid_damage_1",
 	[1] = "asteroid_damage_1",
-	[2] = "asteroid_damage_2"
+	[1.5] = "asteroid_damage_2"
 }
 
 local function New(self, physicsWorld)
@@ -98,10 +99,11 @@ local function New(self, physicsWorld)
 			love.graphics.push()
 				local x, y = self.body:getWorldCenter()
 				local angle = self.body:getAngle()
+				local alpha = TerrainHandler.GetWrapAlpha(x, y)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage(asteroidDamageImages[self.damage] or "asteroid_damage_2", 0, 0, 0, false, self.def.radius)
+				Resources.DrawImage(asteroidDamageImages[self.damage] or "asteroid_damage_2", 0, 0, 0, alpha, self.def.radius)
 				if Global.DRAW_PHYSICS then
 					love.graphics.setColor(1, 1, 1, 1)
 					love.graphics.circle("line", 0, 0, self.def.radius)

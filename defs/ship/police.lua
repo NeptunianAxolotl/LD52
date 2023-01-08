@@ -43,9 +43,20 @@ local function DoShooting(self, dt)
 	local otherBody = PlayerHandler.GetPlayerShipBody()
 	local bx, by = self.body:getWorldCenter()
 	local ox, oy = otherBody:getWorldCenter()
-	if util.DistSq(bx, by, ox, oy) > self.def.range * self.def.range then
-		self.shootProgress = 0.95
-		return
+	local smuggler = planetUtils.GetClosestSmuggler(bx, by, self.def.range)
+	local playerDistSq = util.DistSq(bx, by, ox, oy)
+	if playerDistSq > self.def.range * self.def.range then
+		if not smuggler then
+			self.shootProgress = 0.95
+			return
+		end
+		otherBody = smuggler.body
+	elseif smuggler then
+		local sx, sy = smuggler.body:getWorldCenter()
+		local smugglerDistSq = util.DistSq(bx, by, sx, sy)
+		if smugglerDistSq < playerDistSq then
+			otherBody = smuggler.body
+		end
 	end
 	planetUtils.ShootAtBody(otherBody, self.body, "police_bullet", 600, 85)
 	self.shootProgress = 0

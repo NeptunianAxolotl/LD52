@@ -130,12 +130,13 @@ local function New(self, physicsWorld)
 			love.graphics.push()
 				local x, y = self.body:getWorldCenter()
 				local angle = self.body:getAngle()
+				local alpha = TerrainHandler.GetWrapAlpha(x, y)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage(self.def.image, 0, 0, 0, false, self.def.scaleFactor)
+				Resources.DrawImage(self.def.image, 0, 0, 0, alpha, self.def.scaleFactor)
 				if self.stasisProgress then
-					Resources.DrawImage("stasis", 0, 0, 0, 0.5 * (1 - self.stasisProgress * self.stasisProgress), self.def.scaleFactor)
+					Resources.DrawImage("stasis", 0, 0, 0, alpha * 0.5 * (1 - self.stasisProgress * self.stasisProgress), self.def.scaleFactor)
 				end
 			love.graphics.pop()
 			

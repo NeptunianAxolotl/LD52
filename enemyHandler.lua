@@ -68,6 +68,10 @@ function api.GetBullets()
 	return self.bullets
 end
 
+function api.GetShips()
+	return self.ships
+end
+
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 -- Creation and handling

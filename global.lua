@@ -22,7 +22,7 @@ local globals = {
 	EMERGENCY_BRAKE_MULT = 80,
 	BRAKE_MULT = 35,
 	BRAKE_DAMPEN = 2.2,
-	TURN_MULT = 11000,
+	TURN_MULT = 11500,
 	MIN_TURN = 2600,
 	
 	SHOOT_COOLDOWN = 0.1,
@@ -37,7 +37,9 @@ local globals = {
 	
 	REPEL_DIST = 150,
 	REPEL_MAX_FORCE = 1300,
-	GUY_AGE_END_DELAY = false,
+	GUY_AGE_END_DELAY = 10,
+	
+	WRAP_ALPHA_SIZE = 35,
 	
 	INIT_LEVEL = "testLevel",
 	DRAW_PHYSICS = false,

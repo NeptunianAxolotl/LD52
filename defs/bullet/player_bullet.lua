@@ -1,7 +1,7 @@
 local def = {
 	radius = 10,
-	density = 11,
-	life = 7,
+	density = 9,
+	life = 4,
 	damage = 1,
 	planetDamage = 0.04,
 	guyDamage = 0.02,

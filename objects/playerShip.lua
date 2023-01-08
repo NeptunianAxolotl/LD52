@@ -83,7 +83,7 @@ local function New(self, physicsWorld)
 	self.shape = love.physics.newPolygonShape(unpack(modCoords))
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
-	self.body:setAngularDamping(8.6)
+	self.body:setAngularDamping(9.6)
 	self.body:setUserData(self)
 	self.fixture:setFriction(0.45)
 	
@@ -129,8 +129,10 @@ local function New(self, physicsWorld)
 		
 		local vx, vy = self.body:getLinearVelocity()
 		local speed = math.sqrt(vx*vx + vy*vy)
+		local buildTurnRamp = false
 		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
+			buildTurnRamp = true
 			local angle = self.body:getAngle()
 			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 80)) * self.GetSpeedMod()
 			local forceVec = util.PolarToCart(accel, angle)
@@ -157,6 +159,7 @@ local function New(self, physicsWorld)
 		
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)
 		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") then
+			buildTurnRamp = true
 			local vx, vy = self.body:getLinearVelocity()
 			local force = -1 * Global.BRAKE_MULT * self.GetSpeedMod()
 			if emergencyStop then
@@ -173,9 +176,16 @@ local function New(self, physicsWorld)
 		elseif love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 			turnAmount = 1
 		end
+		if turnAmount or buildTurnRamp then
+			self.turnRamp = math.min(1, (self.turnRamp or 0) + 8*dt)
+		else
+			self.turnRamp = 0
+		end
+		
 		if turnAmount then
 			local vx, vy = self.body:getLinearVelocity()
 			local speed = util.Dist(0, 0, vx, vy)
+			turnAmount = (0.9 * self.turnRamp + 0.1) * turnAmount 
 			turnAmount = turnAmount * math.max(Global.MIN_TURN, Global.TURN_MULT * (0.15 + 0.85 * (1 - speed / (speed + 750)))) * self.TurnMod()
 			self.body:applyTorque(turnAmount)
 		end
@@ -194,12 +204,13 @@ local function New(self, physicsWorld)
 			love.graphics.push()
 				local x, y = self.body:getWorldCenter()
 				local angle = self.body:getAngle()
+				local alpha = TerrainHandler.GetWrapAlpha(x, y)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage("ship", 0, 0, 0, false, scaleFactor)
+				Resources.DrawImage("ship", 0, 0, 0, alpha, scaleFactor)
 				if self.stasisProgress then
-					Resources.DrawImage("stasis", 0, 0, 0, 0.5 * (1 - self.stasisProgress * self.stasisProgress), scaleFactor)
+					Resources.DrawImage("stasis", 0, 0, 0, alpha * 0.5 * (1 - self.stasisProgress * self.stasisProgress), scaleFactor)
 				end
 				
 			love.graphics.pop()
