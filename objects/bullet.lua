@@ -57,7 +57,7 @@ local function New(self, physicsWorld)
 		
 		if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
 			local tx, ty = self.def.target:getWorldCenter()
-			planetUtils.ApplyForceTowards(self.body, {tx, ty}, self.def.homingForce)
+			planetUtils.ApplyForceTowards(self.body, {tx, ty}, self.def.homingForce, true)
 		end
 	end
 	

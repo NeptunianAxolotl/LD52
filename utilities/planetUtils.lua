@@ -1,10 +1,43 @@
 
 local api = {}
 
+local function ClosestToWithDistSq(data, maxDistSq, px, py)
+	if data.isDead or data.body:isDestroyed() then
+		return false
+	end
+	local bx, by = data.body:getWorldCenter()
+	local distSq = util.DistSqWithWrap(bx, by, px, py, Global.WORLD_WIDTH, Global.WORLD_HEIGHT)
+	if maxDistSq and distSq > maxDistSq then
+		return false
+	end
+	return distSq
+end
+
 function api.ApplyForceTowards(body, pos, forceSize)
 	local bx, by = body:getWorldCenter()
-	local force = util.Mult(forceSize, util.Unit({pos[1] - bx, pos[2] - by}))
+	local force = util.Mult(forceSize, util.UnitTowardsWithWrap({bx, by}, pos, Global.WORLD_WIDTH, Global.WORLD_HEIGHT))
 	body:applyForce(force[1], force[2])
+end
+
+function api.ForceTowardsClosest(body, objType, maxDist, forceSize, doFalloff)
+	local bx, by = body:getWorldCenter()
+	local other = false
+	if objType == "asteroid" then
+		other = IterableMap.GetMinimum(EnemyHandler.GetAsteroids(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by)
+	end
+	
+	if not other then
+		return
+	end
+	local otherBody = other.body
+	local ox, oy = otherBody:getWorldCenter()
+	
+	local towards, dist = util.UnitTowardsWithWrap({bx, by}, {ox, oy}, Global.WORLD_WIDTH, Global.WORLD_HEIGHT)
+	if doFalloff then
+		forceSize = forceSize * (1 - dist / maxDist)
+	end
+	local forceVec = util.Mult(forceSize, towards)
+	body:applyForce(forceVec[1], forceVec[2])
 end
 
 function api.RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius, repelDist, repelForce)

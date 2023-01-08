@@ -5,15 +5,20 @@ local toAdd = {
 	"police",
 }
 
+local xOff = {
+	ship = 0.45,
+	police = 0.52,
+}
+
 for i = 1, #toAdd do
 	local name = toAdd[i]
 	images[#images + 1] = {
 		name = name,
 		form = "image", -- image, sound or animation
 		file = "resources/images/characters/" .. name .. ".png",
-		xScale = 0.19*1.2 * 1.2,
-		yScale = 0.19*1.2 * 1.2,
-		xOffset = 0.45,
+		xScale = 0.003257,
+		yScale = 0.003257,
+		xOffset = xOff[name] or 0.5,
 		yOffset = 0.5,
 	}
 end

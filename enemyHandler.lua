@@ -1,8 +1,8 @@
 
-
 local Font = require("include/font")
 local NewAsteroid = require("objects/asteroid")
 local NewBullet = require("objects/bullet")
+local NewShip = require("objects/ship")
 
 local self = {}
 local api = {}
@@ -66,6 +66,10 @@ function api.ApplyToBullets(func, ...)
 	IterableMap.Apply(self.bullets, func, ...)
 end
 
+function api.GetAsteroids()
+	return self.asteroids
+end
+
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 -- Creation and handling
@@ -83,12 +87,16 @@ function api.AddBullet(data)
 	IterableMap.Add(self.bullets, NewBullet({def = data}, self.world.GetPhysicsWorld()))
 end
 
-local function SpawnAsteroidsUpdate(spawnData, spawnIndex, dt)
-	if not self.asteroidTimer[spawnIndex] then
-		self.asteroidTimer[spawnIndex] = spawnData.timeMin + math.random()*spawnData.timeRand
+function api.AddShip(data)
+	IterableMap.Add(self.ships, NewShip({def = data}, self.world.GetPhysicsWorld()))
+end
+
+local function CheckEnemyTypeSpawn(spawnData, spawnIndex, dt, timerTable, spawnFunc)
+	if not timerTable[spawnIndex] then
+		timerTable[spawnIndex] = spawnData.timeMin + math.random()*spawnData.timeRand
 	end
-	self.asteroidTimer[spawnIndex] = self.asteroidTimer[spawnIndex] - dt
-	if self.asteroidTimer[spawnIndex] < 0 then
+	timerTable[spawnIndex] = timerTable[spawnIndex] - dt
+	if timerTable[spawnIndex] < 0 then
 		local spawnMin = 0.5 - (spawnData.spawnRange or 1) * 0.5
 		local spawnPosFactor = (spawnMin + (spawnData.spawnRange or 1) * math.random()) + (spawnData.spawnOffset or 0)
 		local pos = {0, spawnPosFactor * TerrainHandler.GetHeight()}
@@ -149,13 +157,13 @@ local function SpawnAsteroidsUpdate(spawnData, spawnIndex, dt)
 			end
 		end
 		
-		local asteroidData = {
+		local toSpawn = {
 			pos = pos,
 			velocity = velocity,
-			typeName = spawnData.spawnType,
+			typeName = spawnData.typeName,
 		}
-		api.AddAsteroid(asteroidData)
-		self.asteroidTimer[spawnIndex] = self.asteroidTimer[spawnIndex] + spawnData.timeMin + math.random()*spawnData.timeRand
+		spawnFunc(toSpawn)
+		timerTable[spawnIndex] = timerTable[spawnIndex] + spawnData.timeMin + math.random()*spawnData.timeRand
 	end
 end
 
@@ -163,7 +171,10 @@ local function SpawnEnemiesUpdate(dt)
 	local levelData = TerrainHandler.GetLevelData()
 	if levelData.asteroidSpawn then
 		for i = 1, #levelData.asteroidSpawn do
-			SpawnAsteroidsUpdate(levelData.asteroidSpawn[i], i, dt)
+			CheckEnemyTypeSpawn(levelData.asteroidSpawn[i], i, dt, self.asteroidTimer, api.AddAsteroid)
+		end
+		for i = 1, #levelData.shipSpawn do
+			CheckEnemyTypeSpawn(levelData.shipSpawn[i], i, dt, self.shipTimer, api.AddShip)
 		end
 	end
 end
@@ -175,6 +186,7 @@ end
 function api.Update(dt)
 	SpawnEnemiesUpdate(dt)
 	IterableMap.ApplySelf(self.asteroids, "Update", dt)
+	IterableMap.ApplySelf(self.ships, "Update", dt)
 	IterableMap.ApplySelf(self.bullets, "Update", dt)
 	
 	if self.asteroidCreateQueue then
@@ -188,6 +200,7 @@ end
 
 function api.Draw(drawQueue)
 	IterableMap.ApplySelf(self.asteroids, "Draw", drawQueue)
+	IterableMap.ApplySelf(self.ships, "Draw", drawQueue)
 	IterableMap.ApplySelf(self.bullets, "Draw", drawQueue)
 end
 
@@ -196,8 +209,10 @@ function api.Initialize(world, levelIndex, mapDataOverride)
 		world = world,
 		asteroids = IterableMap.New(),
 		bullets = IterableMap.New(),
+		ships = IterableMap.New(),
 		asteroidCreateQueue = false,
-		asteroidTimer = {}
+		shipTimer = {},
+		asteroidTimer = {},
 	}
 end
 

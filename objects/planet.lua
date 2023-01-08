@@ -119,6 +119,10 @@ local function New(self, physicsWorld)
 		return (1 - self.guyProgress) / self.def.guySpeed + self.guyGapTime
 	end
 	
+	local function IsGuyAppearing()
+		return GetGuyTimeRemaining() < 0.5
+	end
+	
 	function self.CheckShoot(dt)
 		if not shootParameters[self.age] then
 			return
@@ -171,7 +175,7 @@ local function New(self, physicsWorld)
 			 -- Can only go down one age per damage instance.
 			self.age = self.age - 1
 			self.ageProgress = math.max(0, self.ageProgress + 1)
-			if  ageGuys[self.age] and GetGuyTimeRemaining() < 0.5 then
+			if ageGuys[self.age] and IsGuyAppearing() then
 				self.guyGapTime = self.def.guyGap
 			end
 			self.guyProgress = 0
@@ -212,11 +216,18 @@ local function New(self, physicsWorld)
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
-				if self.age < self.def.maxAge then
-					self.age = self.age + 1
-					self.ageProgress = self.ageProgress - 1
+				if IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
+					self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
+					self.ageProgress = 0.9999
 				else
-					self.ageProgress = 1
+			self.guyProgress = 0
+					self.guyAgeEndRemovalTime = false
+					if self.age < self.def.maxAge then
+						self.age = self.age + 1
+						self.ageProgress = self.ageProgress - 1
+					else
+						self.ageProgress = 1
+					end
 				end
 			end
 		else
@@ -235,6 +246,7 @@ local function New(self, physicsWorld)
 			end
 		else
 			self.guyProgress = 0
+			self.guyAgeEndRemovalTime = false
 		end
 		
 		self.CheckRepelBullets(dt)
@@ -249,6 +261,7 @@ local function New(self, physicsWorld)
 				if PlayerHandler.GetDistanceToPlayer({bx, by}) < Global.ABDUCT_DIST_REQUIRE then
 					if PlayerHandler.SetAbducting(ageGuys[self.age], self.body, self.def.radius) then
 						self.guyProgress = 0
+						self.guyAgeEndRemovalTime = false
 						self.guyGapTime = self.def.guyGap
 					end
 				end
@@ -289,7 +302,7 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 		
-			if ageGuys[self.age] and GetGuyTimeRemaining() < 0.5 then
+			if ageGuys[self.age] and IsGuyAppearing() then
 				local timeRemaining = GetGuyTimeRemaining()
 				Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
 				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5)*0.7, self.def.radius)

@@ -24,6 +24,21 @@ function util.DistSq(x1, y1, x2, y2)
 	return util.DistSqVectors(x1, y1)
 end
 
+function util.DistSqWithWrap(x1, y1, x2, y2, wrapX, wrapY)
+	local smallestDistSq = false
+	local si, sj = 0, 0
+	for i = -1, 1 do
+		for j = -1, 1 do
+			local distSq = util.DistSq(x1, y1, x2 + i*wrapX, y2 + j*wrapY)
+			if (not smallestDistSq) or distSq < smallestDistSq then
+				smallestDistSq = distSq
+				si, sj = i, j
+			end
+		end
+	end
+	return smallestDistSq, si, sj
+end
+
 function util.Dist(x1, y1, x2, y2)
 	return sqrt(util.DistSq(x1,y1,x2,y2))
 end
@@ -63,6 +78,22 @@ function util.Unit(v)
 	else
 		return v, mag
 	end
+end
+
+function util.UnitTowardsWithWrap(from, to, wrapX, wrapY)
+	local smallestDistSq = false
+	local si, sj = 0, 0
+	for i = -1, 1 do
+		for j = -1, 1 do
+			local distSq = util.DistSq(from[1], from[2], to[1] + i*wrapX, to[2] + j*wrapY)
+			if (not smallestDistSq) or distSq < smallestDistSq then
+				smallestDistSq = distSq
+				si, sj = i, j
+			end
+		end
+	end
+	local v, mag = util.Unit(util.Subtract({to[1] + si*wrapX, to[2] + sj*wrapY}, from))
+	return v, mag
 end
 
 function util.SetLength(b, v)

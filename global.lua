@@ -35,9 +35,10 @@ local globals = {
 	
 	REPEL_DIST = 150,
 	REPEL_MAX_FORCE = 1300,
+	GUY_AGE_END_DELAY = 8,
 	
 	INIT_LEVEL = "testLevel",
-	DRAW_PHYSICS = false,
+	DRAW_PHYSICS = true,
 }
 
 return globals

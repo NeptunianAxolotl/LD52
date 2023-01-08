@@ -70,7 +70,7 @@ local function New(self, physicsWorld)
 	self.def.density = 5
 	
 	local coords = {{-0.4, 0.35}, {-0.4, -0.35}, {-0.1, -0.35}, {0.6, -0.05}, {0.6, 0.05}, {-0.1, 0.35}}
-	local scaleFactor = 50*1.4*1.2
+	local scaleFactor = 84
 	local modCoords = {}
 	for i = 1, #coords do
 		local pos = util.Mult(scaleFactor, coords[i])
@@ -158,7 +158,7 @@ local function New(self, physicsWorld)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage("ship", 0, 0, 0, false, self.def.radius)
+				Resources.DrawImage("ship", 0, 0, 0, false, scaleFactor)
 				
 			love.graphics.pop()
 			

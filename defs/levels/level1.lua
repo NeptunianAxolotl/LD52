@@ -10,7 +10,7 @@ local def = {
 			timeRand = 2,
 			speedMin = 80,
 			speedMax = 350,
-			spawnType = "asteroid_big",
+			typeName = "asteroid_big",
 		},
 	},
 	planets = {
