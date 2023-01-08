@@ -297,14 +297,13 @@ function api.Draw()
 	love.graphics.replaceTransform(self.emptyTransform)
 end
 
-function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
+function api.Initialize(cosmos, levelData)
 	self = {}
 	self.cosmos = cosmos
 	self.cameraTransform = love.math.newTransform()
 	self.interfaceTransform = love.math.newTransform()
 	self.emptyTransform = love.math.newTransform()
 	self.paused = false
-	self.musicEnabled = false
 	self.lifetime = Global.DEBUG_START_LIFETIME or 0
 	
 	Delay.Initialise()
@@ -319,7 +318,7 @@ function api.Initialize(cosmos, levelIndex, levelTableOverride, musicEnabled)
 	
 	PlayerHandler.Initialize(api)
 	EnemyHandler.Initialize(api)
-	TerrainHandler.Initialize(api, self.levelIndex, self.levelTableOverride)
+	TerrainHandler.Initialize(api, levelData)
 	
 	DeckHandler.Initialize(api)
 	GameHandler.Initialize(api)

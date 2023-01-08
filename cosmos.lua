@@ -3,6 +3,8 @@ local World = require("world")
 SoundHandler = require("soundHandler")
 MusicHandler = require("musicHandler")
 
+local LevelDefs = util.LoadDefDirectory("defs/levels")
+
 local self = {}
 local api = {}
 
@@ -29,11 +31,11 @@ end
 --------------------------------------------------
 
 function api.RestartWorld()
-	World.Initialize(api, self.levelIndex)
+	World.Initialize(api, LevelDefs[self.levelName])
 end
 
 function api.LoadLevelByTable(levelTable)
-	World.Initialize(api, self.levelIndex, levelTable)
+	World.Initialize(api, levelTable)
 end
 
 --------------------------------------------------
@@ -83,10 +85,10 @@ end
 
 function api.Initialize()
 	self = {
-		levelIndex = 0
+		levelName = "level1"
 	}
 	MusicHandler.Initialize(api)
-	World.Initialize(api, self.levelIndex)
+	World.Initialize(api, LevelDefs[self.levelName])
 end
 
 return api

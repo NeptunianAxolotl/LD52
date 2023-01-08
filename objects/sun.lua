@@ -30,7 +30,7 @@ local function New(self, physicsWorld)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage("sun", 0, 0, 0, false, self.def.radius)
+				Resources.DrawImage(self.def.image, 0, 0, 0, false, self.def.radius)
 				if Global.DRAW_PHYSICS then
 					love.graphics.setColor(1, 1, 1, 1)
 					love.graphics.circle("line", 0, 0, self.def.radius)

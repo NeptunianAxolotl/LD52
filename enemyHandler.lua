@@ -85,6 +85,9 @@ end
 
 local function SpawnEnemiesUpdate(dt)
 	local mapData = TerrainHandler.GetMapData()
+	if not mapData.asteroidTimeMin then
+		return
+	end
 	if not self.asteroidTimer then
 		self.asteroidTimer = mapData.asteroidTimeMin + math.random()*mapData.asteroidTimeRand
 	end
