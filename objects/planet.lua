@@ -26,24 +26,25 @@ local ageGuys = {
 
 local shootParameters = {
 	[7] = {
-		range = 400,
-		reloadSpeed = 1/12,
+		range = 420,
+		reloadSpeed = 1/9,
 		checkRate = 0.33,
 		typeName = "modern_bullet",
 		projSpeed = 250,
-		spawnRadius = 15,
+		spawnRadius = 20,
 	},
 	[8] = {
-		range = 360,
+		range = 420,
 		reloadSpeed = 1/0.45,
 		checkRate = 0.33,
 		typeName = "space_bullet",
-		projSpeed = 380,
+		projSpeed = 420,
 		spawnRadius = 15,
 	},
 }
 
 local bulletImmuneAges = {
+	[8] = true
 }
 
 local bulletRepelAges = {
@@ -58,14 +59,14 @@ local planetImageList = {
 }
 
 local ageImages = {
-	"stone3",
+	false,
 	"stone1",
 	"stone2",
 	"stone3",
-	"stone3",
-	"stone3",
-	"stone3",
-	"stone3",
+	"classicalage",
+	"victorianage",
+	"modernage",
+	"spaceage",
 }
 
 local function RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius)
@@ -198,11 +199,16 @@ local function New(self, physicsWorld)
 		return bulletImmuneAges[self.age]
 	end
 	
-	function self.AddDamage(damage)
+	function self.AddDamage(damage, guyDamage)
 		if self.age <= 1 then
 			return true
 		end
 		self.ageProgress = self.ageProgress - damage
+		self.guyProgress = self.guyProgress - (guyDamage or 0)
+		if self.guyProgress < 0 then
+			self.guyProgress = 0
+		end
+		
 		if self.ageProgress < 0 then
 			 -- Can only go down one age per damage instance.
 			self.age = self.age - 1
@@ -211,7 +217,6 @@ local function New(self, physicsWorld)
 				self.guyGapTime = self.def.guyGap
 			end
 			self.guyProgress = 0
-			self.reloadProgress = 0
 			if self.age <= 1 then
 				self.age = 1
 				self.ageProgress = 0
@@ -307,7 +312,9 @@ local function New(self, physicsWorld)
 				love.graphics.rotate(angle)
 				
 				Resources.DrawImage(self.planetDrawBase, 0, 0, self.baseDrawRotation, false, self.def.radius)
-				Resources.DrawImage(ageImages[self.age], 0, 0, self.ageDrawRotation, false, self.def.radius)
+				if ageImages[self.age] then
+					Resources.DrawImage(ageImages[self.age], 0, 0, self.ageDrawRotation, false, self.def.radius)
+				end
 				
 				if Global.DRAW_PHYSICS then
 					love.graphics.setColor(1, 1, 1, 1)

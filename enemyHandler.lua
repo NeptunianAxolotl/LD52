@@ -24,7 +24,7 @@ function api.Collision(aData, bData)
 	end
 	if aData.objType == "planet" and bData.objType == "bullet" then
 		if not aData.IsBulletImmune() then
-			aData.AddDamage(bData.def.planetDamage)
+			aData.AddDamage(bData.def.planetDamage, bData.def.guyDamage)
 			bData.Destroy()
 			return true
 		end

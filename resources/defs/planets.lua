@@ -8,12 +8,19 @@ local toAdd = {
 	"stone1",
 	"stone2",
 	"stone3",
+	"classicalage",
+	"victorianage",
+	"modernage",
+	"spaceage",
 	"asteroid_damage_0",
 	"asteroid_damage_1",
 	"asteroid_damage_2",
 	"philosopher",
 	"inventor",
 	"scientist",
+	"bullet",
+	"modern_bullet",
+	"space_bullet",
 }
 
 for i = 1, #toAdd do

@@ -4,6 +4,7 @@ local def = {
 	life = 2.5,
 	damage = 1,
 	planetDamage = 0.045,
+	image = "space_bullet",
 }
 
 return def

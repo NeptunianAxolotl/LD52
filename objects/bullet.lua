@@ -60,13 +60,16 @@ local function New(self, physicsWorld)
 		drawQueue:push({y=0; f=function()
 			love.graphics.push()
 				local x, y = self.body:getPosition()
-				local angle = self.body:getAngle()
+				local vx, vy = self.body:getLinearVelocity()
+				local angle = util.Angle(vx, vy)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage("planet3", 0, 0, 0, math.min(1, self.life), self.def.radius)
-				love.graphics.setColor(1, 1, 1, math.min(1, self.life))
-				love.graphics.circle("line", 0, 0, self.def.radius)
+				Resources.DrawImage(self.def.image, 0, 0, 0, math.min(1, self.life), self.def.radius)
+				if Global.DRAW_PHYSICS then
+					love.graphics.setColor(1, 1, 1, math.min(1, self.life))
+					love.graphics.circle("line", 0, 0, self.def.radius)
+				end
 			love.graphics.pop()
 		end})
 	end
