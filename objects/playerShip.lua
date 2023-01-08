@@ -97,6 +97,25 @@ local function New(self, physicsWorld)
 		return self.body
 	end
 	
+	function self.ApplyStasis(effect)
+		self.stasisProgress = 0
+		self.stasisEffect = effect
+	end
+	
+	function self.GetSpeedMod()
+		if not self.stasisProgress then
+			return 1
+		end
+		return 1 - (1 - self.stasisProgress * self.stasisProgress) * self.stasisEffect.accelReduce
+	end
+	
+	function self.TurnMod()
+		if not self.stasisProgress then
+			return 1
+		end
+		return 1 - (1 - self.stasisProgress * self.stasisProgress) * self.stasisEffect.turnReduce
+	end
+	
 	function self.Update(dt)
 		self.animTime = self.animTime + dt
 		
@@ -111,7 +130,7 @@ local function New(self, physicsWorld)
 		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 			local angle = self.body:getAngle()
-			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 80))
+			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 80)) * self.GetSpeedMod()
 			local forceVec = util.PolarToCart(accel, angle)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end
@@ -127,7 +146,7 @@ local function New(self, physicsWorld)
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)
 		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") then
 			local vx, vy = self.body:getLinearVelocity()
-			local force = -1 * Global.BRAKE_MULT
+			local force = -1 * Global.BRAKE_MULT * self.GetSpeedMod()
 			if emergencyStop then
 				force = -1 * Global.EMERGENCY_BRAKE_MULT
 			end
@@ -145,8 +164,16 @@ local function New(self, physicsWorld)
 		if turnAmount then
 			local vx, vy = self.body:getLinearVelocity()
 			local speed = util.Dist(0, 0, vx, vy)
-			turnAmount = turnAmount * math.max(Global.MIN_TURN, Global.TURN_MULT * (0.15 + 0.85 * (1 - speed / (speed + 750))))
+			turnAmount = turnAmount * math.max(Global.MIN_TURN, Global.TURN_MULT * (0.15 + 0.85 * (1 - speed / (speed + 750)))) * self.TurnMod()
 			self.body:applyTorque(turnAmount)
+		end
+		
+		if self.stasisProgress then
+			self.stasisProgress = self.stasisProgress + dt / self.stasisEffect.duration
+			if self.stasisProgress > 1 then
+				self.stasisProgress = false
+				self.stasisEffect = false
+			end
 		end
 	end
 	
@@ -159,6 +186,9 @@ local function New(self, physicsWorld)
 				love.graphics.rotate(angle)
 				
 				Resources.DrawImage("ship", 0, 0, 0, false, scaleFactor)
+				if self.stasisProgress then
+					Resources.DrawImage("stasis", 0, 0, 0, 0.5 * (1 - self.stasisProgress * self.stasisProgress), scaleFactor)
+				end
 				
 			love.graphics.pop()
 			

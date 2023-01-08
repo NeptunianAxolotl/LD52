@@ -54,6 +54,25 @@ local function New(self, physicsWorld)
 		self.wantSplit = doSplit
 	end
 	
+	function self.ApplyStasis(effect)
+		self.stasisProgress = 0
+		self.stasisEffect = effect
+	end
+	
+	function self.GetSpeedMod()
+		if not self.stasisProgress then
+			return 1
+		end
+		return 1 - (1 - self.stasisProgress * self.stasisProgress) * self.stasisEffect.accelReduce
+	end
+	
+	function self.TurnMod()
+		if not self.stasisProgress then
+			return 1
+		end
+		return 1 - (1 - self.stasisProgress * self.stasisProgress) * self.stasisEffect.turnReduce
+	end
+	
 	function self.AddDamage(damage)
 		self.damage = self.damage + damage
 		if self.damage >= self.def.health then
@@ -96,6 +115,14 @@ local function New(self, physicsWorld)
 				self.body:applyTorque(-1*self.def.turnRate * math.min(1, math.abs(turnAngle)))
 			end
 		end
+		
+		if self.stasisProgress then
+			self.stasisProgress = self.stasisProgress + dt / self.stasisEffect.duration
+			if self.stasisProgress > 1 then
+				self.stasisProgress = false
+				self.stasisEffect = false
+			end
+		end
 	end
 	
 	function self.Draw(drawQueue)
@@ -107,6 +134,9 @@ local function New(self, physicsWorld)
 				love.graphics.rotate(angle)
 				
 				Resources.DrawImage(self.def.image, 0, 0, 0, false, self.def.scaleFactor)
+				if self.stasisProgress then
+					Resources.DrawImage("stasis", 0, 0, 0, 0.5 * (1 - self.stasisProgress * self.stasisProgress), self.def.scaleFactor)
+				end
 			love.graphics.pop()
 			
 			if Global.DRAW_PHYSICS then

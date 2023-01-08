@@ -6,6 +6,11 @@ local toAdd = {
 	"bullet_police",
 	"bullet_ship",
 	"bullet_space",
+	"stasis",
+}
+
+local specialScale = {
+	stasis = 0.003
 }
 
 for i = 1, #toAdd do
@@ -14,8 +19,8 @@ for i = 1, #toAdd do
 		name = name,
 		form = "image", -- image, sound or animation
 		file = "resources/images/bits/" .. name .. ".png",
-		xScale = 0.01050,
-		yScale = 0.01050,
+		xScale = specialScale[name] or 0.01050,
+		yScale = specialScale[name] or 0.01050,
 		xOffset = 0.5,
 		yOffset = 0.5,
 	}

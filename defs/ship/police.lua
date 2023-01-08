@@ -13,15 +13,16 @@ end
 
 local function DoMovement(self)
 	local netForce = false
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -5000, 500, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -4000, 280, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1400, 150, false))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 450, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * self.GetSpeedMod(), 250, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * self.GetSpeedMod(), 110, false))
 	
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320, false, false))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -600, 250, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * self.GetSpeedMod(), false, false))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -900 * self.GetSpeedMod(), 300, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 400 * self.GetSpeedMod(), 350, false, self.dodgeAngle))
 	elseif (not netForce) or util.AbsVal(netForce) < 3000 then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320, false, false, self.dodgeAngle))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * self.GetSpeedMod(), false, false, self.dodgeAngle))
 	end
 	
 	if netForce then
@@ -32,7 +33,22 @@ local function DoMovement(self)
 end
 
 local function DoShooting(self, dt)
-
+	if not PlayerHandler.GetPlayerShipBody() then
+		return
+	end
+	self.shootProgress = (self.shootProgress or 0) + dt*self.def.fireSpeed
+	if self.shootProgress < 1 then
+		return
+	end
+	local otherBody = PlayerHandler.GetPlayerShipBody()
+	local bx, by = self.body:getWorldCenter()
+	local ox, oy = otherBody:getWorldCenter()
+	if util.DistSq(bx, by, ox, oy) > self.def.range * self.def.range then
+		self.shootProgress = 0.95
+		return
+	end
+	planetUtils.ShootAtBody(otherBody, self.body, "police_bullet", 600, 85)
+	self.shootProgress = 0
 end
 
 local function PoliceBehaviour(self, dt)
@@ -49,6 +65,8 @@ local def = {
 	angleDampen = 16,
 	minDampening = 1.2,
 	turnRate = 60000,
+	range = 900,
+	fireSpeed = 1/2,
 	
 	DoBehaviour = PoliceBehaviour,
 }

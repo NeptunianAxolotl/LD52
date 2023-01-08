@@ -18,7 +18,11 @@ function api.Collision(aData, bData)
 		return true
 	end
 	if (aData.objType == "asteroid" or aData.objType == "enemyShip") and bData.objType == "bullet" then
-		aData.AddDamage(bData.def.damage)
+		if bData.def.stasisEffect and aData.objType == "enemyShip" then
+			aData.ApplyStasis(bData.def.stasisEffect)
+		else
+			aData.AddDamage(bData.def.damage)
+		end
 		bData.Destroy()
 		return true
 	end
@@ -40,6 +44,9 @@ function api.Collision(aData, bData)
 		return true
 	end
 	if aData.objType == "playerShip" and bData.objType == "bullet" then
+		if bData.def.stasisEffect then
+			aData.ApplyStasis(bData.def.stasisEffect)
+		end
 		bData.Destroy()
 		return true
 	end
