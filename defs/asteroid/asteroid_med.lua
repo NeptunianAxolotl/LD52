@@ -3,7 +3,7 @@ local def = {
 	planetDamage = 0.5,
 	splitTo = "asteroid_small",
 	splitCount = 2,
-	density = 2,
+	density = 2.4,
 	health = 1,
 }
 

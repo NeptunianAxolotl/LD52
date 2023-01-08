@@ -83,28 +83,76 @@ function api.AddBullet(data)
 	IterableMap.Add(self.bullets, NewBullet({def = data}, self.world.GetPhysicsWorld()))
 end
 
-local function SpawnEnemiesUpdate(dt)
-	local mapData = TerrainHandler.GetMapData()
-	if not mapData.asteroidTimeMin then
-		return
+local function SpawnAsteroidsUpdate(spawnData, spawnIndex, dt)
+	if not self.asteroidTimer[spawnIndex] then
+		self.asteroidTimer[spawnIndex] = spawnData.timeMin + math.random()*spawnData.timeRand
 	end
-	if not self.asteroidTimer then
-		self.asteroidTimer = mapData.asteroidTimeMin + math.random()*mapData.asteroidTimeRand
-	end
-	self.asteroidTimer = self.asteroidTimer - dt
-	if self.asteroidTimer < 0 then
-		local pos = {0, math.random()*TerrainHandler.GetHeight()}
-		local velocity = util.RandomPointInAnnulus(80, 350)
-		if velocity[1] < 0 then
-			pos[1] = TerrainHandler.GetWidth()
+	self.asteroidTimer[spawnIndex] = self.asteroidTimer[spawnIndex] - dt
+	if self.asteroidTimer[spawnIndex] < 0 then
+		local spawnMin = 0.5 - (spawnData.spawnRange or 1) * 0.5
+		local spawnPosFactor = (spawnMin + spawnData.spawnRange * math.random()) + (spawnData.spawnOffset or 0)
+		local pos = {0, spawnPosFactor * TerrainHandler.GetHeight()}
+		local leftRightSpawn = true
+		if spawnData.topBotChance and math.random() < spawnData.topBotChance then
+			pos[1] = spawnPosFactor * TerrainHandler.GetWidth()
+			pos[2] = 0
+			leftRightSpawn = false
 		end
+		
+		local velocity = {0, 0}
+		if spawnData.speedMin then
+			velocity = util.Add(velocity, util.RandomPointInAnnulus(spawnData.speedMin, spawnData.speedMax))
+		end
+		if spawnData.orbitMult then
+			local orbitMult = spawnData.orbitMult + (spawnData.orbitMultRand or 0)*math.random()
+			if spawnData.orbitOtherDirChance and math.random() < spawnData.orbitOtherDirChance then
+				orbitMult = -1*orbitMult
+			end
+			velocity = util.Add(velocity, TerrainHandler.GetCircularOrbitVelocity(pos, orbitMult))
+		end
+		
+		if spawnData.avoidOrbitOverWrap then
+			if leftRightSpawn then
+				if velocity[2] < 0 and pos[2] > TerrainHandler.GetSunY() then
+					velocity[2] = -1*velocity[2]
+				elseif velocity[2] > 0 and pos[2] < TerrainHandler.GetSunY() then
+					velocity[2] = -1*velocity[2]
+				end
+			else
+				if velocity[1] < 0 and pos[1] > TerrainHandler.GetSunX() then
+					velocity[1] = -1*velocity[1]
+				elseif velocity[1] > 0 and pos[1] < TerrainHandler.GetSunX() then
+					velocity[1] = -1*velocity[1]
+				end
+			end
+		end
+		
+		if leftRightSpawn then
+			if velocity[1] < 0 then
+				pos[1] = TerrainHandler.GetWidth()
+			end
+		else
+			if velocity[2] < 0 then
+				pos[2] = TerrainHandler.GetHeight()
+			end
+		end
+		
 		local asteroidData = {
 			pos = pos,
 			velocity = velocity,
-			typeName = "asteroid_big",
+			typeName = spawnData.spawnType,
 		}
 		api.AddAsteroid(asteroidData)
-		self.asteroidTimer = self.asteroidTimer + mapData.asteroidTimeMin + math.random()*mapData.asteroidTimeRand
+		self.asteroidTimer[spawnIndex] = self.asteroidTimer[spawnIndex] + spawnData.timeMin + math.random()*spawnData.timeRand
+	end
+end
+
+local function SpawnEnemiesUpdate(dt)
+	local levelData = TerrainHandler.GetLevelData()
+	if levelData.asteroidSpawn then
+		for i = 1, #levelData.asteroidSpawn do
+			SpawnAsteroidsUpdate(levelData.asteroidSpawn[i], i, dt)
+		end
 	end
 end
 
@@ -136,7 +184,8 @@ function api.Initialize(world, levelIndex, mapDataOverride)
 		world = world,
 		asteroids = IterableMap.New(),
 		bullets = IterableMap.New(),
-		asteroidCreateQueue = false
+		asteroidCreateQueue = false,
+		asteroidTimer = {}
 	}
 end
 

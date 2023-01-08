@@ -3,7 +3,7 @@ local SPAWN_TIME_MULT = 1.8
 
 local def = {
 	name = "Drain Circling",
-	nextLevel = "level1",
+	prevLevel = "level 1",
 	gravity = 80,
 	asteroidSpawn = {
 		{

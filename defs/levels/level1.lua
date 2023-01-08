@@ -1,9 +1,18 @@
 
 local def = {
+	name = "Tutorial?",
 	prevLevel = "testLevel",
+	nextLeve = "drainCircling",
 	gravity = 20,
-	asteroidTimeMin = 4,
-	asteroidTimeRand = 2,
+	asteroidSpawn = {
+		{
+			timeMin = 4,
+			timeRand = 2,
+			speedMin = 80,
+			speedMax = 350,
+			spawnType = "asteroid_big",
+		},
+	},
 	planets = {
 		{
 			pos = {-1000, 0},
