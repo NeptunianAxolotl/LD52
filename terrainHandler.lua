@@ -63,7 +63,7 @@ local function SetupLevel()
 		pos = pos,
 		velocity = api.GetCircularOrbitVelocity(pos),
 		radius = 95,
-		density = 150,		age = 3,		maxAge = 8,		ageSpeed = 1/20,		guySpeed = 1/6,		guyGap = 8,		guyAgeBoost = 1.5
+		density = 150,		age = 5,		maxAge = 8,		ageSpeed = 1/20,		guySpeed = 1/6,		guyGap = 8,		guyAgeBoost = 1.5
 	}
 	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX + 1100, self.sunY - 750}		local asteroidParams = {		{			pos = {self.sunX + 1100, self.sunY - 750},			mult = 0.65,		},		{			pos = {self.sunX + 500, self.sunY + 360},			mult = -1.15,		},	}		for i = 1, #asteroidParams do		local data = asteroidParams[i]		local asteroidData = {			pos = data.pos,			velocity = api.GetCircularOrbitVelocity(data.pos, data.mult, data.angle),			typeName = "asteroid_big",		}		EnemyHandler.AddAsteroid(asteroidData)	end		pos = {self.sunX - 300, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = api.GetCircularOrbitVelocity(pos, -0.95)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end

@@ -87,6 +87,10 @@ local function New(self, physicsWorld)
 		self.isDead = true
 	end
 	
+	local function GetGuyTimeRemaining()
+		return (1 - self.guyProgress) / self.def.guySpeed + self.guyGapTime
+	end
+	
 	function self.AddDamage(damage)
 		if self.age <= 1 then
 			return
@@ -96,7 +100,7 @@ local function New(self, physicsWorld)
 			 -- Can only go down one age per damage instance.
 			self.age = self.age - 1
 			self.ageProgress = math.max(0, self.ageProgress + 1)
-			if self.guyProgress > 0.95 and ageGuys[self.age] then
+			if  ageGuys[self.age] and GetGuyTimeRemaining() < 0.5 then
 				self.guyGapTime = self.def.guyGap
 			end
 			self.guyProgress = 0
@@ -143,6 +147,8 @@ local function New(self, physicsWorld)
 		
 		if self.guyGapTime and self.guyGapTime >= 0 then
 			self.guyGapTime = self.guyGapTime - dt
+		else
+			self.guyGapTime = 0
 		end
 		
 		if ageGuys[self.age] and (self.guyGapTime or 0) <= 0 then
@@ -194,8 +200,9 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 		
-			if self.guyProgress > 0.95 and ageGuys[self.age] then
-				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (self.guyProgress - 0.95)/0.05), self.def.radius)
+			if ageGuys[self.age] and GetGuyTimeRemaining() < 0.5 then
+				local timeRemaining = GetGuyTimeRemaining()
+				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
 			end
 			
 			love.graphics.setColor(1, 1, 1, 0.6)
