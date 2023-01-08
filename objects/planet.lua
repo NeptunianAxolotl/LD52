@@ -237,8 +237,10 @@ local function New(self, physicsWorld)
 				ageSpeed = ageSpeed * self.def.guyAgeBoost
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
-			if self.ageProgress > 1 and not self.smuggleAbductionProgress then
-				if self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
+			if self.ageProgress > 1 then
+				if self.smuggleAbductionProgress then
+					self.ageProgress = 0.9999
+				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
 					self.ageProgress = 0.9999
 				else

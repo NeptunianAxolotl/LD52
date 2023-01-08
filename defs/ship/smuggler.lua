@@ -22,7 +22,7 @@ end
 local function DoMovement(self)
 	local netForce = false
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 550, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), 300, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), 220, true))
 	
 	if not self.abductionProgress then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -2000 * self.GetSpeedMod(), 250, true))
@@ -31,7 +31,7 @@ local function DoMovement(self)
 	local goodPlanetForce, goodPlanetObj = false
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
 		if self.abductionProgress then
-			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 250 * self.GetSpeedMod(), false, false, false, PlanetHasGuy)
+			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 300 * self.GetSpeedMod(), false, false, false, PlanetHasGuy)
 		else
 			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 500 * self.GetSpeedMod(), false, false, false, PlanetHasGuy)
 		end
@@ -94,7 +94,7 @@ local def = {
 	angleDampen = 17,
 	minDampening = 1.2,
 	turnRate = 80000,
-	abductRange = 450,
+	abductRange = 380,
 	
 	DoBehaviour = SmugglerBehaviour,
 }
