@@ -53,7 +53,7 @@ local function New(self, physicsWorld)
 		
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
-		TerrainHandler.UpdateSpeedLimit(self.body, Global.BULLET_SPEED_LIMIT)
+		TerrainHandler.UpdateSpeedLimit(self.body, Global.BULLET_SPEED_LIMIT, self.def.minDampening)
 		
 		if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
 			local tx, ty = self.def.target:getWorldCenter()

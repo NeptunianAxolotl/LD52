@@ -24,9 +24,12 @@ local function DoMovement(self)
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 550, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), 220, true))
 	
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -800 * self.GetSpeedMod(), 350, true))
-	if not self.abductionProgress and not netForce then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -900 * self.GetSpeedMod(), 250, true))
+	if self.abductionProgress and not netForce then
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -1000 * self.GetSpeedMod(), 650, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * self.GetSpeedMod(), 450, true))
+	else
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -300 * self.GetSpeedMod(), 650, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -300 * self.GetSpeedMod(), 450, true))
 	end
 	
 	local goodPlanetForce, goodPlanetObj = false

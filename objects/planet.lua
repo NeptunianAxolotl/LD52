@@ -336,7 +336,7 @@ local function New(self, physicsWorld)
 				local period = 0.4
 				local offset = 0.5
 				if self.guyAgeEndRemovalTime then
-					period = (0.4 * (0.4 + 0.6 * self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime)))
+					period = (0.4 * (0.5 + 0.6 * self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime)))
 					offset = 0.5 * (self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime))
 				end
 				local alpha = (self.animTime%period) / period
