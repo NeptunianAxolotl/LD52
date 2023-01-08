@@ -136,7 +136,7 @@ local function New(self, physicsWorld)
 		self.reloadProgress = 1 - shootDef.checkRate * shootDef.reloadSpeed
 		
 		local mx, my = self.body:getWorldCenter()
-		local closestAsteroid, closeDist = EnemyHandler.GetClosestAsteroid(mx, my, shootDef.range + self.def.radius)
+		local closestAsteroid = planetUtils.GetClosestAsteroid(mx, my, shootDef.range + self.def.radius)
 		if not closestAsteroid then
 			return
 		end

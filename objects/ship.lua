@@ -28,6 +28,7 @@ local function New(self, physicsWorld)
 	self.fixture:setFriction(0.45)
 	
 	self.damage = 0
+	self.dodgeAngle = (math.random() < 0.6 and 1.5) or -1.5
 	
 	function self.GetBody()
 		return self.body
@@ -83,9 +84,18 @@ local function New(self, physicsWorld)
 		
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
-		TerrainHandler.UpdateSpeedLimit(self.body)
+		TerrainHandler.UpdateSpeedLimit(self.body, false, self.def.minDampening)
 		
 		self.def.DoBehaviour(self)
+		
+		if self.targetAngle then
+			local turnAngle = util.AngleSubtractShortest(self.targetAngle, self.body:getAngle())
+			if turnAngle > 0 then
+				self.body:applyTorque(self.def.turnRate * math.min(1, math.abs(turnAngle)))
+			else
+				self.body:applyTorque(-1*self.def.turnRate * math.min(1, math.abs(turnAngle)))
+			end
+		end
 		--local vx, vy = self.body:getLinearVelocity()
 		--local speed = util.Dist(0, 0, vx, vy)
 		--print(speed)

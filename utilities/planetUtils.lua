@@ -1,8 +1,11 @@
 
 local api = {}
 
-local function ClosestToWithDistSq(data, maxDistSq, px, py)
+local function ClosestToWithDistSq(data, maxDistSq, px, py, filterFunc)
 	if data.isDead or data.body:isDestroyed() then
+		return false
+	end
+	if filterFunc and not filterFunc(data) then
 		return false
 	end
 	local bx, by = data.body:getWorldCenter()
@@ -19,25 +22,68 @@ function api.ApplyForceTowards(body, pos, forceSize)
 	body:applyForce(force[1], force[2])
 end
 
-function api.ForceTowardsClosest(body, objType, maxDist, forceSize, doFalloff)
-	local bx, by = body:getWorldCenter()
-	local other = false
-	if objType == "asteroid" then
-		other = IterableMap.GetMinimum(EnemyHandler.GetAsteroids(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by)
-	end
-	
+function api.GetClosestAsteroid(bx, by, maxDist)
+	local other = IterableMap.GetMinimum(EnemyHandler.GetAsteroids(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by)
 	if not other then
 		return
 	end
-	local otherBody = other.body
-	local ox, oy = otherBody:getWorldCenter()
+	return other
+end
+
+function api.GetClosestPlanet(bx, by, maxDist, filterFunc)
+	local other = IterableMap.GetMinimum(TerrainHandler.GetPlanets(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by, filterFunc)
+	if not other then
+		return
+	end
+	return other
+end
+
+function api.ForceTowardsClosest(body, objType, forceSize, maxDist, doFalloff, angle)
+	local bx, by = body:getWorldCenter()
+	local ox, oy = false, false
+	if objType == "asteroid" then
+		local other = api.GetClosestAsteroid(bx, by, maxDist)
+		if not other then
+			return false
+		end
+		ox, oy = other.body:getWorldCenter()
+	elseif objType == "planet" then
+		local other = api.GetClosestPlanet(bx, by, maxDist)
+		if not other then
+			return false
+		end
+		ox, oy = other.body:getWorldCenter()
+	elseif objType == "player" then
+		local other = PlayerHandler.GetPlayerShip()
+		if not other then
+			return false
+		end
+		ox, oy = other.body:getWorldCenter()
+	elseif objType == "sun" then
+		ox, oy = TerrainHandler.GetSunX(), TerrainHandler.GetSunY()
+	end
+	
+	if not ox then
+		return false
+	end
+
+	if maxDist then
+		local distSq = util.DistSq(ox, oy, bx, by)
+		if distSq > maxDist*maxDist then
+			return false
+		end
+	end
 	
 	local towards, dist = util.UnitTowardsWithWrap({bx, by}, {ox, oy}, Global.WORLD_WIDTH, Global.WORLD_HEIGHT)
 	if doFalloff then
 		forceSize = forceSize * (1 - dist / maxDist)
 	end
 	local forceVec = util.Mult(forceSize, towards)
+	if angle then
+		forceVec = util.RotateVector(forceVec, angle)
+	end
 	body:applyForce(forceVec[1], forceVec[2])
+	return forceVec
 end
 
 function api.RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius, repelDist, repelForce)

@@ -36,17 +36,17 @@ function api.ApplyGravity(body)
 	body:applyForce(forceVector[1], forceVector[2])
 end
 function api.GetLocalGravityAccel(x, y)	if not y then		x, y = x[1], x[2]	end	local toSun, sunDist = util.Unit({self.sunX - x, self.sunY - y})	local distSq = math.max(sunDist * sunDist, 100)	return util.Mult(self.sunGravity / distSq, toSun)end
-function api.UpdateSpeedLimit(body, speedLimit)	speedLimit = speedLimit or Global.SPEED_LIMIT
+function api.UpdateSpeedLimit(body, speedLimit, minDampening)	speedLimit = speedLimit or Global.SPEED_LIMIT
 	local vx, vy = body:getLinearVelocity()
 	local speedSq = util.DistSq(0, 0, vx, vy)
 	if speedSq < speedLimit * speedLimit then
-		body:setLinearDamping(0)
+		body:setLinearDamping(minDampening or 0)
 		return
 	end
 	local speed = math.sqrt(speedSq)
-	body:setLinearDamping((speed - speedLimit) / speedLimit)
+	body:setLinearDamping(math.max(minDampening or 0, (speed - speedLimit) / speedLimit))
 end
----------------------------------------------------------------------------------------------------------------------------------------------- Collisionfunction api.Collision(aData, bData)	if aData.objType == "planet" and bData.objType == "sun" then		aData.Destroy()		return true	endend---------------------------------------------------------------------------------------------------------------------------------------------- Level utilsfunction api.GetLevelData()	return self.levelDataendfunction api.GetWidth()	return self.widthendfunction api.GetHeight()	return self.heightendfunction api.GetSunX()	return self.sunXendfunction api.GetSunY()	return self.sunYend---------------------------------------------------------------------------------------------------------------------------------------------- Setup and creation
+---------------------------------------------------------------------------------------------------------------------------------------------- Collisionfunction api.Collision(aData, bData)	if aData.objType == "planet" and bData.objType == "sun" then		aData.Destroy()		return true	endend---------------------------------------------------------------------------------------------------------------------------------------------- Level utilsfunction api.GetLevelData()	return self.levelDataendfunction api.GetWidth()	return self.widthendfunction api.GetHeight()	return self.heightendfunction api.GetSunX()	return self.sunXendfunction api.GetSunY()	return self.sunYendfunction api.GetPlanets()	return self.planetsend---------------------------------------------------------------------------------------------------------------------------------------------- Setup and creation
 local function AddPlanet(data)
 	IterableMap.Add(self.planets, NewPlanet({def = data}, self.world.GetPhysicsWorld()))
 endlocal function AddSun(data)	IterableMap.Add(self.suns, NewSun({def = data}, self.world.GetPhysicsWorld()))end

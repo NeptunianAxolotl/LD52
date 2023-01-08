@@ -20,6 +20,10 @@ function api.Collision(aData, bData)
 
 end
 
+function api.GetPlayerShip()
+	return self.playerShip
+end
+
 function api.GetPlayerShipBody()
 	return self.playerShip and self.playerShip.GetBody()
 end

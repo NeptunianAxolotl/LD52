@@ -38,7 +38,7 @@ local globals = {
 	GUY_AGE_END_DELAY = 8,
 	
 	INIT_LEVEL = "testLevel",
-	DRAW_PHYSICS = true,
+	DRAW_PHYSICS = false,
 }
 
 return globals

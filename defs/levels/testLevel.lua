@@ -30,11 +30,11 @@ local def = {
 			orbitMult = 0.8,
 			orbitMultRand = 0.1,
 			orbitMultBothDirections = 0,
-			topBotChance = 1,
+			topBotChance = 0,
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = "smuggler",
+			typeName = "police",
 		},
 	},
 	planets = {

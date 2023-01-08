@@ -44,24 +44,6 @@ end
 ----------------------------------------------------------------------
 -- Utilities
 
-function api.GetClosestAsteroid(x, y, maxDist)
-	local maxDistSq = maxDist * maxDist
-	local function MinFunc(asteroid)
-		if asteroid.isDead then
-			return false
-		end
-		local bx, by = asteroid.GetBody():getWorldCenter()
-		local distSq = util.DistSq(x, y, bx, by)
-		if distSq < maxDistSq then
-			return distSq
-		end
-		return false
-	end
-	
-	local asteroid, asteroidDist = IterableMap.GetMinimum(self.asteroids, MinFunc)
-	return asteroid, asteroidDist and math.sqrt(asteroidDist)
-end
-
 function api.ApplyToBullets(func, ...)
 	IterableMap.Apply(self.bullets, func, ...)
 end
