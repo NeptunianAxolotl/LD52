@@ -119,8 +119,27 @@ local function New(self, physicsWorld)
 		return (1 - self.guyProgress) / self.def.guySpeed + self.guyGapTime
 	end
 	
-	local function IsGuyAppearing()
+	function self.IsGuyAppearing()
 		return GetGuyTimeRemaining() < 0.5
+	end
+	
+	function self.AddSmuggleAbductionProgress(newProgress, abductionId)
+		if not ageGuys[self.age] then
+			return
+		end
+		self.smuggleAbductionProgress = (self.smuggleAbductionProgress or 0) + newProgress
+		self.smuggleAbductionId = abductionId
+		if self.smuggleAbductionProgress >= 1 then
+			self.guyProgress = 0
+			self.guyAgeEndRemovalTime = false
+			self.guyGapTime = self.def.guyGap
+			self.smuggleAbductionProgress = false
+		end
+		return self.smuggleAbductionProgress, ageGuys[self.age]
+	end
+	
+	function self.IsGuyAvailible(abductionId)
+		return ((not self.smuggleAbductionProgress) or (self.smuggleAbductionId == abductionId)) and (self.guyProgress >= 1)
 	end
 	
 	function self.CheckShoot(dt)
@@ -166,16 +185,19 @@ local function New(self, physicsWorld)
 			return true
 		end
 		self.ageProgress = self.ageProgress - damage
-		self.guyProgress = self.guyProgress - (guyDamage or 0)
-		if self.guyProgress < 0 then
-			self.guyProgress = 0
+		
+		if not self.smuggleAbductionProgress then
+			self.guyProgress = self.guyProgress - (guyDamage or 0)
+			if self.guyProgress < 0 then
+				self.guyProgress = 0
+			end
 		end
 		
 		if self.ageProgress < 0 then
 			 -- Can only go down one age per damage instance.
 			self.age = self.age - 1
 			self.ageProgress = math.max(0, self.ageProgress + 1)
-			if ageGuys[self.age] and IsGuyAppearing() then
+			if ageGuys[self.age] and self.IsGuyAppearing() then
 				self.guyGapTime = self.def.guyGap
 			end
 			self.guyProgress = 0
@@ -215,12 +237,12 @@ local function New(self, physicsWorld)
 				ageSpeed = ageSpeed * self.def.guyAgeBoost
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
-			if self.ageProgress > 1 then
-				if IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
+			if self.ageProgress > 1 and not self.smuggleAbductionProgress then
+				if self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
 					self.ageProgress = 0.9999
 				else
-			self.guyProgress = 0
+					self.guyProgress = 0
 					self.guyAgeEndRemovalTime = false
 					if self.age < self.def.maxAge then
 						self.age = self.age + 1
@@ -252,7 +274,7 @@ local function New(self, physicsWorld)
 		self.CheckRepelBullets(dt)
 		self.CheckShoot(dt)
 		
-		if self.guyProgress >= 1 and ageGuys[self.age] then
+		if self.IsGuyAvailible() and ageGuys[self.age] then
 			local playerBody = PlayerHandler.GetPlayerShipBody()
 			local bx, by = self.body:getWorldCenter()
 			local myVx, myVy = self.body:getLinearVelocity()
@@ -272,9 +294,12 @@ local function New(self, physicsWorld)
 		TerrainHandler.ApplyGravity(self.body)
 		TerrainHandler.UpdateSpeedLimit(self.body)
 		
-		--local vx, vy = self.body:getLinearVelocity()
-		--local speed = util.Dist(0, 0, vx, vy)
-		--print(speed)
+		if self.smuggleAbductionProgress then
+			self.smuggleAbductionProgress = self.smuggleAbductionProgress - 2*dt
+			if self.smuggleAbductionProgress < 0 then
+				self.smuggleAbductionProgress = false
+			end
+		end
 	end
 	
 	function self.Draw(drawQueue)
@@ -302,7 +327,7 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 		
-			if ageGuys[self.age] and IsGuyAppearing() then
+			if ageGuys[self.age] and self.IsGuyAppearing() and self.IsGuyAvailible() then
 				local timeRemaining = GetGuyTimeRemaining()
 				Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
 				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5)*0.7, self.def.radius)

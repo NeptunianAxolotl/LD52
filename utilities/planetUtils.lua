@@ -38,23 +38,23 @@ function api.GetClosestPlanet(bx, by, maxDist, filterFunc)
 	return other
 end
 
-function api.ForceTowardsClosest(body, objType, forceSize, maxDist, doFalloff, angle)
+function api.ForceTowardsClosest(body, objType, forceSize, maxDist, doFalloff, angle, filterFunc)
 	local bx, by = body:getWorldCenter()
-	local ox, oy = false, false
+	local ox, oy, other = false, false, false
 	if objType == "asteroid" then
-		local other = api.GetClosestAsteroid(bx, by, maxDist)
+		other = api.GetClosestAsteroid(bx, by, maxDist)
 		if not other then
 			return false
 		end
 		ox, oy = other.body:getWorldCenter()
 	elseif objType == "planet" then
-		local other = api.GetClosestPlanet(bx, by, maxDist)
+		other = api.GetClosestPlanet(bx, by, maxDist, filterFunc)
 		if not other then
 			return false
 		end
 		ox, oy = other.body:getWorldCenter()
 	elseif objType == "player" then
-		local other = PlayerHandler.GetPlayerShip()
+		other = PlayerHandler.GetPlayerShip()
 		if not other then
 			return false
 		end
@@ -83,7 +83,7 @@ function api.ForceTowardsClosest(body, objType, forceSize, maxDist, doFalloff, a
 		forceVec = util.RotateVector(forceVec, angle)
 	end
 	body:applyForce(forceVec[1], forceVec[2])
-	return forceVec
+	return forceVec, other
 end
 
 function api.RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius, repelDist, repelForce)

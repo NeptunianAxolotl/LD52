@@ -164,11 +164,15 @@ end
 local function SpawnEnemiesUpdate(dt)
 	local levelData = TerrainHandler.GetLevelData()
 	if levelData.asteroidSpawn then
-		for i = 1, #levelData.asteroidSpawn do
-			CheckEnemyTypeSpawn(levelData.asteroidSpawn[i], i, dt, self.asteroidTimer, api.AddAsteroid)
+		if levelData.asteroidSpawn then
+			for i = 1, #levelData.asteroidSpawn do
+				CheckEnemyTypeSpawn(levelData.asteroidSpawn[i], i, dt, self.asteroidTimer, api.AddAsteroid)
+			end
 		end
-		for i = 1, #levelData.shipSpawn do
-			CheckEnemyTypeSpawn(levelData.shipSpawn[i], i, dt, self.shipTimer, api.AddShip)
+		if levelData.shipSpawn then
+			for i = 1, #levelData.shipSpawn do
+				CheckEnemyTypeSpawn(levelData.shipSpawn[i], i, dt, self.shipTimer, api.AddShip)
+			end
 		end
 	end
 end

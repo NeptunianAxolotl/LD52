@@ -139,6 +139,24 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 			
+			if self.abductionPlanet and not self.isDead and not self.abductionPlanet.body:isDestroyed() then
+				local px, py = self.abductionPlanet.body:getWorldCenter()
+				local abductPos = {px, py}
+				local sX, sY = self.body:getWorldCenter()
+				local toShip, shipDist = util.Unit(util.Subtract({sX, sY}, abductPos))
+				local triangleRad = self.abductionPlanet.def.radius*math.sqrt(1 - self.abductionProgress)
+				local planetLeft = util.Add(abductPos, util.RotateVector(util.Mult(triangleRad, toShip), 0.5*math.pi))
+				local planetRight = util.Add(abductPos, util.RotateVector(util.Mult(triangleRad, toShip), -0.5*math.pi))
+				abductPos = util.Add(abductPos, util.Mult(self.abductionProgress * shipDist, toShip))
+				
+				drawQueue:push({y=10; f=function()
+					Resources.DrawImage(self.abductType, abductPos[1], abductPos[2], 0, 1, self.abductionPlanet.def.radius*(1 - self.abductionProgress))
+					
+					love.graphics.setColor(1, 1, 0, 0.6)
+					love.graphics.polygon("fill", sX, sY, planetLeft[1], planetLeft[2], planetRight[1], planetRight[2])
+				end})
+			end
+			
 			if Global.DRAW_PHYSICS then
 				love.graphics.push()
 					x, y = self.body:getWorldCenter()

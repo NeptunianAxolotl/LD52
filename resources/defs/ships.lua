@@ -3,11 +3,13 @@ local images = {}
 local toAdd = {
 	"ship",
 	"police",
+	"smuggler",
 }
 
 local xOff = {
 	ship = 0.45,
 	police = 0.52,
+	smuggler = 0.52,
 }
 
 for i = 1, #toAdd do

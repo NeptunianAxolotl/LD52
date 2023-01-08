@@ -8,7 +8,7 @@ local def = {
 	stasisEffect = {
 		duration = 0.8,
 		accelReduce = 0.95,
-		turnReduce = 0.5,
+		turnReduce = 0.25,
 	},
 	homingForce = 35,
 }
