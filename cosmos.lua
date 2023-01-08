@@ -31,11 +31,23 @@ end
 --------------------------------------------------
 
 function api.RestartWorld()
-	World.Initialize(api, LevelDefs[self.levelName])
+	World.Initialize(api, self.curLevelData)
 end
 
 function api.LoadLevelByTable(levelTable)
-	World.Initialize(api, levelTable)
+	self.curLevelData = levelTable
+	World.Initialize(api, self.curLevelData)
+end
+
+function api.SwitchLevel(goNext)
+	local nameKey = (goNext and "nextLevel") or "prevLevel"
+	local newLevelName = LevelDefs[self.inbuiltLevelName][nameKey]
+	if not newLevelName then
+		return
+	end
+	self.inbuiltLevelName = newLevelName
+	self.curLevelData = LevelDefs[self.inbuiltLevelName]
+	World.Initialize(api, self.curLevelData)
 end
 
 --------------------------------------------------
@@ -55,8 +67,25 @@ end
 --------------------------------------------------
 
 function api.KeyPressed(key, scancode, isRepeat)
+	if key == "r" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
+		api.RestartWorld()
+		return true
+	end
+	if key == "m" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
+		api.ToggleMusic()
+		return true
+	end
+	if key == "s" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
+		api.TakeScreenshot()
+		return true
+	end
+	if key == "n" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
+		api.SwitchLevel(true)
+		return true
+	end
 	if key == "p" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
-		-- Do level switching/handling here
+		api.SwitchLevel(false)
+		return true
 	end
 	return World.KeyPressed(key, scancode, isRepeat)
 end
@@ -85,10 +114,11 @@ end
 
 function api.Initialize()
 	self = {
-		levelName = "level1"
+		inbuiltLevelName = Global.INIT_LEVEL,
 	}
+	self.curLevelData = LevelDefs[self.inbuiltLevelName]
 	MusicHandler.Initialize(api)
-	World.Initialize(api, LevelDefs[self.levelName])
+	World.Initialize(api, self.curLevelData)
 end
 
 return api

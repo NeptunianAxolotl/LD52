@@ -114,12 +114,12 @@ local function New(self, physicsWorld)
 			return
 		end
 		local bx, by = self.body:getPosition()
-		for i = 1, 20 do
+		for i = 1, 30 do
 			EffectsHandler.SpawnEffect(
 				"fireball_explode",
-				util.Add({bx, by}, util.RandomPointInCircle(self.def.radius*0.6)),
+				util.Add({bx, by}, util.RandomPointInCircle(self.def.radius*0.7)),
 				{
-					delay = math.random()*0.4,
+					delay = math.random()*0.5,
 					scale = 0.2 + 0.3*math.random(),
 					animSpeed = 1 + 0.5*math.random()
 				}
@@ -223,14 +223,17 @@ local function New(self, physicsWorld)
 			end
 			
 			local bx, by = self.body:getPosition()
-			for i = 1, 15 do
+			local vx, vy = self.body:getLinearVelocity()
+			local selfVelocity = {vx, vy}
+			for i = 1, 30 do
 				EffectsHandler.SpawnEffect(
 					"fireball_explode",
-					util.Add({bx, by}, util.RandomPointInCircle(self.def.radius*0.6)),
+					util.Add({bx, by}, util.RandomPointInCircle(self.def.radius*0.7)),
 					{
-						delay = math.random()*0.4,
+						delay = math.random()*0.5,
 						scale = 0.2 + 0.3*math.random(),
-						animSpeed = 1 + 0.5*math.random()
+						animSpeed = 1 + 0.5*math.random(),
+						velocity = selfVelocity,
 					}
 				)
 			end

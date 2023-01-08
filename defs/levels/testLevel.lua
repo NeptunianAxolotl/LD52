@@ -1,6 +1,6 @@
 
 local def = {
-	prevLevel = "testLevel",
+	nextLevel = "level1",
 	gravity = 20,
 	asteroidTimeMin = 4,
 	asteroidTimeRand = 2,
@@ -29,7 +29,12 @@ local def = {
 			pos = {1100, -750},
 			orbitMult = 0.65,
 			typeName = "asteroid_big",
-		}
+		},
+		{
+			pos = {500, 360},
+			orbitMult = -1.15,
+			typeName = "asteroid_big",
+		},
 	},
 	player = {
 		pos = {-300, -500},

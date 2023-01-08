@@ -34,6 +34,7 @@ local globals = {
 	REPEL_DIST = 150,
 	REPEL_MAX_FORCE = 1300,
 	
+	INIT_LEVEL = "testLevel",
 	DRAW_PHYSICS = false,
 }
 

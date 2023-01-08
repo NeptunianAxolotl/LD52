@@ -43,7 +43,7 @@ local function NewEffect(self, def)
 		end
 		
 		if self.velocity then
-			self.pos = util.Add(self.pos, util.Mult(dt*60, self.velocity))
+			self.pos = util.Add(self.pos, util.Mult(dt, self.velocity))
 		end
 	end
 	

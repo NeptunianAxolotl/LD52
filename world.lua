@@ -79,26 +79,11 @@ function api.KeyPressed(key, scancode, isRepeat)
 	if TerrainHandler.KeyPressed and TerrainHandler.KeyPressed(key, scancode, isRepeat) then
 		return
 	end
-	if key == "escape" or key == "return" or key == "kpenter" then
+	if key == "escape" then
 		self.paused = not self.paused
-	end
-	if key == "r" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
-		api.Restart()
 	end
 	if key == "p" then
 		self.paused = not self.paused
-	end
-	if key == "m" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
-		api.ToggleMusic()
-	end
-	if key == "s" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
-		api.TakeScreenshot()
-	end
-	if key == "n" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
-		api.SwitchLevel(1)
-	end
-	if key == "p" and (love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl")) then
-		api.SwitchLevel(-1)
 	end
 	if api.GetGameOver() then
 		return -- No doing actions
