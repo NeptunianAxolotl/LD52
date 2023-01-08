@@ -40,7 +40,7 @@ local function New(self, physicsWorld)
 		if self.isDead then
 			return
 		end
-		local bx, by = self.body:getPosition()
+		local bx, by = self.body:getWorldCenter()
 		for i = 1, 12 do
 			EffectsHandler.SpawnEffect(
 				"fireball_explode",
@@ -66,7 +66,7 @@ local function New(self, physicsWorld)
 	function self.Update(dt)
 		if self.isDead then
 			if self.wantSplit and self.def.splitTo then
-				local bx, by = self.body:getPosition()
+				local bx, by = self.body:getWorldCenter()
 				local vx, vy = self.body:getLinearVelocity()
 				local outVel = util.RandomPointInAnnulus(50, 250)
 				for i = 1, self.def.splitCount do
@@ -96,7 +96,7 @@ local function New(self, physicsWorld)
 	function self.Draw(drawQueue)
 		drawQueue:push({y=0; f=function()
 			love.graphics.push()
-				local x, y = self.body:getPosition()
+				local x, y = self.body:getWorldCenter()
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)

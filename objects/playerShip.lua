@@ -3,7 +3,7 @@ local Resources = require("resourceHandler")
 local Font = require("include/font")
 
 local function GetStopVectors(body)
-	local bx, by = body:getPosition()
+	local bx, by = body:getWorldCenter()
 	local vx, vy = body:getLinearVelocity()
 
 	local pos = {bx, by}
@@ -21,11 +21,11 @@ local function GetStopVectors(body)
 end
 
 local function SpawnBullet(physicsWorld, body)
-	local bx, by = body:getPosition()
+	local bx, by = body:getWorldCenter()
 	local vx, vy = body:getLinearVelocity()
 	local angle = body:getAngle()
 	
-	local spawnPos = util.Add({bx, by}, util.PolarToCart(60, angle))
+	local spawnPos = util.Add({bx, by}, util.PolarToCart(70, angle))
 	local spawnVel = util.Add({vx, vy}, util.PolarToCart(Global.SHOOT_SPEED, angle))
 	local recolForce = util.PolarToCart(-120, angle)
 	
@@ -68,8 +68,8 @@ local function New(self, physicsWorld)
 	self.animTime = 0
 	self.objType = "playerShip"
 	
-	local coords = {{-0.2, 0.35}, {-0.2, -0.35}, {0.8, 0}}
-	local scaleFactor = 50
+	local coords = {{-0.4, 0.35}, {-0.4, -0.35}, {-0.1, -0.35}, {0.6, -0.05}, {0.6, 0.05}, {-0.1, 0.35}}
+	local scaleFactor = 50*1.4*1.2
 	local modCoords = {}
 	for i = 1, #coords do
 		local pos = util.Mult(scaleFactor, coords[i])
@@ -82,7 +82,7 @@ local function New(self, physicsWorld)
 	self.shape = love.physics.newPolygonShape(unpack(modCoords))
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
-	self.body:setAngularDamping(10)
+	self.body:setAngularDamping(9)
 	self.body:setUserData(self)
 	self.fixture:setFriction(0.45)
 	
@@ -140,8 +140,7 @@ local function New(self, physicsWorld)
 		if turnAmount then
 			local vx, vy = self.body:getLinearVelocity()
 			local speed = util.Dist(0, 0, vx, vy)
-			turnAmount = turnAmount * Global.TURN_MULT
-			turnAmount = math.min(1200, turnAmount * (0.15 + 0.85 * (1 - speed / (speed + 750))))
+			turnAmount = turnAmount * math.max(Global.MIN_TURN, Global.TURN_MULT * (0.15 + 0.85 * (1 - speed / (speed + 750))))
 			self.body:applyTorque(turnAmount)
 		end
 	end
@@ -149,21 +148,35 @@ local function New(self, physicsWorld)
 	function self.Draw(drawQueue)
 		drawQueue:push({y=0; f=function()
 			love.graphics.push()
-				local x, y = self.body:getPosition()
+				local x, y = self.body:getWorldCenter()
 				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
-				love.graphics.setColor(1, 1, 1, 1)
-				for i = 1, #coords do
-					local other = coords[(i < #coords and (i + 1)) or 1]
-					love.graphics.line(coords[i][1], coords[i][2], other[1], other[2])
-				end
+				
+				Resources.DrawImage("ship", 0, 0, 0, false, self.def.radius)
 				
 			love.graphics.pop()
 			
-			--local leftStart, leftEnd, rightStart, rightEnd = GetStopVectors(self.body)
-			--love.graphics.line(leftStart[1], leftStart[2], leftEnd[1], leftEnd[2])
-			--love.graphics.line(rightStart[1], rightStart[2], rightEnd[1], rightEnd[2])
+			if Global.DRAW_PHYSICS then
+				love.graphics.push()
+					x, y = self.body:getWorldCenter()
+					love.graphics.translate(x, y)
+					love.graphics.rotate(angle)
+					love.graphics.setColor(1, 1, 1, 1)
+					
+					local lx, ly = self.body:getLocalCenter()
+					
+					for i = 1, #coords do
+						local other = coords[(i < #coords and (i + 1)) or 1]
+						love.graphics.line(coords[i][1] - lx, coords[i][2] - ly, other[1] - lx, other[2] - ly)
+					end
+				love.graphics.pop()
+				
+				local leftStart, leftEnd, rightStart, rightEnd = GetStopVectors(self.body)
+				love.graphics.line(leftStart[1], leftStart[2], leftEnd[1], leftEnd[2])
+				love.graphics.line(rightStart[1], rightStart[2], rightEnd[1], rightEnd[2])
+			end
+			
 		end})
 		if DRAW_DEBUG then
 			love.graphics.circle('line',self.pos[1], self.pos[2], def.radius)

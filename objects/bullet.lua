@@ -27,7 +27,7 @@ local function New(self, physicsWorld)
 		if self.isDead then
 			return
 		end
-		local bx, by = self.body:getPosition()
+		local bx, by = self.body:getWorldCenter()
 		for i = 1, 5 do
 			EffectsHandler.SpawnEffect(
 				"fireball_explode",
@@ -56,7 +56,7 @@ local function New(self, physicsWorld)
 		TerrainHandler.UpdateSpeedLimit(self.body, Global.BULLET_SPEED_LIMIT)
 		
 		if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
-			local tx, ty = self.def.target:getPosition()
+			local tx, ty = self.def.target:getWorldCenter()
 			planetUtils.ApplyForceTowards(self.body, {tx, ty}, self.def.homingForce)
 		end
 	end
@@ -64,10 +64,10 @@ local function New(self, physicsWorld)
 	function self.Draw(drawQueue)
 		drawQueue:push({y=0; f=function()
 			love.graphics.push()
-				local x, y = self.body:getPosition()
+				local x, y = self.body:getWorldCenter()
 				local angle
 				if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
-					local tx, ty = self.def.target:getPosition()
+					local tx, ty = self.def.target:getWorldCenter()
 					angle = util.Angle(tx - x, ty - y)
 				else
 					local vx, vy = self.body:getLinearVelocity()

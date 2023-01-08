@@ -2,7 +2,7 @@
 local api = {}
 
 function api.ApplyForceTowards(body, pos, forceSize)
-	local bx, by = body:getPosition()
+	local bx, by = body:getWorldCenter()
 	local force = util.Mult(forceSize, util.Unit({pos[1] - bx, pos[2] - by}))
 	body:applyForce(force[1], force[2])
 end
@@ -13,7 +13,7 @@ function api.RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius,
 	end
 	repelDist = repelDist or Global.REPEL_DIST
 	repelForce = repelForce or Global.REPEL_MAX_FORCE
-	local bx, by = other.body:getPosition()
+	local bx, by = other.body:getWorldCenter()
 	local dist = util.Dist(bx, by, repelPos[1], repelPos[2]) - planetRadius
 	if dist > repelDist then
 		return
@@ -22,10 +22,10 @@ function api.RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius,
 end
 
 function api.ShootAtBody(targetBody, myBody, projType, projSpeed, spawnRadius, myKey)
-	local ax, ay = targetBody:getPosition()
+	local ax, ay = targetBody:getWorldCenter()
 	local aVx, aVy = targetBody:getLinearVelocity()
 	
-	local mx, my = myBody:getPosition()
+	local mx, my = myBody:getWorldCenter()
 	local mVx, mVy = myBody:getLinearVelocity()
 
 	-- Relativity

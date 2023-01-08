@@ -100,7 +100,7 @@ local function New(self, physicsWorld)
 		if self.isDead then
 			return
 		end
-		local bx, by = self.body:getPosition()
+		local bx, by = self.body:getWorldCenter()
 		for i = 1, 30 do
 			EffectsHandler.SpawnEffect(
 				"fireball_explode",
@@ -131,7 +131,7 @@ local function New(self, physicsWorld)
 		end
 		self.reloadProgress = 1 - shootDef.checkRate * shootDef.reloadSpeed
 		
-		local mx, my = self.body:getPosition()
+		local mx, my = self.body:getWorldCenter()
 		local closestAsteroid, closeDist = EnemyHandler.GetClosestAsteroid(mx, my, shootDef.range + self.def.radius)
 		if not closestAsteroid then
 			return
@@ -148,7 +148,7 @@ local function New(self, physicsWorld)
 		if not bulletRepelAges[self.age] then
 			return
 		end
-		local mx, my = self.body:getPosition()
+		local mx, my = self.body:getWorldCenter()
 		EnemyHandler.ApplyToBullets(planetUtils.RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
 		PlayerHandler.ApplyToPlayer(planetUtils.RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
 	end
@@ -180,7 +180,7 @@ local function New(self, physicsWorld)
 				self.ageProgress = 0
 			end
 			
-			local bx, by = self.body:getPosition()
+			local bx, by = self.body:getWorldCenter()
 			local vx, vy = self.body:getLinearVelocity()
 			local selfVelocity = {vx, vy}
 			for i = 1, 30 do
@@ -242,7 +242,7 @@ local function New(self, physicsWorld)
 		
 		if self.guyProgress >= 1 and ageGuys[self.age] then
 			local playerBody = PlayerHandler.GetPlayerShipBody()
-			local bx, by = self.body:getPosition()
+			local bx, by = self.body:getWorldCenter()
 			local myVx, myVy = self.body:getLinearVelocity()
 			local pVx, pVy = playerBody:getLinearVelocity()
 			if util.DistSq(myVx, myVy, pVx, pVy) < Global.ABDUCT_VEL_MATCH_SQ + self.def.radius then
@@ -266,7 +266,7 @@ local function New(self, physicsWorld)
 	
 	function self.Draw(drawQueue)
 		drawQueue:push({y=0; f=function()
-			local x, y = self.body:getPosition()
+			local x, y = self.body:getWorldCenter()
 			local angle = self.body:getAngle()
 			
 			love.graphics.setColor(1, 1, 1, 0.5)

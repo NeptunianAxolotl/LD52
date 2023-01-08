@@ -50,7 +50,7 @@ function api.GetClosestAsteroid(x, y, maxDist)
 		if asteroid.isDead then
 			return false
 		end
-		local bx, by = asteroid.GetBody():getPosition()
+		local bx, by = asteroid.GetBody():getWorldCenter()
 		local distSq = util.DistSq(x, y, bx, by)
 		if distSq < maxDistSq then
 			return distSq

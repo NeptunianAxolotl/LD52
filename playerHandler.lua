@@ -13,7 +13,7 @@ local guyTypeList = {
 }
 
 function api.SpawnPlayer(initPlayerData)
-	initPlayerData.density = 10
+	initPlayerData.density = 6
 	self.playerShip = NewPlayerShip({def = initPlayerData}, self.world.GetPhysicsWorld())
 end
 
@@ -30,7 +30,7 @@ function api.GetDistanceToPlayer(pos)
 	if not playerBody then
 		return false
 	end
-	local x, y = playerBody:getPosition()
+	local x, y = playerBody:getWorldCenter()
 	return util.Dist(x, y, pos[1], pos[2])
 end
 
@@ -44,7 +44,7 @@ function api.SetAbducting(guyType, linkedBody, linkedRadius)
 	self.abductBody = linkedBody
 	self.abductRadius = linkedRadius
 	
-	local bx, by = self.abductBody:getPosition()
+	local bx, by = self.abductBody:getWorldCenter()
 	self.abductPos = {bx, by}
 	return true
 end
@@ -75,11 +75,11 @@ function api.Draw(drawQueue)
 		self.playerShip.Draw(drawQueue)
 		if self.abducting then
 			if self.abductBody and not self.abductBody:isDestroyed() then
-				local bx, by = self.abductBody:getPosition()
+				local bx, by = self.abductBody:getWorldCenter()
 				self.abductPos[1], self.abductPos[2] = bx, by
 			end
 			
-			local sX, sY = api.GetPlayerShipBody():getPosition()
+			local sX, sY = api.GetPlayerShipBody():getWorldCenter()
 			local toShip, shipDist = util.Unit(util.Subtract({sX, sY}, self.abductPos))
 			local triangleRad = self.abductRadius*math.sqrt(1 - self.abductProgress)
 			local planetLeft = util.Add(self.abductPos, util.RotateVector(util.Mult(triangleRad, toShip), 0.5*math.pi))
