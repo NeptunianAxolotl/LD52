@@ -31,6 +31,9 @@ local globals = {
 	ABDUCT_DIST_REQUIRE = 250,
 	ABDUCT_SPEED = 2,
 	
+	REPEL_DIST = 180,
+	REPEL_MAX_FORCE = 1350,
+	
 	DRAW_PHYSICS = false,
 }
 

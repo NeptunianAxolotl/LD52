@@ -2,10 +2,14 @@
 local Resources = require("resourceHandler")
 local Font = require("include/font")
 
+local BulletDefs = util.LoadDefDirectory("defs/bullet")
+
+
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
 	self.objType = "bullet"
+	self.def = util.CopyTable(BulletDefs[self.def.typeName], false, self.def)
 	
 	self.body = love.physics.newBody(physicsWorld, self.def.pos[1], self.def.pos[2], "dynamic")
 	self.shape = love.physics.newCircleShape(self.def.radius)

@@ -49,6 +49,13 @@ function api.SetAbducting(guyType, linkedBody, linkedRadius)
 	return true
 end
 
+function api.ApplyToPlayer(func, ...)
+	if not self.playerShip then
+		return
+	end
+	func(false, self.playerShip, false, ...)
+end
+
 function api.Update(dt)
 	if self.playerShip then
 		self.playerShip.Update(dt)
@@ -100,10 +107,8 @@ function api.DrawInterface()
 			love.graphics.printf((self.abductScore[guyType] or 0), 1825, offset + 50, 90, "left")
 			
 			offset = offset + 130
-		
 		end
 	end
-
 end
 
 function api.Initialize(world)

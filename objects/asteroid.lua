@@ -32,6 +32,10 @@ local function New(self, physicsWorld)
 	
 	self.damage = 0
 	
+	function self.GetBody()
+		return self.body
+	end
+	
 	function self.Destroy(doSplit)
 		if self.isDead then
 			return

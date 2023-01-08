@@ -24,6 +24,32 @@ local ageGuys = {
 	false,
 }
 
+local shootParameters = {
+	[7] = {
+		range = 400,
+		reloadSpeed = 1/12,
+		checkRate = 0.33,
+		typeName = "modern_bullet",
+		projSpeed = 250,
+		spawnRadius = 15,
+	},
+	[8] = {
+		range = 360,
+		reloadSpeed = 1/0.45,
+		checkRate = 0.33,
+		typeName = "space_bullet",
+		projSpeed = 380,
+		spawnRadius = 15,
+	},
+}
+
+local bulletImmuneAges = {
+}
+
+local bulletRepelAges = {
+	[8] = true
+}
+
 local planetImageList = {
 	"planet1",
 	"planet2",
@@ -41,6 +67,20 @@ local ageImages = {
 	"stone3",
 	"stone3",
 }
+
+local function RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius)
+	if other.def.parentPlanetKey == planetKey then
+		return
+	end
+	local bx, by = other.body:getPosition()
+	local dist = util.Dist(bx, by, repelPos[1], repelPos[2]) - planetRadius
+	if dist > Global.REPEL_DIST then
+		return
+	end
+	
+	local force = util.Mult(Global.REPEL_MAX_FORCE * (1 - dist / Global.REPEL_DIST), util.Unit({bx - repelPos[1], by - repelPos[2]}))
+	other.body:applyForce(force[1], force[2])
+end
 
 local function New(self, physicsWorld)
 	-- pos
@@ -91,9 +131,76 @@ local function New(self, physicsWorld)
 		return (1 - self.guyProgress) / self.def.guySpeed + self.guyGapTime
 	end
 	
+	function self.CheckShoot(dt)
+		if not shootParameters[self.age] then
+			return
+		end
+		local shootDef = shootParameters[self.age]
+		
+		self.reloadProgress = (self.reloadProgress or 0) + dt * shootDef.reloadSpeed
+		if self.reloadProgress < 1 then
+			return
+		end
+		self.reloadProgress = 1 - shootDef.checkRate * shootDef.reloadSpeed
+		
+		local mx, my = self.body:getPosition()
+		local closestAsteroid, closeDist = EnemyHandler.GetClosestAsteroid(mx, my, shootDef.range + self.def.radius)
+		if not closestAsteroid then
+			return
+		end
+		local ax, ay = closestAsteroid.GetBody():getPosition()
+		local aVx, aVy = closestAsteroid.GetBody():getLinearVelocity()
+		local mVx, mVy = self.body:getLinearVelocity()
+		
+		-- Relativity
+		aVx, aVy = aVx - mVx, aVy - mVy
+		
+		-- Find a predicted travel time that matches predicted velocity
+		local fullSpawnRad = self.def.radius + shootDef.spawnRadius
+		local bestTravel = 0.1
+		local bestTravelDelta = 100
+		local gravityAccel = TerrainHandler.GetLocalGravityAccel(ax, ay)
+		for travelTest = 0.1, 1.6, 0.1 do
+			local px = ax + travelTest * aVx + 0.5 * travelTest * travelTest * gravityAccel[1]
+			local py = ay + travelTest * aVy + 0.5 * travelTest * travelTest * gravityAccel[2]
+			local travelTime = (util.Dist(mx, my, px, py) - fullSpawnRad) / shootDef.projSpeed
+			if math.abs(travelTime - travelTest) < bestTravelDelta then
+				bestTravel = travelTime
+				bestTravelDelta = math.abs(travelTime - travelTest)
+			end
+		end
+		local travelTime = bestTravel
+		local px, py = ax + travelTime * aVx, ay + travelTime * aVy
+		
+		-- Shoot at predicted spot
+		local toPrediction = util.Unit({px - mx, py - my})
+		local bulletData = {
+			pos = util.Add({mx, my}, util.Mult(fullSpawnRad, toPrediction)),
+			velocity = util.Add({mVx, mVy}, util.Mult(shootDef.projSpeed, toPrediction)),
+			typeName = shootDef.typeName,
+			target = closestAsteroid.GetBody(),
+			parentPlanetKey = self.iterableMapKey,
+		}
+		EnemyHandler.AddBullet(bulletData)
+		self.reloadProgress = 0
+	end
+	
+	function self.CheckRepelBullets(dt)
+		if not bulletRepelAges[self.age] then
+			return
+		end
+		local mx, my = self.body:getPosition()
+		EnemyHandler.ApplyToBullets(RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
+		PlayerHandler.ApplyToPlayer(RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
+	end
+	
+	function self.IsBulletImmune()
+		return bulletImmuneAges[self.age]
+	end
+	
 	function self.AddDamage(damage)
 		if self.age <= 1 then
-			return
+			return true
 		end
 		self.ageProgress = self.ageProgress - damage
 		if self.ageProgress < 0 then
@@ -104,6 +211,7 @@ local function New(self, physicsWorld)
 				self.guyGapTime = self.def.guyGap
 			end
 			self.guyProgress = 0
+			self.reloadProgress = 0
 			if self.age <= 1 then
 				self.age = 1
 				self.ageProgress = 0
@@ -131,15 +239,19 @@ local function New(self, physicsWorld)
 		end
 		self.animTime = self.animTime + dt
 		
-		if self.age > 1 and self.age < self.def.maxAge then
+		if self.age > 1 and (self.def.fillLastAge or self.age < self.def.maxAge) then
 			local ageSpeed = self.def.ageSpeed
 			if self.guyProgress >= 1 and ageGuys[self.age] then
 				ageSpeed = ageSpeed * self.def.guyAgeBoost
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
-				self.age = self.age + 1
-				self.ageProgress = self.ageProgress - 1
+				if self.age < self.def.maxAge then
+					self.age = self.age + 1
+					self.ageProgress = self.ageProgress - 1
+				else
+					self.ageProgress = 1
+				end
 			end
 		else
 			self.ageProgress = 0
@@ -158,6 +270,9 @@ local function New(self, physicsWorld)
 		else
 			self.guyProgress = 0
 		end
+		
+		self.CheckRepelBullets(dt)
+		self.CheckShoot(dt)
 		
 		if self.guyProgress >= 1 and ageGuys[self.age] then
 			local playerBody = PlayerHandler.GetPlayerShipBody()
@@ -206,7 +321,9 @@ local function New(self, physicsWorld)
 			end
 			
 			love.graphics.setColor(1, 1, 1, 0.6)
-			love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			if self.ageProgress < 1 then
+				love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			end
 			
 			Font.SetSize(3)
 			love.graphics.setColor(1, 1, 1, 1)

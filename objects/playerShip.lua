@@ -34,11 +34,7 @@ local function SpawnBullet(physicsWorld, body)
 	local bulletData = {
 		pos = spawnPos,
 		velocity = spawnVel,
-		radius = 10,
-		density = 10,
-		life = 7,
-		damage = 1,
-		planetDamage = 0.035,
+		typeName = "player_bullet",
 	}
 	EnemyHandler.AddBullet(bulletData)
 end

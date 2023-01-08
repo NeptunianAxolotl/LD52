@@ -5,7 +5,7 @@ local MapDefs = util.LoadDefDirectory("defs/maps")
 local NewPlanet = require("objects/planet")local NewSun = require("objects/sun")
 
 local self = {}
-local api = {}
+local api = {}local ageNameMap = {	dead = 1,	stone = 2,	bronze = 3,	iron = 4,	classical = 5,	invention = 6,	modern = 7,	space = 8,}
 ---------------------------------------------------------------------------------------------------------------------------------------------- Update utilities
 function api.WrapBody(body)
 	local bx, by = body:getPosition()
@@ -35,7 +35,7 @@ function api.ApplyGravity(body)
 	local forceVector = util.Mult(body:getMass() * self.sunGravity / distSq, toSun)
 	body:applyForce(forceVector[1], forceVector[2])
 end
-
+function api.GetLocalGravityAccel(x, y)	if not y then		x, y = x[1], x[2]	end	local toSun, sunDist = util.Unit({self.sunX - x, self.sunY - y})	local distSq = math.max(sunDist * sunDist, 100)	return util.Mult(self.sunGravity / distSq, toSun)end
 function api.UpdateSpeedLimit(body, speedLimit)	speedLimit = speedLimit or Global.SPEED_LIMIT
 	local vx, vy = body:getLinearVelocity()
 	local speedSq = util.DistSq(0, 0, vx, vy)
@@ -63,7 +63,7 @@ local function SetupLevel()
 		pos = pos,
 		velocity = api.GetCircularOrbitVelocity(pos),
 		radius = 95,
-		density = 150,		age = 5,		maxAge = 8,		ageSpeed = 1/20,		guySpeed = 1/6,		guyGap = 8,		guyAgeBoost = 1.5
+		density = 150,		age = ageNameMap.space,		maxAge = ageNameMap.space,		ageSpeed = 1/20,		guySpeed = 1/6,		guyGap = 8,		guyAgeBoost = 1.5,		fillLastAge = false
 	}
 	AddPlanet(planetData)		local sunData = {		pos = {self.sunX, self.sunY},		radius = 200,		density = 1000	}	AddSun(sunData)		pos = {self.sunX + 1100, self.sunY - 750}		local asteroidParams = {		{			pos = {self.sunX + 1100, self.sunY - 750},			mult = 0.65,		},		{			pos = {self.sunX + 500, self.sunY + 360},			mult = -1.15,		},	}		for i = 1, #asteroidParams do		local data = asteroidParams[i]		local asteroidData = {			pos = data.pos,			velocity = api.GetCircularOrbitVelocity(data.pos, data.mult, data.angle),			typeName = "asteroid_big",		}		EnemyHandler.AddAsteroid(asteroidData)	end		pos = {self.sunX - 300, self.sunY - 500}	local initPlayerData = {		pos = pos,		velocity = api.GetCircularOrbitVelocity(pos, -0.95)	}	PlayerHandler.SpawnPlayer(initPlayerData)
 end

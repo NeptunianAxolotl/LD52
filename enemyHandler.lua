@@ -23,9 +23,11 @@ function api.Collision(aData, bData)
 		return true
 	end
 	if aData.objType == "planet" and bData.objType == "bullet" then
-		aData.AddDamage(bData.def.planetDamage)
-		bData.Destroy()
-		return true
+		if not aData.IsBulletImmune() then
+			aData.AddDamage(bData.def.planetDamage)
+			bData.Destroy()
+			return true
+		end
 	end
 	if aData.objType == "planet" and bData.objType == "asteroid" then
 		aData.AddDamage(bData.def.planetDamage)
@@ -36,6 +38,32 @@ function api.Collision(aData, bData)
 		bData.Destroy()
 		return true
 	end
+end
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+-- Utilities
+
+function api.GetClosestAsteroid(x, y, maxDist)
+	local maxDistSq = maxDist * maxDist
+	local function MinFunc(asteroid)
+		if asteroid.isDead then
+			return false
+		end
+		local bx, by = asteroid.GetBody():getPosition()
+		local distSq = util.DistSq(x, y, bx, by)
+		if distSq < maxDistSq then
+			return distSq
+		end
+		return false
+	end
+	
+	local asteroid, asteroidDist = IterableMap.GetMinimum(self.asteroids, MinFunc)
+	return asteroid, asteroidDist and math.sqrt(asteroidDist)
+end
+
+function api.ApplyToBullets(func, ...)
+	IterableMap.Apply(self.bullets, func, ...)
 end
 
 ----------------------------------------------------------------------
