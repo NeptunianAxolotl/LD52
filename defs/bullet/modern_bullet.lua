@@ -4,7 +4,7 @@ local def = {
 	life = 3,
 	damage = 2,
 	planetDamage = 0.15,
-	image = "bullet_modern",
+	image = "bullet_modern_triangle",
 	homingForce = 150,
 }
 

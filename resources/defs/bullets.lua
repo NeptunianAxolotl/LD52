@@ -2,6 +2,7 @@ local images = {}
 
 local toAdd = {
 	"bullet_modern",
+	"bullet_modern_triangle",
 	"bullet_police",
 	"bullet_ship",
 	"bullet_space",
