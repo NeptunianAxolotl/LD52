@@ -82,6 +82,9 @@ function api.Update(dt)
 			currentTrack = GetTracks()
 			currentTrackRemaining = 0
 			for i = 1, 1 do
+				if not soundFiles[currentTrack[i].sound] then
+					return
+				end
 				currentTrackRemaining = math.max(currentTrackRemaining, soundFiles[currentTrack[i].sound].duration or Global.DEFAULT_MUSIC_DURATION)
 			end
 			currentTrackRemaining = currentTrackRemaining - Global.CROSSFADE_TIME

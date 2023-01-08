@@ -23,7 +23,7 @@ local def = {
 	},
 	shipSpawn = {
 		{
-			timeMin = 1.5 * SPAWN_TIME_MULT,
+			timeMin = 2.5 * SPAWN_TIME_MULT,
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
@@ -45,10 +45,11 @@ local def = {
 			age = "classical",
 			maxAge = "space",
 			shootRateMult = 2,
-			ageSpeed = 1/10,
+			earlyAgeSpeed = 1/10,
+			lateAgeSpeed = 1/50,
 			guySpeed = 1/10,
 			guyGap = 0,
-			guyAgeBoost = 1.5,
+			guyAgeBoost = 6,
 			fillLastAge = false,
 		},
 	},

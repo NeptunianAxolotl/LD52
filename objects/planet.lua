@@ -232,8 +232,8 @@ local function New(self, physicsWorld)
 		self.animTime = self.animTime + dt
 		
 		if self.age > 1 and (self.def.fillLastAge or self.age < self.def.maxAge) then
-			local ageSpeed = self.def.ageSpeed
-			if self.guyProgress >= 1 and ageGuys[self.age] then
+			local ageSpeed = (self.age <= 4 and self.def.earlyAgeSpeed) or (self.age > 4 and self.def.lateAgeSpeed) or self.def.ageSpeed
+			if self.IsGuyAvailible() and ageGuys[self.age] then
 				ageSpeed = ageSpeed * self.def.guyAgeBoost
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
@@ -241,7 +241,9 @@ local function New(self, physicsWorld)
 				if self.smuggleAbductionProgress then
 					self.ageProgress = 0.9999
 				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
-					self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
+					if Global.GUY_AGE_END_DELAY then
+						self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
+					end
 					self.ageProgress = 0.9999
 				else
 					self.guyProgress = 0
@@ -309,10 +311,6 @@ local function New(self, physicsWorld)
 			local x, y = self.body:getWorldCenter()
 			local angle = self.body:getAngle()
 			
-			love.graphics.setColor(1, 1, 1, 0.5)
-			if self.ageProgress < 1 then
-				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.3, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
-			end
 			
 			love.graphics.push()
 				love.graphics.translate(x, y)
@@ -329,9 +327,13 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 		
+			love.graphics.setColor(1, 1, 1, 0.6)
+			if self.ageProgress < 1 then
+				love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.7, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			end
 			if ageGuys[self.age] and self.IsGuyAppearing() and self.IsGuyAvailible() then
 				local timeRemaining = GetGuyTimeRemaining()
-				Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
+				--Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
 				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5)*0.7, self.def.radius)
 			end
 			

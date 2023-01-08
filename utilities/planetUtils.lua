@@ -30,6 +30,14 @@ function api.GetClosestAsteroid(bx, by, maxDist)
 	return other
 end
 
+function api.GetClosestBullet(bx, by, maxDist)
+	local other = IterableMap.GetMinimum(EnemyHandler.GetBullets(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by)
+	if not other then
+		return
+	end
+	return other
+end
+
 function api.GetClosestPlanet(bx, by, maxDist, filterFunc)
 	local other = IterableMap.GetMinimum(TerrainHandler.GetPlanets(), ClosestToWithDistSq, maxDist and maxDist*maxDist, bx, by, filterFunc)
 	if not other then
@@ -49,6 +57,12 @@ function api.ForceTowardsClosest(body, objType, forceSize, maxDist, doFalloff, a
 		ox, oy = other.body:getWorldCenter()
 	elseif objType == "planet" then
 		other = api.GetClosestPlanet(bx, by, maxDist, filterFunc)
+		if not other then
+			return false
+		end
+		ox, oy = other.body:getWorldCenter()
+	elseif objType == "bullet" then
+		other = api.GetClosestBullet(bx, by, maxDist)
 		if not other then
 			return false
 		end

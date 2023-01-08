@@ -64,6 +64,10 @@ function api.GetAsteroids()
 	return self.asteroids
 end
 
+function api.GetBullets()
+	return self.bullets
+end
+
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 -- Creation and handling

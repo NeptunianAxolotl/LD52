@@ -24,8 +24,9 @@ local function DoMovement(self)
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 550, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), 220, true))
 	
-	if not self.abductionProgress then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -2000 * self.GetSpeedMod(), 250, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -800 * self.GetSpeedMod(), 350, true))
+	if not self.abductionProgress and not netForce then
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -900 * self.GetSpeedMod(), 250, true))
 	end
 	
 	local goodPlanetForce, goodPlanetObj = false
@@ -39,10 +40,15 @@ local function DoMovement(self)
 	end
 	
 	if not self.abductionProgress and not goodPlanetObj then
-		if (not netForce) or util.AbsVal(netForce) < 1500 then
+		if (not netForce) or util.AbsVal(netForce) < 1800 then
 			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -250 * self.GetSpeedMod(), false, false))
 			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -500 * self.GetSpeedMod(), 800, false))
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 400 * self.GetSpeedMod(), 800, true, self.dodgeAngle))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 80 * self.GetSpeedMod(), 900, false, self.dodgeAngle))
+		end
+	else
+		if (not netForce) or util.AbsVal(netForce) < 1400 then
+			local force = (self.abductionProgress and -200) or -450
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", force * self.GetSpeedMod(), 600, false))
 		end
 	end
 	
@@ -70,7 +76,7 @@ local function DoAbduction(self, dt, foundPlanet)
 	end
 	
 	self.abductionId = self.abductionId or math.random()
-	self.abductionProgress, self.abductType = foundPlanet.AddSmuggleAbductionProgress(2.2*dt, self.abductionId)
+	self.abductionProgress, self.abductType = foundPlanet.AddSmuggleAbductionProgress(2.35*dt, self.abductionId)
 	if self.abductionProgress then
 		self.abductionPlanet = foundPlanet
 	end
