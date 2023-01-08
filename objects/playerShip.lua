@@ -67,6 +67,7 @@ local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
 	self.objType = "playerShip"
+	self.def.density = 5
 	
 	local coords = {{-0.4, 0.35}, {-0.4, -0.35}, {-0.1, -0.35}, {0.6, -0.05}, {0.6, 0.05}, {-0.1, 0.35}}
 	local scaleFactor = 50*1.4*1.2
@@ -82,7 +83,7 @@ local function New(self, physicsWorld)
 	self.shape = love.physics.newPolygonShape(unpack(modCoords))
 	self.fixture = love.physics.newFixture(self.body, self.shape, self.def.density)
 	
-	self.body:setAngularDamping(9)
+	self.body:setAngularDamping(8.6)
 	self.body:setUserData(self)
 	self.fixture:setFriction(0.45)
 	
@@ -105,9 +106,13 @@ local function New(self, physicsWorld)
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
 		
+		local vx, vy = self.body:getLinearVelocity()
+		local speed = math.sqrt(vx*vx + vy*vy)
+		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 			local angle = self.body:getAngle()
-			local forceVec = util.PolarToCart(Global.ACCEL_MULT, angle)
+			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 80))
+			local forceVec = util.PolarToCart(accel, angle)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end
 		

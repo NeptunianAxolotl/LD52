@@ -13,7 +13,6 @@ local guyTypeList = {
 }
 
 function api.SpawnPlayer(initPlayerData)
-	initPlayerData.density = 6
 	self.playerShip = NewPlayerShip({def = initPlayerData}, self.world.GetPhysicsWorld())
 end
 
