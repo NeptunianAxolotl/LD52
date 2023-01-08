@@ -88,6 +88,8 @@ local function New(self, physicsWorld)
 	self.fixture:setFriction(0.45)
 	
 	self.shootCooldown = 0
+	self.bulletStock = Global.BULLET_STOCKPILE
+	self.restockCooldown = Global.BULLET_RECHARGE
 	
 	if self.def.velocity then
 		self.body:setLinearVelocity(self.def.velocity[1], self.def.velocity[2])
@@ -135,12 +137,22 @@ local function New(self, physicsWorld)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end
 		
+		if self.bulletStock < Global.BULLET_STOCKPILE then
+			if self.restockCooldown >= 0 then
+				self.restockCooldown = self.restockCooldown - dt
+			end
+			if self.restockCooldown < 0 then
+				self.restockCooldown = Global.BULLET_RECHARGE
+				self.bulletStock = self.bulletStock + 1
+			end
+		end
 		if self.shootCooldown >= 0 then
 			self.shootCooldown = self.shootCooldown - dt
 		end
-		if self.shootCooldown < 0 and (love.keyboard.isDown("space") or love.keyboard.isDown("return") or love.keyboard.isDown("kpenter")) then
+		if self.shootCooldown < 0 and self.bulletStock > 0 and (love.keyboard.isDown("space") or love.keyboard.isDown("return") or love.keyboard.isDown("kpenter")) then
 			SpawnBullet(physicsWorld, self.body)
 			self.shootCooldown = Global.SHOOT_COOLDOWN
+			self.bulletStock = self.bulletStock - 1
 		end
 		
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)
