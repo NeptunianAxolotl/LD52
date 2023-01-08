@@ -5,7 +5,7 @@ local def = {
 	damage = 1,
 	planetDamage = 0.045,
 	guyDamage = 0.2,
-	image = "bullet",
+	image = "bullet_ship",
 }
 
 return def
