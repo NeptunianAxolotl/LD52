@@ -23,7 +23,7 @@ local def = {
 	},
 	shipSpawn = {
 		{
-			timeMin = 22.5 * SPAWN_TIME_MULT,
+			timeMin = 5.5 * SPAWN_TIME_MULT,
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
@@ -37,7 +37,7 @@ local def = {
 			typeName = "smuggler",
 		},
 		{
-			timeMin = 22.5 * SPAWN_TIME_MULT,
+			timeMin = 5.5 * SPAWN_TIME_MULT,
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,

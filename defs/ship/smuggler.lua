@@ -42,13 +42,13 @@ local function DoMovement(self)
 	if not self.abductionProgress and not goodPlanetObj then
 		if (not netForce) or util.AbsVal(netForce) < 1800 then
 			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -250 * self.GetSpeedMod(), false, false))
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -650 * self.GetSpeedMod(), 800, false))
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 80 * self.GetSpeedMod(), 900, false, self.dodgeAngle))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -650 * self.GetSpeedMod(), 1100, false))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 80 * self.GetSpeedMod(), 1100, false, self.dodgeAngle))
 		end
 	else
 		if (not netForce) or util.AbsVal(netForce) < 1400 then
-			local force = (self.abductionProgress and -200) or -450
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", force * self.GetSpeedMod(), 600, false))
+			local force = (self.abductionProgress and -200) or -650
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", force * self.GetSpeedMod(), 700, false))
 		end
 	end
 	
