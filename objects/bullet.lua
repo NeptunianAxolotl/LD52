@@ -1,9 +1,9 @@
 
 local Resources = require("resourceHandler")
 local Font = require("include/font")
+local planetUtils = require("utilities/planetUtils")
 
 local BulletDefs = util.LoadDefDirectory("defs/bullet")
-
 
 local function New(self, physicsWorld)
 	-- pos
@@ -54,14 +54,25 @@ local function New(self, physicsWorld)
 		TerrainHandler.WrapBody(self.body)
 		TerrainHandler.ApplyGravity(self.body)
 		TerrainHandler.UpdateSpeedLimit(self.body, Global.BULLET_SPEED_LIMIT)
+		
+		if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
+			local tx, ty = self.def.target:getPosition()
+			planetUtils.ApplyForceTowards(self.body, {tx, ty}, self.def.homingForce)
+		end
 	end
 	
 	function self.Draw(drawQueue)
 		drawQueue:push({y=0; f=function()
 			love.graphics.push()
 				local x, y = self.body:getPosition()
-				local vx, vy = self.body:getLinearVelocity()
-				local angle = util.Angle(vx, vy)
+				local angle
+				if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
+					local tx, ty = self.def.target:getPosition()
+					angle = util.Angle(tx - x, ty - y)
+				else
+					local vx, vy = self.body:getLinearVelocity()
+					angle = util.Angle(vx, vy)
+				end
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				

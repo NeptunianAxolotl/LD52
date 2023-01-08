@@ -18,6 +18,7 @@ local toAdd = {
 	"bullet",
 	"modern_bullet",
 	"space_bullet",
+	"guyglow",
 }
 
 for i = 1, #toAdd do

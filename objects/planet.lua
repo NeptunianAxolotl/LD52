@@ -1,6 +1,7 @@
 
 local Resources = require("resourceHandler")
 local Font = require("include/font")
+local planetUtils = require("utilities/planetUtils")
 
 local ageNames = {
 	"Dead",
@@ -26,8 +27,8 @@ local ageGuys = {
 
 local shootParameters = {
 	[7] = {
-		range = 420,
-		reloadSpeed = 1/9,
+		range = 600,
+		reloadSpeed = 1/8,
 		checkRate = 0.33,
 		typeName = "modern_bullet",
 		projSpeed = 250,
@@ -68,20 +69,6 @@ local ageImages = {
 	"modernage",
 	"spaceage",
 }
-
-local function RepelFunc(key, other, index, dt, repelPos, planetKey, planetRadius)
-	if other.def.parentPlanetKey == planetKey then
-		return
-	end
-	local bx, by = other.body:getPosition()
-	local dist = util.Dist(bx, by, repelPos[1], repelPos[2]) - planetRadius
-	if dist > Global.REPEL_DIST then
-		return
-	end
-	
-	local force = util.Mult(Global.REPEL_MAX_FORCE * (1 - dist / Global.REPEL_DIST), util.Unit({bx - repelPos[1], by - repelPos[2]}))
-	other.body:applyForce(force[1], force[2])
-end
 
 local function New(self, physicsWorld)
 	-- pos
@@ -138,7 +125,7 @@ local function New(self, physicsWorld)
 		end
 		local shootDef = shootParameters[self.age]
 		
-		self.reloadProgress = (self.reloadProgress or 0) + dt * shootDef.reloadSpeed
+		self.reloadProgress = (self.reloadProgress or 0) + dt * shootDef.reloadSpeed * (self.def.shootRateMult or 1)
 		if self.reloadProgress < 1 then
 			return
 		end
@@ -149,41 +136,12 @@ local function New(self, physicsWorld)
 		if not closestAsteroid then
 			return
 		end
-		local ax, ay = closestAsteroid.GetBody():getPosition()
-		local aVx, aVy = closestAsteroid.GetBody():getLinearVelocity()
-		local mVx, mVy = self.body:getLinearVelocity()
-		
-		-- Relativity
-		aVx, aVy = aVx - mVx, aVy - mVy
-		
-		-- Find a predicted travel time that matches predicted velocity
 		local fullSpawnRad = self.def.radius + shootDef.spawnRadius
-		local bestTravel = 0.1
-		local bestTravelDelta = 100
-		local gravityAccel = TerrainHandler.GetLocalGravityAccel(ax, ay)
-		for travelTest = 0.1, 1.6, 0.1 do
-			local px = ax + travelTest * aVx + 0.5 * travelTest * travelTest * gravityAccel[1]
-			local py = ay + travelTest * aVy + 0.5 * travelTest * travelTest * gravityAccel[2]
-			local travelTime = (util.Dist(mx, my, px, py) - fullSpawnRad) / shootDef.projSpeed
-			if math.abs(travelTime - travelTest) < bestTravelDelta then
-				bestTravel = travelTime
-				bestTravelDelta = math.abs(travelTime - travelTest)
-			end
+		if planetUtils.ShootAtBody(
+				closestAsteroid.GetBody(), self.body, shootDef.typeName,
+				shootDef.projSpeed, fullSpawnRad, self.iterableMapKey) then
+			self.reloadProgress = 0
 		end
-		local travelTime = bestTravel
-		local px, py = ax + travelTime * aVx, ay + travelTime * aVy
-		
-		-- Shoot at predicted spot
-		local toPrediction = util.Unit({px - mx, py - my})
-		local bulletData = {
-			pos = util.Add({mx, my}, util.Mult(fullSpawnRad, toPrediction)),
-			velocity = util.Add({mVx, mVy}, util.Mult(shootDef.projSpeed, toPrediction)),
-			typeName = shootDef.typeName,
-			target = closestAsteroid.GetBody(),
-			parentPlanetKey = self.iterableMapKey,
-		}
-		EnemyHandler.AddBullet(bulletData)
-		self.reloadProgress = 0
 	end
 	
 	function self.CheckRepelBullets(dt)
@@ -191,8 +149,8 @@ local function New(self, physicsWorld)
 			return
 		end
 		local mx, my = self.body:getPosition()
-		EnemyHandler.ApplyToBullets(RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
-		PlayerHandler.ApplyToPlayer(RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
+		EnemyHandler.ApplyToBullets(planetUtils.RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
+		PlayerHandler.ApplyToPlayer(planetUtils.RepelFunc, dt, {mx, my}, self.iterableMapKey, self.def.radius)
 	end
 	
 	function self.IsBulletImmune()
@@ -308,9 +266,15 @@ local function New(self, physicsWorld)
 	
 	function self.Draw(drawQueue)
 		drawQueue:push({y=0; f=function()
+			local x, y = self.body:getPosition()
+			local angle = self.body:getAngle()
+			
+			love.graphics.setColor(1, 1, 1, 0.5)
+			if self.ageProgress < 1 then
+				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.3, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			end
+			
 			love.graphics.push()
-				local x, y = self.body:getPosition()
-				local angle = self.body:getAngle()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
@@ -327,12 +291,8 @@ local function New(self, physicsWorld)
 		
 			if ageGuys[self.age] and GetGuyTimeRemaining() < 0.5 then
 				local timeRemaining = GetGuyTimeRemaining()
-				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
-			end
-			
-			love.graphics.setColor(1, 1, 1, 0.6)
-			if self.ageProgress < 1 then
-				love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.9, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+				Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
+				Resources.DrawImage(ageGuys[self.age], x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5)*0.7, self.def.radius)
 			end
 			
 			Font.SetSize(3)

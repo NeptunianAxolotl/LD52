@@ -90,7 +90,7 @@ local function SpawnAsteroidsUpdate(spawnData, spawnIndex, dt)
 	self.asteroidTimer[spawnIndex] = self.asteroidTimer[spawnIndex] - dt
 	if self.asteroidTimer[spawnIndex] < 0 then
 		local spawnMin = 0.5 - (spawnData.spawnRange or 1) * 0.5
-		local spawnPosFactor = (spawnMin + spawnData.spawnRange * math.random()) + (spawnData.spawnOffset or 0)
+		local spawnPosFactor = (spawnMin + (spawnData.spawnRange or 1) * math.random()) + (spawnData.spawnOffset or 0)
 		local pos = {0, spawnPosFactor * TerrainHandler.GetHeight()}
 		local leftRightSpawn = true
 		if spawnData.topBotChance and math.random() < spawnData.topBotChance then

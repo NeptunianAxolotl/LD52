@@ -1,6 +1,7 @@
 
 local Resources = require("resourceHandler")
 local Font = require("include/font")
+local planetUtils = require("utilities/planetUtils")
 
 local function New(self, physicsWorld)
 	-- pos
@@ -17,6 +18,7 @@ local function New(self, physicsWorld)
 	function self.Update(dt)
 		self.animTime = self.animTime + dt
 		
+		PlayerHandler.ApplyToPlayer(planetUtils.RepelFunc, dt, self.def.pos, false, self.def.radius, 80, Global.REPEL_MAX_FORCE * self.def.gravity * 0.01)
 		--local vx, vy = self.body:getLinearVelocity()
 		--local speed = util.Dist(0, 0, vx, vy)
 		--print(speed)
