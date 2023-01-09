@@ -4,16 +4,13 @@ local SPAWN_TIME_MULT = 1
 local def = {
 	humanName = "Armageddon",
 	description = [[
-First planet.
+Protect the planet and harvest the people.  Watch out for the asteroids!
 
-Protect the planet and harvest the people.
+WSAD/Arrow Keys to move. X/Numpad 0 to brake. Space/Z to shoot.
 
-WSAD/Arrow Keys to move
-Space to shoot
+Shoot the asteroids, or nudge them out of the way with your ship if you're feeling adventurous.
 
-Don't shoot the planet.
-
-Move once two have been selected.
+Please don't shoot the planet.
 ]],
 	nextLevel = "level1",
 	prevLevel = "level0",

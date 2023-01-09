@@ -6,7 +6,7 @@ local def = {
 	description = [[
 The inhabitants of this system are a bit thick.
 
-Luckily a frieghter of monoliths (sapience guranteed!) just had an "accident" nearby.
+Luckily a frieghter of monoliths (sapience guranteed!) just had an 'accident' nearby.
 
 Nudge the monoliths onto the planet to help things along.
 ]],

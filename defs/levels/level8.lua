@@ -2,9 +2,11 @@
 local SPAWN_TIME_MULT = 0.95
 
 local def = {
-	humanName = "System X",
+	humanName = "Counter-System",
 	description = [[
-Our client wants one Great Mind of each type from both planets. The Minds work best in pairs.
+Our client wants one Great Mind of each type from both planets. They say the Minds work best in pairs.
+
+We're pretty sure they just like watching culture shock.
 ]],
 	prevLevel = "level7",
 	nextLevel = "level9",

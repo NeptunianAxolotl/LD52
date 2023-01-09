@@ -5,6 +5,8 @@ local def = {
 	humanName = "Whirlpool",
 	description = [[
 If this star sucked any harder, it might just pull the planet apart.
+
+It looks like someone dropped a whole asteroid belt in here, too.
 ]],
 	prevLevel = "level9",
 	nextLevel = "level11",

@@ -4,9 +4,9 @@ local SPAWN_TIME_MULT = 1.35
 local def = {
 	humanName = "Science Victory",
 	description = [[
-We have a buyer for some more modern thinkers.
+We've found a buyer for some more modern thinkers.  Apparently watching Classical-era philosophers argue got old.
 
-Great Minds increase the rate of advancement while they remain on the planet.
+They want three of them this time, so it's harder for them to reach a consensus.  There might even be fisticuffs!
 ]],
 	prevLevel = "level3",
 	nextLevel = "level5",

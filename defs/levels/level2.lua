@@ -6,7 +6,11 @@ local def = {
 	description = [[
 Different types of people come from different ages.
 
-Great minds in an age help progress greatly.
+Great minds in an age help civilizations grow significantly faster.
+
+However, they also cause stagnation at the end of an age, and must be removed to allow the planet to progress.
+
+You can hit the planet with things to revert progress.
 ]],
 	prevLevel = "level1",
 	nextLevel = "level3",

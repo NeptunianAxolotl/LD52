@@ -4,7 +4,9 @@ local SPAWN_TIME_MULT = 1.35
 local def = {
 	humanName = "Competition",
 	description = [[
-There is a smuggler
+Smugglers have gotten a whiff of our planet, and they're threatening our completely ethical and legal business model!
+
+Quick, shoot them before they try to undercut us on price!
 ]],
 	prevLevel = "level2",
 	nextLevel = "level4",

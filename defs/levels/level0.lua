@@ -4,9 +4,13 @@ local SPAWN_TIME_MULT = 1
 local def = {
 	humanName = "Simple Pickup",
 	description = [[
-Fly to the planet and collect the person.
+You've been sent on your first abduction - er - collection... harvesting mission?
 
-WSAD to move
+Fly to the planet and collect the person.
+  
+WASD/Arrow Keys to move. You can also use X/Numpad 0 to brake.
+
+Click 'Continue' once you've met the level objective to go to the next level.
 ]],
 	nextLevel = "level0_a",
 	gravity = 10,

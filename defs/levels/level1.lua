@@ -2,18 +2,11 @@
 local SPAWN_TIME_MULT = 1
 
 local def = {
-	humanName = "Caretaker",
+	humanName = "A Lively Debate",
 	description = [[
-First planet.
+Protect the planet and harvest the people.  Watch out for the asteroids!
 
-Protect the planet and harvest the people.
-
-WSAD/Arrow Keys to move
-Space to shoot
-
-Don't shoot the planet.
-
-Move once two have been selected.
+The quota has gone up.  The buyer wants two philosophers this time, so he can watch them argue with each other.
 ]],
 	nextLevel = "level2",
 	prevLevel = "level0_a",
