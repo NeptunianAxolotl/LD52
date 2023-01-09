@@ -20,43 +20,44 @@ local function UsefulPlanet(planet)
 end
 
 local function DoMovement(self)
+	local speedMod = self.GetSpeedMod() * self.def.speedMult
 	local netForce = false
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), TerrainHandler.GetSunRadius() + 300, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), Global.PLANET_RADIUS + 125, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * speedMod, TerrainHandler.GetSunRadius() + 300, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * speedMod, Global.PLANET_RADIUS + 125, true))
 	
 	if self.abductionProgress and not netForce then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -1000 * self.GetSpeedMod(), 650, true))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1200 * self.GetSpeedMod(), 500, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -1000 * speedMod, 650, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1200 * speedMod, 500, true))
 	else
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -300 * self.GetSpeedMod(), 650, true))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -400 * self.GetSpeedMod(), 450, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -300 * speedMod, 650, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -400 * speedMod, 450, true))
 	end
 	
 	local goodPlanetForce, goodPlanetObj = false
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
 		if self.abductionProgress then
-			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 300 * self.GetSpeedMod(), false, false, false, PlanetHasGuy)
+			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 300 * speedMod, false, false, false, PlanetHasGuy)
 		else
-			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 500 * self.GetSpeedMod(), false, false, false, PlanetHasGuy)
+			goodPlanetForce, goodPlanetObj = planetUtils.ForceTowardsClosest(self.body, "planet", 500 * speedMod, false, false, false, PlanetHasGuy)
 		end
 		netForce = AddIfExists(netForce, goodPlanetForce)
 	end
 	
 	if not self.abductionProgress and not goodPlanetObj then
 		if (not netForce) or util.AbsVal(netForce) < 1800 then
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -250 * self.GetSpeedMod(), false, false))
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -650 * self.GetSpeedMod(), 1100, false))
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 80 * self.GetSpeedMod(), 1100, false, self.dodgeAngle))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -250 * speedMod, false, false))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -650 * speedMod, 1100, false))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 80 * speedMod, 1100, false, self.dodgeAngle))
 		end
 	else
 		if (not netForce) or util.AbsVal(netForce) < 1400 then
 			local force = (self.abductionProgress and -200) or -650
-			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", force * self.GetSpeedMod(), 700, false))
+			netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", force * speedMod, 700, false))
 		end
 	end
 	
 	if (not goodPlanetObj) and ((not netForce) or util.AbsVal(netForce) < 900) then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", 350 * self.GetSpeedMod(), false, false, false, UsefulPlanet))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", 350 * speedMod, false, false, false, UsefulPlanet))
 	end
 	
 	if netForce then
@@ -105,13 +106,14 @@ end
 local def = {
 	density = 5,
 	coords = {{-0.25, 0.25}, {-0.25, -0.25}, {0.18, -0.43}, {0.75, -0.41}, {0.94, 0}, {0.75, 0.41}, {0.18, 0.43}},
-	scaleFactor = 105,
+	scaleFactor = 95,
 	health = 2,
 	image = "smuggler",
 	angleDampen = 17,
 	minDampening = 1.2,
 	turnRate = 80000,
 	abductRange = 380,
+	speedMult = 0.8,
 	
 	DoBehaviour = SmugglerBehaviour,
 }

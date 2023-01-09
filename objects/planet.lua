@@ -70,6 +70,13 @@ local ageImages = {
 	"spaceage",
 }
 
+local deadImage = {
+	planet1 = "planet1_dead",
+	planet2 = "planet2_dead",
+	planet3 = "planet3_dead",
+	planet4 = "planet4_dead",
+}
+
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
@@ -94,7 +101,7 @@ local function New(self, physicsWorld)
 	
 	self.baseDrawRotation = math.pi*2
 	self.ageDrawRotation = math.pi*2
-	self.planetDrawBase = util.SampleList(planetImageList)
+	self.planetDrawBase = self.def.image or util.SampleList(planetImageList)
 	
 	function self.Destroy()
 		if self.isDead then
@@ -312,13 +319,20 @@ local function New(self, physicsWorld)
 			local x, y = self.body:getWorldCenter()
 			local angle = self.body:getAngle()
 			
+			love.graphics.setColor(1, 1, 1, 0.6)
+			if self.ageProgress <= 1 then
+				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			end
+			
 			love.graphics.push()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				Resources.DrawImage(self.planetDrawBase, 0, 0, self.baseDrawRotation, false, self.def.radius)
 				if ageImages[self.age] then
+					Resources.DrawImage(self.planetDrawBase, 0, 0, self.baseDrawRotation, false, self.def.radius)
 					Resources.DrawImage(ageImages[self.age], 0, 0, self.ageDrawRotation, false, self.def.radius)
+				else
+					Resources.DrawImage(planetImageList[self.planetDrawBase], 0, 0, self.ageDrawRotation, false, self.def.radius)
 				end
 				
 				if Global.DRAW_PHYSICS then
@@ -327,10 +341,6 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 		
-			love.graphics.setColor(1, 1, 1, 0.6)
-			if self.ageProgress <= 1 then
-				love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.7, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
-			end
 			if ageGuys[self.age] and self.IsGuyAppearing() and self.IsGuyAvailible() then
 				local timeRemaining = GetGuyTimeRemaining()
 				--Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
@@ -345,9 +355,9 @@ local function New(self, physicsWorld)
 				Resources.DrawImage(ageGuys[self.age], x, y, 0, alpha * math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
 			end
 			
-			Font.SetSize(3)
-			love.graphics.setColor(1, 1, 1, 1)
-			love.graphics.printf(ageNames[self.age], x - 100, y - 24, 200, "center")
+			--Font.SetSize(3)
+			--love.graphics.setColor(1, 1, 1, 1)
+			--love.graphics.printf(ageNames[self.age], x - 100, y - 24, 200, "center")
 		end})
 		if DRAW_DEBUG then
 			love.graphics.circle('line',self.pos[1], self.pos[2], def.radius)

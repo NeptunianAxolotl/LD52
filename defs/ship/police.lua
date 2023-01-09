@@ -12,17 +12,19 @@ local function AddIfExists(v1, v2)
 end
 
 local function DoMovement(self)
+	local speedMod = self.GetSpeedMod() * self.def.speedMult
+	
 	local netForce = false
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), TerrainHandler.GetSunRadius() + 250, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * self.GetSpeedMod(), Global.PLANET_RADIUS + 150, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * self.GetSpeedMod(), 110, false))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * speedMod, TerrainHandler.GetSunRadius() + 250, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * speedMod, Global.PLANET_RADIUS + 150, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * speedMod, 110, false))
 	
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * self.GetSpeedMod(), false, false))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -900 * self.GetSpeedMod(), 300, true))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 400 * self.GetSpeedMod(), 350, false, self.dodgeAngle))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * speedMod, false, false))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", -900 * speedMod, 300, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 400 * speedMod, 350, false, self.dodgeAngle))
 	elseif (not netForce) or util.AbsVal(netForce) < 3000 then
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * self.GetSpeedMod(), false, false, self.dodgeAngle))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * speedMod, false, false, self.dodgeAngle))
 	end
 	
 	if netForce then
@@ -78,6 +80,7 @@ local def = {
 	turnRate = 60000,
 	range = 900,
 	fireSpeed = 1/2,
+	speedMult = 1,
 	
 	DoBehaviour = PoliceBehaviour,
 }
