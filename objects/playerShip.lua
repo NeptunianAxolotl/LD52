@@ -200,7 +200,7 @@ local function New(self, physicsWorld)
 	end
 	
 	function self.Draw(drawQueue)
-		drawQueue:push({y=0; f=function()
+		drawQueue:push({y=1; f=function()
 			love.graphics.push()
 				local x, y = self.body:getWorldCenter()
 				local angle = self.body:getAngle()

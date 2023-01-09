@@ -101,7 +101,7 @@ function api.Draw(drawQueue)
 			drawQueue:push({y=10; f=function()
 				Resources.DrawImage(self.abductType, abductPos[1], abductPos[2], 0, 1, self.abductRadius*(1 - self.abductProgress))
 				
-				love.graphics.setColor(1, 1, 0, 0.6)
+				love.graphics.setColor(255/255, 216/255, 0/255, 0.6)
 				love.graphics.polygon("fill", sX, sY, planetLeft[1], planetLeft[2], planetRight[1], planetRight[2])
 			end})
 		end

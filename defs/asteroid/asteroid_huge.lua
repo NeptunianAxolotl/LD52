@@ -6,7 +6,7 @@ local def = {
 	splitCount = 2,
 	density = 5.5,
 	health = 12,
-	shipDamage = 5,
+	shipDamage = 1,
 	bounce = 0.1,
 	damageImages = {
 		{4, "asteroid_damage_0"},

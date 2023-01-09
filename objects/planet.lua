@@ -240,12 +240,12 @@ local function New(self, physicsWorld)
 			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
 				if self.smuggleAbductionProgress or (PlayerHandler.GetAbductPlanet() == self.def.name) then
-					self.ageProgress = 1
+					self.ageProgress = self.ageProgress - dt * ageSpeed
 				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					if Global.GUY_AGE_END_DELAY then
 						self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
 					end
-					self.ageProgress = 1
+					self.ageProgress = self.ageProgress - dt * ageSpeed
 				else
 					self.guyProgress = 0
 					self.guyAgeEndRemovalTime = false
@@ -253,7 +253,7 @@ local function New(self, physicsWorld)
 						self.age = self.age + 1
 						self.ageProgress = self.ageProgress - 1
 					else
-						self.ageProgress = 1
+						self.ageProgress = self.ageProgress - dt * ageSpeed
 					end
 				end
 			end
@@ -312,8 +312,8 @@ local function New(self, physicsWorld)
 		local angle = self.body:getAngle()
 		drawQueue:push({y=-2; f=function()
 			love.graphics.setColor(1, 1, 1, 0.6)
-			if self.ageProgress <= 1 then
-				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
+			if self.ageProgress > 0 then
+				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*math.min(1, self.ageProgress), math.pi*1.5, 32)
 			end
 		end})
 		drawQueue:push({y=2; f=function()

@@ -88,7 +88,7 @@ local function DoAbduction(self, dt, foundPlanet)
 	end
 	if finished then
 		EffectsHandler.SpawnEffect(
-			"enter_ship",
+			"enter_ship_bad",
 			{bx, by}
 		)
 	end
