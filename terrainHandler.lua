@@ -59,7 +59,7 @@ end
 local function SetupLevel(levelData)	self.levelData = levelData		self.sunX = self.width * levelData.sun.alignX	self.sunY = self.height * levelData.sun.alignY	self.sunGravity = Global.GRAVITY_MULT * levelData.gravity		for i = 1, #levelData.planets do		local planetData = util.CopyTable(levelData.planets[i])		planetData.name = planetData.name or ("noname_" .. i)
 		planetData.pos = {self.sunX + planetData.pos[1], self.sunY + planetData.pos[2]}
 		planetData.velocity = planetData.velocity or api.GetCircularOrbitVelocity(			planetData.pos, planetData.orbitMult, planetData.orbitAngle)				planetData.age = ageNameMap[planetData.age]		planetData.maxAge = ageNameMap[planetData.maxAge]
-		local planet = AddPlanet(planetData)		self.planetNameList[#self.planetNameList + 1] = planetData.name		self.planetImageList[#self.planetImageList + 1] = planet.planetDrawBase	end		for i = 1, #levelData.asteroids do		local asteroidData = util.CopyTable(levelData.asteroids[i])		asteroidData.pos = {self.sunX + asteroidData.pos[1], self.sunY + asteroidData.pos[2]}		asteroidData.velocity = asteroidData.velocity or api.GetCircularOrbitVelocity(			asteroidData.pos, asteroidData.orbitMult, asteroidData.orbitAngle)		EnemyHandler.AddAsteroid(asteroidData)	end		local sunData = {		pos = {self.sunX, self.sunY},		radius = levelData.sun.radius,		image = levelData.sun.image,		density = 1000,		gravity = levelData.gravity	}	AddSun(sunData)		local playerData = util.CopyTable(levelData.player)	playerData.pos = {self.sunX + playerData.pos[1], self.sunY + playerData.pos[2]}	playerData.velocity = playerData.velocity or api.GetCircularOrbitVelocity(		playerData.pos, playerData.orbitMult, playerData.orbitAngle)	PlayerHandler.SpawnPlayer(playerData)
+		local planet = AddPlanet(planetData)		self.planetNameList[#self.planetNameList + 1] = planetData.name		self.planetImageList[#self.planetImageList + 1] = planet.planetDrawBase	end		for i = 1, #levelData.asteroids do		local asteroidData = util.CopyTable(levelData.asteroids[i])		asteroidData.pos = {self.sunX + asteroidData.pos[1], self.sunY + asteroidData.pos[2]}		asteroidData.velocity = asteroidData.velocity or api.GetCircularOrbitVelocity(			asteroidData.pos, asteroidData.orbitMult, asteroidData.orbitAngle)		EnemyHandler.AddAsteroid(asteroidData)	end		local sunData = {		pos = {self.sunX, self.sunY},		radius = levelData.sun.radius,		image = levelData.sun.image,		density = 1000,		gravity = levelData.gravity	}	AddSun(sunData)		local playerData = util.CopyTable(levelData.player)	playerData.pos = {self.sunX + playerData.pos[1], self.sunY + playerData.pos[2]}	playerData.velocity = playerData.velocity or api.GetCircularOrbitVelocity(		playerData.pos, playerData.orbitMult, playerData.orbitAngle)	PlayerHandler.SpawnPlayer(playerData)		for i = 1, levelData.starCount do		self.stars[#self.stars + 1] = 5 + math.random()*(self.width - 10)		self.stars[#self.stars + 1] = 5 + math.random()*(self.height - 10)	end	for i = 1, levelData.starCount*0.4 do		self.brightStars[#self.brightStars + 1] = 5 + math.random()*(self.width - 10)		self.brightStars[#self.brightStars + 1] = 5 + math.random()*(self.height - 10)	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------- Callins
 function api.Update(dt)
@@ -67,7 +67,7 @@ function api.Update(dt)
 end
 
 function api.Draw(drawQueue)
-	drawQueue:push({y=-100; f=function()		love.graphics.setColor(1, 1, 1, 0.2)
+	drawQueue:push({y=-100; f=function()		love.graphics.setColor(1, 1, 1, 0.35)		love.graphics.points(self.stars)		love.graphics.setColor(1, 1, 1, 0.55)		love.graphics.points(self.brightStars)				love.graphics.setColor(1, 1, 1, 0.2)
 		love.graphics.rectangle("line", 0, 0, self.width, self.height)
 	end})
 	IterableMap.ApplySelf(self.planets, "Draw", drawQueue)	IterableMap.ApplySelf(self.suns, "Draw", drawQueue)
@@ -78,7 +78,7 @@ function api.Initialize(world, levelData)
 		world = world,
 		width = Global.WORLD_WIDTH,
 		height = Global.WORLD_HEIGHT,
-		planets = IterableMap.New(),		suns = IterableMap.New(),		planetNameList = {},		planetImageList = {},
+		planets = IterableMap.New(),		suns = IterableMap.New(),		planetNameList = {},		planetImageList = {},		stars = {},		brightStars = {},
 	}
 	
 	SetupLevel(levelData)

@@ -5,6 +5,7 @@ local def = {
 	name = "Drain Circling",
 	prevLevel = "level1",
 	gravity = 80,
+	starCount = 2500,
 	asteroidSpawn = {
 		{
 			timeMin = 1.5 * SPAWN_TIME_MULT,

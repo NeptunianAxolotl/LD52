@@ -5,6 +5,7 @@ local def = {
 	name = "Test Level",
 	nextLevel = "level1",
 	gravity = 100,
+	starCount = 1200,
 	asteroidSpawn = {
 		{
 			timeMin = 1.5 * SPAWN_TIME_MULT,
@@ -149,7 +150,7 @@ local def = {
 		{
 			pos = {1000, 0},
 			orbitMult = -1,
-			typeName = "monolith",
+			typeName = "asteroid_huge",
 		}
 	},
 	player = {

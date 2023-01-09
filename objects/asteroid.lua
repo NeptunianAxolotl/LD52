@@ -43,7 +43,7 @@ local function New(self, physicsWorld)
 	self.body:setAngle(math.random()*math.pi*2)
 	self.body:setAngularVelocity(math.random()*3 - 1.5)
 	self.fixture:setFriction(0.6)
-	self.fixture:setRestitution(0.6)
+	self.fixture:setRestitution(self.def.bounce or 0.6)
 	if self.def.angleDampen then
 		self.body:setAngularDamping(self.def.angleDampen)
 	end
@@ -86,7 +86,7 @@ local function New(self, physicsWorld)
 			end
 		end
 		self.isDead = true
-		self.wantSplit = doSplit
+		self.wantSplit = doSplit or self.def.alwaySplit
 	end
 	
 	function self.AddDamage(damage)
@@ -137,8 +137,16 @@ local function New(self, physicsWorld)
 				local alpha = TerrainHandler.GetWrapAlpha(x, y)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
-
-				Resources.DrawImage(self.def.image or asteroidDamageImages[self.damage] or "asteroid_damage_2", 0, 0, 0, alpha, self.def.radius)
+				local image = self.def.image or asteroidDamageImages[self.damage] or "asteroid_damage_2"
+				if self.def.damageImages then
+					for i = 1, #self.def.damageImages do
+						if self.damage < self.def.damageImages[i][1] then
+							image = self.def.damageImages[i][2]
+							break
+						end
+					end
+				end
+				Resources.DrawImage(image, 0, 0, 0, alpha, self.def.radius)
 				if Global.DRAW_PHYSICS then
 					if self.def.coords then
 						local lx, ly = self.body:getLocalCenter()

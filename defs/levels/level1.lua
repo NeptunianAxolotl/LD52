@@ -4,6 +4,7 @@ local def = {
 	prevLevel = "testLevel",
 	nextLevel = "drainCircling",
 	gravity = 20,
+	starCount = 1200,
 	asteroidSpawn = {
 		{
 			timeMin = 4,
@@ -19,10 +20,11 @@ local def = {
 			pos = {-1000, 0},
 			radius = 95,
 			density = 150,
-			age = "classical",
-			maxAge = "space",
+			age = "stone",
+			maxAge = "classical",
 			ageSpeed = 1/20,
 			guySpeed = 1/6,
+			ageProgress = 0.5,
 			guyGap = 0,
 			guyAgeBoost = 1.5,
 			fillLastAge = false,
@@ -43,7 +45,7 @@ local def = {
 	},
 	goal = {
 		["Planet 1"] = {
-			philosopher = 2,
+			philosopher = 2
 		}
 	},
 	player = {

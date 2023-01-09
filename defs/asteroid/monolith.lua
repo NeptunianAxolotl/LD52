@@ -8,6 +8,7 @@ local def = {
 	image = "monolith",
 	planetDeathAnim = "monolith_use",
 	angleDampen = 0.02,
+	bounce = 0.1,
 }
 
 return def
