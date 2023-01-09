@@ -201,6 +201,9 @@ function api.Collision(a, b, colObject, normal, tangent)
 	if not (aData and bData) then
 		return
 	end
+	if aData.isDead or bData.isDead then
+		return
+	end
 	local checkSwap = not (aData.objType == bData.objType)
 	if PlayerHandler.Collision(aData, bData) or (checkSwap and PlayerHandler.Collision(bData, aData)) then
 		return

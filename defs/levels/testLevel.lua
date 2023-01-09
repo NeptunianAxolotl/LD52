@@ -54,8 +54,9 @@ local def = {
 	planets = {
 		{
 			pos = {-1000, 0},
-			radius = 95,
+			radius = Global.PLANET_RADIUS,
 			density = 150,
+			ageProgress = 0.5,
 			age = "classical",
 			maxAge = "space",
 			shootRateMult = 2,
@@ -77,7 +78,7 @@ local def = {
 		{
 			pos = {1000, 0},
 			orbitMult = -1,
-			typeName = "asteroid_big",
+			typeName = "monolith",
 		}
 	},
 	player = {

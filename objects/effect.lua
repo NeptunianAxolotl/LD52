@@ -13,7 +13,7 @@ local function NewEffect(self, def)
 	end
 	self.life = maxLife / (self.animSpeed or 1)
 	self.animTime = 0
-	self.direction = (def.randomDirection and math.random()*2*math.pi) or 0
+	self.direction = self.direction  or (def.randomDirection and math.random()*2*math.pi) or 0
 	self.delay = self.delay or 0
 	
 	self.pos = (def.spawnOffset and util.Add(self.pos, def.spawnOffset)) or self.pos
@@ -45,6 +45,9 @@ local function NewEffect(self, def)
 		if self.velocity then
 			self.pos = util.Add(self.pos, util.Mult(dt, self.velocity))
 		end
+		if self.angularVelocity then
+			self.direction = self.direction + dt * self.angularVelocity
+		end
 	end
 	
 	function self.Draw(drawQueue)
@@ -59,9 +62,11 @@ local function NewEffect(self, def)
 				love.graphics.printf(self.text, self.pos[1] - def.textWidth/2, self.pos[2] - def.textHeight, def.textWidth, "center")
 				love.graphics.setColor(1, 1, 1, 1)
 			elseif self.actualImageOverride or def.actual_image then
-				Resources.DrawImage(self.actualImageOverride or def.actual_image, self.pos[1], self.pos[2], self.direction, GetAlpha(),
-					(self.scale or 1)*((def.lifeScale and (1 - 0.5*self.life/maxLife)) or 1),
-				def.color)
+				local scale = (self.scale or 1)*((def.lifeScale and (1 - 0.5*self.life/maxLife)) or 1)
+				if def.shrink then
+					scale = (self.scale or 1)*self.life/maxLife
+				end
+				Resources.DrawImage(self.actualImageOverride or def.actual_image, self.pos[1], self.pos[2], self.direction, GetAlpha(), scale, def.color)
 			else
 				Resources.DrawAnimation(def.image, self.pos[1], self.pos[2], self.animTime, self.direction, GetAlpha(),
 					(self.scale or 1)*((def.lifeScale and (1 - 0.5*self.life/maxLife)) or 1),

@@ -40,7 +40,7 @@ function api.Collision(aData, bData)
 	end
 	if aData.objType == "planet" and bData.objType == "asteroid" then
 		aData.AddDamage(bData.def.planetDamage)
-		bData.Destroy()
+		bData.Destroy(false, "planet", aData)
 		return true
 	end
 	if aData.objType == "playerShip" and bData.objType == "bullet" then

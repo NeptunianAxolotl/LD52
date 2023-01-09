@@ -22,7 +22,7 @@ end
 local function DoMovement(self)
 	local netForce = false
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 550, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), 220, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), Global.PLANET_RADIUS + 125, true))
 	
 	if self.abductionProgress and not netForce then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -1000 * self.GetSpeedMod(), 650, true))

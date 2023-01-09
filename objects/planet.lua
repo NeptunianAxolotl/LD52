@@ -89,7 +89,7 @@ local function New(self, physicsWorld)
 	self.fixture:setFriction(0.6)
 	
 	self.age = self.def.age
-	self.ageProgress = 0
+	self.ageProgress = self.def.ageProgress or 0
 	self.guyProgress = 0
 	
 	self.baseDrawRotation = math.pi*2
@@ -239,12 +239,12 @@ local function New(self, physicsWorld)
 			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
 				if self.smuggleAbductionProgress then
-					self.ageProgress = 0.9999
+					self.ageProgress = 1
 				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					if Global.GUY_AGE_END_DELAY then
 						self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
 					end
-					self.ageProgress = 0.9999
+					self.ageProgress = 1
 				else
 					self.guyProgress = 0
 					self.guyAgeEndRemovalTime = false
@@ -327,7 +327,7 @@ local function New(self, physicsWorld)
 			love.graphics.pop()
 		
 			love.graphics.setColor(1, 1, 1, 0.6)
-			if self.ageProgress < 1 then
+			if self.ageProgress <= 1 then
 				love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.7, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
 			end
 			if ageGuys[self.age] and self.IsGuyAppearing() and self.IsGuyAvailible() then
