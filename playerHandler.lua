@@ -6,12 +6,6 @@ local Font = require("include/font")
 local self = {}
 local api = {}
 
-local guyTypeList = {
-	"philosopher",
-	"inventor",
-	"scientist",
-}
-
 function api.SpawnPlayer(initPlayerData)
 	self.playerShip = NewPlayerShip({def = initPlayerData}, self.world.GetPhysicsWorld())
 end
@@ -28,6 +22,10 @@ function api.GetPlayerShipBody()
 	return self.playerShip and self.playerShip.GetBody()
 end
 
+function api.GetAbductPlanet()
+	return self.abductPlanet
+end
+
 function api.GetDistanceToPlayer(pos)
 	local playerBody = api.GetPlayerShipBody()
 	if not playerBody then
@@ -37,13 +35,14 @@ function api.GetDistanceToPlayer(pos)
 	return util.Dist(x, y, pos[1], pos[2])
 end
 
-function api.SetAbducting(guyType, linkedBody, linkedRadius)
+function api.SetAbducting(guyType, planetName, linkedBody, linkedRadius)
 	if self.abducting then
 		return false
 	end
 	self.abducting = true
 	self.abductProgress = 0
 	self.abductType = guyType
+	self.abductPlanet = planetName
 	self.abductBody = linkedBody
 	self.abductRadius = linkedRadius
 	
@@ -68,7 +67,9 @@ function api.Update(dt)
 		if self.abductProgress > 1 then
 			self.abducting = false
 			self.abductBody = false
-			self.abductScore[self.abductType] = (self.abductScore[self.abductType] or 0) + 1
+			GameHandler.AddAbduct(self.abductType, self.abductPlanet)
+			self.abductType = false
+			self.abductPlanet = false
 			local body = api.GetPlayerShipBody()
 			if body then
 				local bx, by = body:getWorldCenter()
@@ -108,26 +109,13 @@ function api.Draw(drawQueue)
 end
 
 function api.DrawInterface()
-	local offset = 20
-	for i = 1, #guyTypeList do
-		local guyType = guyTypeList[i]
-		if true or (self.abductScore[guyType] or 0) > 0 then
-			Resources.DrawImage(guyType, 1750, offset + 80, 0, 1, 80)
-			love.graphics.setColor(1, 1, 1, 1)
-			Font.SetSize(3)
-			love.graphics.printf((self.abductScore[guyType] or 0), 1825, offset + 50, 90, "left")
-			
-			offset = offset + 130
-		end
-	end
 end
 
 function api.Initialize(world)
 	self = {
 		playerShip = false,
 		animationTimer = 0,
-		world = world,
-		abductScore = {}
+		world = world
 	}
 end
 

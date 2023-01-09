@@ -239,7 +239,7 @@ local function New(self, physicsWorld)
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
-				if self.smuggleAbductionProgress then
+				if self.smuggleAbductionProgress or (PlayerHandler.GetAbductPlanet() == self.def.name) then
 					self.ageProgress = 1
 				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					if Global.GUY_AGE_END_DELAY then
@@ -286,7 +286,7 @@ local function New(self, physicsWorld)
 			local pVx, pVy = playerBody:getLinearVelocity()
 			if util.DistSq(myVx, myVy, pVx, pVy) < Global.ABDUCT_VEL_MATCH_SQ + self.def.radius then
 				if PlayerHandler.GetDistanceToPlayer({bx, by}) < Global.ABDUCT_DIST_REQUIRE then
-					if PlayerHandler.SetAbducting(ageGuys[self.age], self.body, self.def.radius) then
+					if PlayerHandler.SetAbducting(ageGuys[self.age], self.def.name, self.body, self.def.radius) then
 						self.guyProgress = 0
 						self.guyAgeEndRemovalTime = false
 						self.guyGapTime = self.def.guyGap
