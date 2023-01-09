@@ -63,7 +63,11 @@ local globals = {
 	GUY_FADE_IN_TIME = 1.2,
 	SUN_ROTATE_FACTOR = 0.2,
 	
-	INIT_LEVEL = "level4",
+	GUY_SECONDS = 10,
+	EARLY_AGE_SECONDS = 12,
+	LATE_AGE_SECONDS = 50,
+	
+	INIT_LEVEL = "level5",
 	DRAW_PHYSICS = false,
 	DRAW_ITEM_COUNTS = true,
 	DEBUG_PLANET_NAME = false,

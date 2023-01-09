@@ -11,7 +11,7 @@ Great minds in an age help progress greatly.
 	prevLevel = "level1",
 	nextLevel = "level3",
 	gravity = 20,
-	starCount = 1200,
+	starCount = 850,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
@@ -44,9 +44,9 @@ Great minds in an age help progress greatly.
 			age = "stone",
 			maxAge = "invention",
 			shootRateMult = 1,
-			earlyAgeSpeed = 1/12,
-			lateAgeSpeed = 1/50,
-			guySpeed = 1/12,
+			earlyAgeSpeed = 1/Global.EARLY_AGE_SECONDS,
+			lateAgeSpeed = 1/Global.LATE_AGE_SECONDS,
+			guySpeed = 1/Global.GUY_SECONDS,
 			guyGap = 0,
 			guyAgeBoost = 6,
 			fillLastAge = false,

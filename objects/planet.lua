@@ -318,7 +318,11 @@ local function New(self, physicsWorld)
 		drawQueue:push({y=-2; f=function()
 			love.graphics.setColor(1, 1, 1, 0.5)
 			if self.ageProgress > 0 then
-				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*math.min(1.01, self.ageProgress), math.pi*1.5, 32)
+				if self.ageProgress >= 1 then
+					love.graphics.circle("fill", x, y, self.def.radius * 1.4, 32)
+				else
+					love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*math.min(1, self.ageProgress), math.pi*1.5, 32)
+				end
 			end
 		end})
 		drawQueue:push({y=2; f=function()

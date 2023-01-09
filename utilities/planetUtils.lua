@@ -144,7 +144,7 @@ function api.ShootAtBody(targetBody, myBody, projType, projSpeed, spawnRadius, m
 	for travelTest = 0.1, 1.6, 0.1 do
 		local px = ax + travelTest * aVx + 0.5 * travelTest * travelTest * gravityAccel[1]
 		local py = ay + travelTest * aVy + 0.5 * travelTest * travelTest * gravityAccel[2]
-		local travelTime = (util.Dist(mx, my, px, py) - spawnRadius) / projSpeed
+		local travelTime = (util.DistWithWrap(mx, my, px, py, TerrainHandler.GetWidth(), TerrainHandler.GetHeight()) - spawnRadius) / projSpeed
 		if math.abs(travelTime - travelTest) < bestTravelDelta then
 			bestTravel = travelTime
 			bestTravelDelta = math.abs(travelTime - travelTest)
@@ -157,7 +157,7 @@ function api.ShootAtBody(targetBody, myBody, projType, projSpeed, spawnRadius, m
 	local px, py = ax + travelTime * aVx, ay + travelTime * aVy
 
 	-- Shoot at predicted spot
-	local toPrediction = util.Unit({px - mx, py - my})
+	local toPrediction = util.UnitTowardsWithWrap({mx, my}, {px, py}, TerrainHandler.GetWidth(), TerrainHandler.GetHeight())
 	local bulletData = {
 		pos = util.Add({mx, my}, util.Mult(spawnRadius, toPrediction)),
 		velocity = util.Add({mVx, mVy}, util.Mult(projSpeed, toPrediction)),

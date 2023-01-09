@@ -1,17 +1,17 @@
 
-local SPAWN_TIME_MULT = 0.7
+local SPAWN_TIME_MULT = 1.2
 
 local def = {
-	humanName = "Cooperation",
+	humanName = "Science Victory",
 	description = [[
-The Gorlaxians have an undeveloped planet in their system and have agreed to look the other way.
+We have a buyer for some more modern thinkers.
 
-They can take care of themselves.
+Great Minds increase the rate of advancement while they remain on the planet.
 ]],
 	prevLevel = "level3",
 	nextLevel = "level5",
-	gravity = 18,
-	starCount = 1200,
+	gravity = 25,
+	starCount = 900,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
@@ -27,7 +27,7 @@ They can take care of themselves.
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 20) / (count + 5)
+				return (count + 20) / (count + 7)
 			end,
 		},
 	},
@@ -66,45 +66,25 @@ They can take care of themselves.
 	planets = {
 		{
 			name = "planet1",
-			humanName = "Gorlax II",
-			pos = util.RotateVector({-1400, 0}, 1),
+			pos = util.RotateVector({-1050, 0}, 4.5),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
-			ageProgress = 0,
-			orbitMult = 0.95,
-			age = "space",
-			maxAge = "space",
-			shootRateMult = 1,
-			earlyAgeSpeed = 1/12,
-			lateAgeSpeed = 1/50,
-			guySpeed = 1/12,
-			guyGap = 0,
-			guyAgeBoost = 6,
-			fillLastAge = false,
-		},
-		{
-			name = "planet2",
-			pos = util.RotateVector({-950, 0}, 3),
-			radius = Global.PLANET_RADIUS,
-			density = 150,
-			ageProgress = 0,
-			orbitMult = 0.95,
+			ageProgress = 0.5,
+			orbitMult = 1.02,
 			age = "bronze",
 			maxAge = "modern",
 			shootRateMult = 1,
-			earlyAgeSpeed = 1/12,
-			lateAgeSpeed = 1/50,
-			guySpeed = 1/12,
+			earlyAgeSpeed = 1/Global.EARLY_AGE_SECONDS,
+			lateAgeSpeed = 1/Global.LATE_AGE_SECONDS,
+			guySpeed = 1/Global.GUY_SECONDS,
 			guyGap = 0,
 			guyAgeBoost = 6,
 			fillLastAge = false,
 		},
 	},
 	goal = {
-		planet2 = {
-			philosopher = 3,
-			inventor = 2,
-			scientist = 1
+		planet1 = {
+			scientist = 4
 		}
 	},
 	sun = {
@@ -115,20 +95,26 @@ They can take care of themselves.
 	},
 	asteroids = {
 		{
-			pos = {1000, -700},
+			pos = {-200, 500},
 			orbitMult = 0.8,
-			orbitAngle = 0.38,
+			orbitAngle = 0.2,
 			typeName = "asteroid_big",
 		},
 		{
-			pos = {1200, 500},
+			pos = {500, 200},
 			orbitMult = 0.95,
 			orbitAngle = -0.2,
 			typeName = "asteroid_big",
 		},
 		{
-			pos = {-600, -700},
+			pos = {500, -700},
 			orbitMult = 0.95,
+			orbitAngle = -0.05,
+			typeName = "asteroid_big",
+		},
+		{
+			pos = {800, -650},
+			orbitMult = 1.1,
 			orbitAngle = -0.05,
 			typeName = "asteroid_big",
 		}

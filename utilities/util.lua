@@ -39,6 +39,10 @@ function util.DistSqWithWrap(x1, y1, x2, y2, wrapX, wrapY)
 	return smallestDistSq, si, sj
 end
 
+function util.DistWithWrap(x1, y1, x2, y2, wrapX, wrapY)
+	return math.sqrt(util.DistSqWithWrap(x1, y1, x2, y2, wrapX, wrapY))
+end
+
 function util.Dist(x1, y1, x2, y2)
 	return sqrt(util.DistSq(x1,y1,x2,y2))
 end
