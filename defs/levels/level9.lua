@@ -4,7 +4,7 @@ local SPAWN_TIME_MULT = 0.95
 local def = {
 	humanName = "Finely Aged",
 	description = [[
-This planet was left alone for a bit too long, and now it fights back when we try to harvest it.
+This planet was left alone for a bit too long. This can cause planets to resist harvesting.
 
 Nothing an asteroid or three won't solve.
 ]],

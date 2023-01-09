@@ -4,13 +4,9 @@ local SPAWN_TIME_MULT = 1
 local def = {
 	humanName = "Sophistication",
 	description = [[
-Different types of people come from different ages.
+Our markets have expanded to slightly more modern type of thinker.  You will have to guide the planet through the ages.
 
-Great minds in an age help civilizations grow significantly faster.
-
-However, they also cause stagnation at the end of an age, and must be removed to allow the planet to progress.
-
-You can hit the planet with things to revert progress.
+Demand for the classics remains strong. If you miss the window, then, well, hitting the planet with something should work.
 ]],
 	prevLevel = "level1",
 	nextLevel = "level3",

@@ -4,9 +4,9 @@ local SPAWN_TIME_MULT = 1
 local def = {
 	humanName = "A Lively Debate",
 	description = [[
-Protect the planet and harvest the people.  Watch out for the asteroids!
+This planet has barely developed so will have to be protected for longer.  Watch out for the asteroids!
 
-The quota has gone up.  The buyer wants two philosophers this time, so he can watch them argue with each other.
+Your quota has increased.  The buyer requested two philosophers this time, so he can watch them argue with each other.
 ]],
 	nextLevel = "level2",
 	prevLevel = "level0_a",

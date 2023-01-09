@@ -5,7 +5,9 @@ local ENEMY_TIME_MULT = 0.7
 local def = {
 	humanName = "Confluence",
 	description = [[
-This system is ripe for the taking. Unfortunately, this makes it hotly contested.  Just...shoot anything that moves, okay?
+This system is ripe for the taking. Unfortunately, this makes it hotly contested.
+
+Just...shoot anything that moves, okay?
 ]],
 	prevLevel = "level10",
 	nextLevel = "level12",

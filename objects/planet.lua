@@ -258,12 +258,14 @@ local function New(self, physicsWorld)
 					end
 					self.ageProgress = oldProgress
 				else
-					self.guyProgress = self.guyProgress * 0.5
 					self.guyAgeEndRemovalTime = false
 					if self.age < self.def.maxAge then
 						self.age = self.age + 1
 						SoundHandler.PlaySound("age_up")
 						self.ageProgress = self.ageProgress - 1
+						if not ageGuys[self.age] then
+							self.guyProgress = 0
+						end
 					else
 						self.ageProgress = oldProgress
 					end

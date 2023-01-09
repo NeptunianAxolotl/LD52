@@ -2,7 +2,7 @@
 local SPAWN_TIME_MULT = 1.35
 
 local def = {
-	humanName = "Science Victory",
+	humanName = "Peer Review",
 	description = [[
 We've found a buyer for some more modern thinkers.  Apparently watching Classical-era philosophers argue got old.
 

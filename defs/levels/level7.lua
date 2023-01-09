@@ -4,11 +4,11 @@ local SPAWN_TIME_MULT = 0.85
 local def = {
 	humanName = "Widdershins",
 	description = [[
-Someone tipped off the space police. Their stun weaponry is quite the annoyance.
+Someone tipped off the space police. Don't worry, their missiles only stun.
 
 Fortunately, they blow up when shot, just like everything else.
 
-To make matters worse, there is something wrong with this system. The planet's going backwards. We blame the space police.
+To make matters worse, the planet's going backwards. We blame the space police.
 ]],
 	prevLevel = "level6",
 	nextLevel = "level8",
