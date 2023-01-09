@@ -11,7 +11,7 @@ They can take care of themselves.
 	prevLevel = "level4",
 	nextLevel = "level6",
 	gravity = 18,
-	starCount = 1050,
+	starCount = 860,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,

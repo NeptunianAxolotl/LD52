@@ -13,7 +13,7 @@ Nudge the monoliths onto the planet to help things along.
 	prevLevel = "level5",
 	nextLevel = "level7",
 	gravity = 12,
-	starCount = 560,
+	starCount = 480,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
@@ -61,7 +61,7 @@ Nudge the monoliths onto the planet to help things along.
 			ageProgress = 0,
 			orbitMult = 0.99,
 			age = "stone",
-			maxAge = "space",
+			maxAge = "modern",
 			shootRateMult = 1,
 			earlyAgeSpeed = 0,
 			lateAgeSpeed = 0,
