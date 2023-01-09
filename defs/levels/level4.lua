@@ -10,7 +10,7 @@ Great Minds increase the rate of advancement while they remain on the planet.
 ]],
 	prevLevel = "level3",
 	nextLevel = "level5",
-	gravity = 25,
+	gravity = 20,
 	starCount = 900,
 	asteroidSpawn = {
 		{

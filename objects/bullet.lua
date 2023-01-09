@@ -68,7 +68,8 @@ local function New(self, physicsWorld)
 				local angle
 				if self.def.homingForce and self.def.target and not self.def.target:isDestroyed() then
 					local tx, ty = self.def.target:getWorldCenter()
-					angle = util.Angle(tx - x, ty - y)
+					local towards = util.UnitTowardsWithWrap({x, y}, {tx, ty}, Global.WORLD_WIDTH, Global.WORLD_HEIGHT)
+					angle = util.Angle(towards)
 				else
 					local vx, vy = self.body:getLinearVelocity()
 					angle = util.Angle(vx, vy)

@@ -34,20 +34,23 @@ function api.LoadSound(name, id)
 	return soundData
 end
 
-function api.PlaySound(name, id, fadeIn, fadeOut, delay, loop)
+function api.PlaySound(name, id, fadeIn, fadeOut, delay, loop, wantedVolume, playAtZero)
+	print("PlaySound", name)
 	local soundData = api.LoadSound(name, id)
 	soundData.source:setLooping(loop and true or false)
 	
 	soundData.fadeIn = fadeIn or 10
 	soundData.fadeOut = fadeOut or 10
-	soundData.want = 1
+	soundData.want = wantedVolume or 1
 	soundData.delay = delay
+	soundData.playAtZero = playAtZero 
 	
 	if not soundData.delay then
 		soundData.source:stop()
 		love.audio.play(soundData.source)
 		soundData.source:setVolume(soundData.want * soundData.volumeMult)
 	end
+	return soundData
 end
 
 function api.StopSound(name, id, instant, delay)
@@ -103,7 +106,7 @@ function api.Update(dt)
 					soundData.have = soundData.want
 				end
 				soundData.source:setVolume(soundData.have * soundData.volumeMult)
-				if soundData.have <= 0 then
+				if (not soundData.playAtZero) and soundData.have <= 0 then
 					soundData.source:stop()
 				end
 			end

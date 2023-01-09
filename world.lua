@@ -298,7 +298,6 @@ function api.Initialize(cosmos, levelData)
 	Delay.Initialise()
 	InterfaceUtil.Initialize()
 	EffectsHandler.Initialize(api)
-	SoundHandler.Initialize()
 	
 	PhysicsHandler.Initialize(api)
 	ComponentHandler.Initialize(api)

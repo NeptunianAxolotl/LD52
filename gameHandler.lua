@@ -49,6 +49,10 @@ local function FilterToSpaceAge(data)
 	return data.age == 8
 end
 
+local function FindMaxTech(data)
+	return -1*data.age
+end
+
 local countableTypes = {
 	"asteroid",
 	"monolith",
@@ -86,6 +90,14 @@ end
 function api.AddAbduct(abductType, abductPlanet)
 	self.abductScore[abductPlanet] = self.abductScore[abductPlanet] or {}
 	self.abductScore[abductPlanet][abductType] = (self.abductScore[abductPlanet][abductType] or 0) + 1
+end
+
+function api.GetMaxTech()
+	local _, negativeMaxTech = IterableMap.GetMinimum(TerrainHandler.GetPlanets(), FindMaxTech)
+	if not negativeMaxTech then
+		return 1
+	end
+	return -1*negativeMaxTech
 end
 
 --------------------------------------------------
@@ -290,6 +302,7 @@ local function DrawDebug()
 		local name = countableTypes[i]
 		offset = PrintLine(name .. ": " .. api.CountObject(name), 4, xOffset, offset)
 	end
+	PrintLine("maxTech: " .. api.GetMaxTech(), 4, xOffset, offset)
 end
 
 --------------------------------------------------

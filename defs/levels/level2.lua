@@ -10,7 +10,7 @@ Great minds in an age help progress greatly.
 ]],
 	prevLevel = "level1",
 	nextLevel = "level3",
-	gravity = 20,
+	gravity = 16,
 	starCount = 850,
 	asteroidSpawn = {
 		{

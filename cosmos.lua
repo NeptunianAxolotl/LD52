@@ -124,9 +124,11 @@ end
 function api.Initialize()
 	self = {
 		inbuiltLevelName = Global.INIT_LEVEL,
+		musicEnabled = true,
 	}
 	self.curLevelData = LevelDefs[self.inbuiltLevelName]
 	MusicHandler.Initialize(api)
+	SoundHandler.Initialize()
 	World.Initialize(api, self.curLevelData)
 end
 

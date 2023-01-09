@@ -11,11 +11,14 @@ local font = love.graphics.newFont(70)
 
 -- First eligible tracks are used as start music
 local trackList = {
-	--'bgm_b',
-}
-
-local fallbackTrack = {
-	--'bgm_b',
+	'bgm_dead',
+	'bgm_stone',
+	'bgm_bronze',
+	'bgm_iron',
+	'bgm_classical',
+	'bgm_reneissance',
+	'bgm_modern',
+	'bgm_space',
 }
 
 local currentTrack = {}
@@ -23,26 +26,7 @@ local trackRunning = false
 local initialDelay = true
 local currentTrackRemaining = 1
 local trackParity = 1
-
-local function GetTracks()
-	local foundTrack = {}
-	
-	for i = 1, #trackList do
-		local track = soundFiles[trackList[i]]
-		if track.handler and not foundTrack[track.handler] then
-			foundTrack[track.handler] = {sound = trackList[i]}
-		end
-	end
-	
-	for i = 1, 3 do
-		if not foundTrack[i] then
-			foundTrack[i] = {sound = fallbackTrack[i]}
-		end
-	end
-	util.Permute(trackList)
-	
-	return {{sound = "bgm_b"}}
-end
+local playingSounds = {}
 
 function api.StopCurrentTrack(delay)
 	currentTrackRemaining = delay or 0
@@ -70,33 +54,30 @@ function api.Update(dt)
 			return
 		end
 	end
+	local maxTech = GameHandler and GameHandler.GetMaxTech()
 	currentTrackRemaining = (currentTrackRemaining or 0) - dt
 	if currentTrackRemaining < 0 then
 		if cosmos.MusicEnabled() then
 			if trackRunning then
-				for i = 1, #currentTrack do
-					SoundHandler.StopSound(currentTrack[i].sound, trackParity)
+				for i = 1, #trackList do
+					SoundHandler.StopSound(currentTrack[i])
 				end
 			end
-			trackParity = 3 - trackParity
-			currentTrack = GetTracks()
-			currentTrackRemaining = 0
-			for i = 1, 1 do
-				if not soundFiles[currentTrack[i].sound] then
-					return
-				end
-				currentTrackRemaining = math.max(currentTrackRemaining, soundFiles[currentTrack[i].sound].duration or Global.DEFAULT_MUSIC_DURATION)
-			end
-			currentTrackRemaining = currentTrackRemaining - Global.CROSSFADE_TIME
 			trackRunning = true
-			for i = 1, #currentTrack do
-				SoundHandler.PlaySound(currentTrack[i].sound, trackParity, false, 1 / Global.CROSSFADE_TIME)
+			currentTrackRemaining = soundFiles[trackList[4]].duration
+			print("currentTrackRemaining", currentTrackRemaining)
+			for i = 1, #trackList do
+				playingSounds[i] = SoundHandler.PlaySound(trackList[i], false, false, false, false, false, (i == maxTech and 1) or 0, true)
 			end
 		elseif trackRunning then
-			for i = 1, #currentTrack do
-				SoundHandler.StopSound(currentTrack[i].sound, trackParity)
+			for i = 1, #trackList do
+				SoundHandler.StopSound(trackList[i])
 			end
 			trackRunning = false
+		end
+	elseif trackRunning then
+		for i = 1, #trackList do
+			playingSounds[i].want = ((i == maxTech and 1) or 0)
 		end
 	end
 end
@@ -104,11 +85,9 @@ end
 function api.Initialize(newCosmos)
 	self = {}
 	cosmos = newCosmos
-	api.StopCurrentTrack()
 	initialDelay = 0
 	for i = 1, #trackList do
-		SoundHandler.LoadSound(trackList[i], 1)
-		SoundHandler.LoadSound(trackList[i], 2)
+		SoundHandler.LoadSound(trackList[i])
 	end
 end
 

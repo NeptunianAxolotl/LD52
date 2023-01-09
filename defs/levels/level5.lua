@@ -10,7 +10,7 @@ They can take care of themselves.
 ]],
 	prevLevel = "level4",
 	nextLevel = "level6",
-	gravity = 18,
+	gravity = 17,
 	starCount = 860,
 	asteroidSpawn = {
 		{
