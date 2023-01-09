@@ -182,7 +182,7 @@ end
 local function UpdateCamera()
 	local cameraX, cameraY, cameraScale = Camera.UpdateCameraToViewPoints(dt, 
 		{
-			{pos = {Global.WORLD_WIDTH/2, Global.WORLD_HEIGHT/2}, xOff = Global.WORLD_WIDTH/2 + 80, yOff = Global.WORLD_HEIGHT/2 + 80},
+			{pos = {Global.WORLD_WIDTH/2, Global.WORLD_HEIGHT/2}, xOff = Global.WORLD_WIDTH/2 + 80 + Global.UI_SPACE, yOff = Global.WORLD_HEIGHT/2 + 80},
 		}
 		, 0, 0
 	)
@@ -267,13 +267,15 @@ function api.Draw()
 		d.f()
 	end
 	
-	--local windowX, windowY = love.window.getMode()
-	--if windowX/windowY > 16/9 then
-	--	self.interfaceTransform:setTransformation(0, 0, 0, windowY/1080, windowY/1080, 0, 0)
-	--else
-	--	self.interfaceTransform:setTransformation(0, 0, 0, windowX/1920, windowX/1920, 0, 0)
-	--end
-	love.graphics.replaceTransform(self.emptyTransform)
+	local windowX, windowY = love.window.getMode()
+	if windowX/windowY > 19/10 then
+		local deadSpace = windowX - windowY*19/10
+		self.interfaceTransform:setTransformation(deadSpace * 0.5, 0, 0, windowY/1000, windowY/1000, 0, 0)
+	else
+		local deadSpace = windowY - windowX*10/19
+		self.interfaceTransform:setTransformation(0, deadSpace * 0.5, 0, windowX/1900, windowX/1900, 0, 0)
+	end
+	love.graphics.replaceTransform(self.interfaceTransform)
 	
 	-- Draw interface
 	PlayerHandler.DrawInterface()

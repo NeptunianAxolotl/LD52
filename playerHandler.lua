@@ -103,8 +103,8 @@ function api.DrawInterface()
 	local offset = 20
 	for i = 1, #guyTypeList do
 		local guyType = guyTypeList[i]
-		if (self.abductScore[guyType] or 0) > 0 then
-			Resources.DrawImage(guyType, 1740, offset + 80, 0, 1, 80)
+		if true or (self.abductScore[guyType] or 0) > 0 then
+			Resources.DrawImage(guyType, 1750, offset + 80, 0, 1, 80)
 			love.graphics.setColor(1, 1, 1, 1)
 			Font.SetSize(3)
 			love.graphics.printf((self.abductScore[guyType] or 0), 1825, offset + 50, 90, "left")

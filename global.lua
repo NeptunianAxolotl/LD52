@@ -14,6 +14,7 @@ local globals = {
 	
 	WORLD_WIDTH = 4500,
 	WORLD_HEIGHT = 3200,
+	UI_SPACE = 650,
 	
 	GRAVITY_MULT = 700000,
 	SPEED_LIMIT = 1800,
