@@ -22,6 +22,9 @@ function externalFunc.SetSize(size)
 	elseif size == 3 then
 		love.graphics.setFont(smallFont)
 		_size = 3
+	elseif size == 4 then
+		love.graphics.setFont(tinyFont)
+		_size = 4
 	end
 end
 
@@ -30,8 +33,10 @@ function externalFunc.GetFont()
 		return bigFont
 	elseif _size == 2 then
 		return medFont
-	else
+	elseif _size == 3 then
 		return smallFont
+	else
+		return tinyFont
 	end
 end
 
@@ -43,6 +48,7 @@ function externalFunc.Load()
 	bigFont   = love.graphics.newFont('include/fonts/' .. FONT, 64)
 	medFont   = love.graphics.newFont('include/fonts/' .. FONT, 48)
 	smallFont = love.graphics.newFont('include/fonts/' .. FONT, 32)
+	tinyFont  = love.graphics.newFont('include/fonts/' .. FONT, 24)
 end
 
 return externalFunc

@@ -73,10 +73,10 @@ end
 -- Drawing
 --------------------------------------------------
 
-local function PrintLine(text, size, x, y, align)
+local function PrintLine(text, size, x, y, align, width)
 	Font.SetSize(size)
 	love.graphics.setColor(1, 1, 1, 1)
-	love.graphics.printf(text, x, y, 240, align or "left")
+	love.graphics.printf(text, x, y, width or 240, align or "left")
 	if size == 1 then
 		return y + 30
 	elseif size == 2 then
@@ -155,6 +155,12 @@ local function DrawRightInterface()
 end
 
 local function DrawTopLeftInterface()
+	local levelData = TerrainHandler.GetLevelData()
+	local offset = 45
+	local xOffset = 0
+	offset = PrintLine(levelData.humanName, 3, xOffset, offset, "center", 280)
+	
+	offset = PrintLine(levelData.description or "missing description", 4, xOffset + 20, offset + 20, "left", 255)
 	
 end
 

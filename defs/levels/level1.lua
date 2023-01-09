@@ -1,6 +1,6 @@
 
 local def = {
-	name = "Tutorial?",
+	humanName = "Tutorial?",
 	prevLevel = "testLevel",
 	nextLevel = "drainCircling",
 	gravity = 20,

@@ -2,7 +2,13 @@
 local SPAWN_TIME_MULT = 1.8
 
 local def = {
-	name = "Test Level",
+	humanName = "Test Level",
+	description = [[
+etBody Returns the body the fixture is attached to. Added since 0.8.0 
+Fixture BoundingBox Returns the points of the fixture bounding box. Added since 0.8.0 
+Fixture Category Returns the categories the fixture belongs to. Added since 0.8.0 
+Fixture Category Returns the categories the fixture belongs to. Added
+]],
 	nextLevel = "level1",
 	gravity = 100,
 	starCount = 1200,
