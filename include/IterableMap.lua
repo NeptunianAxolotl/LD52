@@ -225,8 +225,10 @@ function IterableMap.FilterCount(self, func, ...)
 	while i <= self.indexMax do
 		local key = self.keyByIndex[i]
 		local result = func(self.dataByKey[key], ...)
-		if result then
+		if result == true then
 			count = count + 1
+		elseif result then
+			count = count + result
 		end
 		i = i + 1
 	end

@@ -65,6 +65,7 @@ local globals = {
 	INIT_LEVEL = "level1",
 	DRAW_PHYSICS = false,
 	DRAW_ITEM_COUNTS = true,
+	DEBUG_PLANET_NAME = false,
 	
 	AGE_IMAGE = {
 		false,

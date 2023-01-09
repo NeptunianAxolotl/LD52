@@ -2,43 +2,32 @@
 local SPAWN_TIME_MULT = 1
 
 local def = {
-	humanName = "Orientation",
+	humanName = "Sophistication",
 	description = [[
-First planet.
+Different types of people come from different ages.
 
-Protect the planet and harvest the people.
-
-WSAD/Arrow Keys to move
-Space to shoot
-
-Don't shoot the planet.
-
-Move once two have been selected.
+Great minds in an age help progress greatly.
 ]],
-	nextLevel = "level2",
-	gravity = 15,
+	prevLevel = "level1",
+	nextLevel = "level3",
+	gravity = 20,
 	starCount = 1200,
 	asteroidSpawn = {
 		{
-			timeMin = 20 * SPAWN_TIME_MULT,
-			timeRand = 8 * SPAWN_TIME_MULT,
-			speedMin = 2,
-			speedMax = 6,
-			orbitMult = 0.75,
-			orbitMultRand = 0.2,
-			orbitOtherDirChance = 0,
+			timeMin = 10 * SPAWN_TIME_MULT,
+			timeRand = 5 * SPAWN_TIME_MULT,
+			speedMin = 10,
+			speedMax = 35,
+			orbitMult = 0.7,
+			orbitMultRand = 0.3,
+			orbitOtherDirChance = 0.3,
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
-			spawnRange = 0.4,
-			typeName = {"asteroid_big"},
+			spawnRange = 0.6,
+			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				if count == 0 then
-					return 3
-				elseif count <= 1 then
-					return 1
-				end
-				return 0.2
+				return (count + 12) / (count + 3) * (1 - (count + 3) / (count + 15))
 			end,
 		},
 	},
@@ -47,12 +36,13 @@ Move once two have been selected.
 	planets = {
 		{
 			name = "planet1",
-			pos = {-1000, 0},
+			pos = util.RotateVector({-500, 0}, -1),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
-			ageProgress = 0.25,
+			ageProgress = 0.5,
+			orbitMult = 1.18,
 			age = "stone",
-			maxAge = "classical",
+			maxAge = "invention",
 			shootRateMult = 2,
 			earlyAgeSpeed = 1/12,
 			lateAgeSpeed = 1/50,
@@ -64,7 +54,8 @@ Move once two have been selected.
 	},
 	goal = {
 		planet1 = {
-			philosopher = 2
+			philosopher = 2,
+			inventor = 2
 		}
 	},
 	sun = {
@@ -75,16 +66,21 @@ Move once two have been selected.
 	},
 	asteroids = {
 		{
-			-- Designed to hit the planet in the classical age
-			pos = util.RotateVector({1200, -400}, -1.85),
+			pos = {1200, -400},
 			orbitMult = 0.75,
 			orbitAngle = -0.38,
 			typeName = "asteroid_big",
 		},
 		{
-			-- Harmless, taget practice
-			pos = {350, 1200},
-			orbitMult = 0.98,
+			pos = {1000, 700},
+			orbitMult = -0.95,
+			orbitAngle = -0.2,
+			typeName = "asteroid_big",
+		},
+		{
+			pos = {-800, -700},
+			orbitMult = 0.95,
+			orbitAngle = -0.05,
 			typeName = "asteroid_big",
 		}
 	},

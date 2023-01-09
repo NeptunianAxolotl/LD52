@@ -345,12 +345,12 @@ local function New(self, physicsWorld)
 					local period = 0.5
 					local offset = 0.7
 					if self.guyAgeEndRemovalTime then
-						period = (0.4 * (0.5 + 0.6 * self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime)))
+						period = 0.3
 						offset = 0.7 * (self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime))
 					end
 					local alpha = (self.animTime%period) / period
 					local fadeIn = math.min(1, (Global.GUY_FADE_IN_TIME - timeRemaining)/Global.GUY_FADE_IN_TIME)
-					alpha = 0.5 * 0.3 * (math.sin(alpha * 2 * math.pi) + 1) + offset
+					alpha = 0.3 * 0.5 * (math.sin(alpha * 2 * math.pi) + 1) + offset
 					Resources.DrawImage("guyglow", x, y, 0, alpha * fadeIn, self.def.radius)
 					Resources.DrawImage(ageGuys[self.age], x, y, 0, (offset / 0.7 + (1 - offset / 0.7) * alpha) * fadeIn, self.def.radius)
 				end

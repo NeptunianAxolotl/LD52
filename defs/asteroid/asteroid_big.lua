@@ -6,6 +6,7 @@ local def = {
 	density = 2.7,
 	health = 2,
 	shipDamage = 2,
+	asteroidAmount = 1,
 }
 
 return def

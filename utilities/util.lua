@@ -403,6 +403,20 @@ function util.SampleList(list)
 	return list[index], index
 end
 
+function util.SampleMap(map)
+	local size = 0
+	for _, _ in pairs(map) do
+		size = size + 1
+	end
+	for k, v in pairs(map) do
+		size = size - 1
+		if size == 0 then
+			return v, k
+		end
+	end
+	return false
+end
+
 function util.SampleDistribution(distribution, rngIn)
 	local rngFunc = rngIn or math.random
 	local value = rngFunc()

@@ -3,7 +3,7 @@ local Font = require("include/font")
 
 local EffectsHandler = require("effectsHandler")
 local Resources = require("resourceHandler")
-MusicHandler = require("musicHandler")
+local planetNameDefs = require("defs/planetNames")
 
 local self = {}
 local api = {}
@@ -22,11 +22,11 @@ local greyFlashColor = {0.7, 0.7, 0.7, 1}
 --------------------------------------------------
 
 local function FilterToAsteroid(data)
-	return data.def.typeName ~= "monolith"
+	return data.def.asteroidAmount
 end
 
 local function FilterToMonolith(data)
-	return data.def.typeName == "monolith"
+	return not data.def.asteroidAmount
 end
 
 local function FilterToPolice(data)
@@ -178,6 +178,10 @@ local function DrawAbductScore(name, humanName, planetImage, goal, planetScore, 
 		end
 	else
 		Resources.DrawImage(Global.DEAD_IMAGE[planetImage], xOffset + 20, offset + 22, 0, 1, 20, greyColor)
+	end
+	
+	if Global.DEBUG_PLANET_NAME then
+		humanName = util.SampleList(util.SampleMap(planetNameDefs))
 	end
 	offset = PrintLine(humanName, 3, xOffset + 60, offset)
 	offset = offset + 15
