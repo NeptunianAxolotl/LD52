@@ -134,7 +134,7 @@ local function New(self, physicsWorld)
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 			buildTurnRamp = true
 			local angle = self.body:getAngle()
-			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 80)) * self.GetSpeedMod()
+			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 120)) * self.GetSpeedMod()
 			local forceVec = util.PolarToCart(accel, angle)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		end

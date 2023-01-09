@@ -79,9 +79,17 @@ local function DoAbduction(self, dt, foundPlanet)
 	end
 	
 	self.abductionId = self.abductionId or math.random()
-	self.abductionProgress, self.abductType = foundPlanet.AddSmuggleAbductionProgress(2.35*dt, self.abductionId)
+	local progress, abType, finished = foundPlanet.AddSmuggleAbductionProgress(2.35*dt, self.abductionId)
+	self.abductionProgress = progress
+	self.abductType = abType
 	if self.abductionProgress then
 		self.abductionPlanet = foundPlanet
+	end
+	if finished then
+		EffectsHandler.SpawnEffect(
+			"enter_ship",
+			{bx, by}
+		)
 	end
 end
 

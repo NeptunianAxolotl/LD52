@@ -69,6 +69,14 @@ function api.Update(dt)
 			self.abducting = false
 			self.abductBody = false
 			self.abductScore[self.abductType] = (self.abductScore[self.abductType] or 0) + 1
+			local body = api.GetPlayerShipBody()
+			if body then
+				local bx, by = body:getWorldCenter()
+				EffectsHandler.SpawnEffect(
+					"enter_ship",
+					{bx, by}
+				)
+			end
 		end
 	end
 end

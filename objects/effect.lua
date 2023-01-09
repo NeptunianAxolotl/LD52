@@ -15,6 +15,7 @@ local function NewEffect(self, def)
 	self.animTime = 0
 	self.direction = self.direction  or (def.randomDirection and math.random()*2*math.pi) or 0
 	self.delay = self.delay or 0
+	self.scale = self.scale or def.scale
 	
 	self.pos = (def.spawnOffset and util.Add(self.pos, def.spawnOffset)) or self.pos
 	

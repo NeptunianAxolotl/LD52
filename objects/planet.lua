@@ -125,7 +125,7 @@ local function New(self, physicsWorld)
 	
 	function self.AddSmuggleAbductionProgress(newProgress, abductionId)
 		if not ageGuys[self.age] then
-			return
+			return false
 		end
 		self.smuggleAbductionProgress = (self.smuggleAbductionProgress or 0) + newProgress
 		self.smuggleAbductionId = abductionId
@@ -134,6 +134,7 @@ local function New(self, physicsWorld)
 			self.guyAgeEndRemovalTime = false
 			self.guyGapTime = self.def.guyGap
 			self.smuggleAbductionProgress = false
+			return false, false, true
 		end
 		return self.smuggleAbductionProgress, ageGuys[self.age]
 	end
