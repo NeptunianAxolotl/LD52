@@ -66,18 +66,25 @@ function api.Update(dt)
 		self.abductProgress = self.abductProgress + dt*Global.ABDUCT_SPEED
 		if self.abductProgress > 1 then
 			self.abducting = false
-			self.abductBody = false
 			GameHandler.AddAbduct(self.abductType, self.abductPlanet)
 			self.abductType = false
 			self.abductPlanet = false
 			local body = api.GetPlayerShipBody()
-			if body then
+			if body and self.abductBody and not self.abductBody:isDestroyed() then
 				local bx, by = body:getWorldCenter()
+				local vx, vy = self.abductBody:getLinearVelocity()
 				EffectsHandler.SpawnEffect(
 					"enter_ship",
-					{bx, by}
+					self.abductPos,
+					{velocity = {vx, vy}}
+				)
+				EffectsHandler.SpawnEffect(
+					"enter_ship",
+					{bx, by},
+					{scale = 0.45}
 				)
 			end
+			self.abductBody = false
 		end
 	end
 end

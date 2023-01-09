@@ -87,9 +87,16 @@ local function DoAbduction(self, dt, foundPlanet)
 		self.abductionPlanet = foundPlanet
 	end
 	if finished then
+		local vx, vy = foundPlanet.body:getLinearVelocity()
 		EffectsHandler.SpawnEffect(
 			"enter_ship_bad",
-			{bx, by}
+			{ox, oy},
+			{velocity = {vx, vy}}
+		)
+		EffectsHandler.SpawnEffect(
+			"enter_ship_bad",
+			{bx, by},
+			{scale = 0.45}
 		)
 	end
 end
