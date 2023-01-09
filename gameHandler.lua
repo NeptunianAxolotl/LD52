@@ -74,7 +74,7 @@ function api.CountObject(objType)
 	elseif objType == "smuggler" then
 		return IterableMap.FilterCount(EnemyHandler.GetShips(), FilterToSmuggler)
 	elseif objType == "police_total" then
-		return EnemyHandler.GetSpawnCount("police")
+		return EnemyHandler.GetSpawnCount("police") + EnemyHandler.GetSpawnCount("police_slow")
 	elseif objType == "smuggler_total" then
 		return EnemyHandler.GetSpawnCount("smuggler") + EnemyHandler.GetSpawnCount("smuggler_slow")
 	elseif objType == "lowTech" then

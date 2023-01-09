@@ -76,17 +76,24 @@ Move once two have been selected.
 	},
 	asteroids = {
 		{
-			-- Designed to hit the planet in the classical age
-			pos = util.RotateVector({1200, -400}, -1.95),
-			orbitMult = 0.75,
-			orbitAngle = -0.38,
-			typeName = "asteroid_big",
-		},
-		{
-			-- Designed to hit the planet earlt
+			-- Designed to hit the planet early
 			pos = util.RotateVector({-1000, 0}, 2.5),
 			orbitMult = -1.005,
 			typeName = "asteroid_med",
+		},
+		{
+			-- Designed to hit the planet in the middle
+			pos = util.RotateVector({600, 1450}, 0.98),
+			orbitMult = 0.95,
+			orbitAngle = -0.2,
+			typeName = "asteroid_med",
+		},
+		{
+			-- Designed to hit the planet in the classical age
+			pos = util.RotateVector({1200, -400}, 2.2),
+			orbitMult = 0.7,
+			orbitAngle = -0.42,
+			typeName = "asteroid_big",
 		},
 		{
 			-- Harmless, taget practice
@@ -96,16 +103,9 @@ Move once two have been selected.
 		},
 		{
 			-- Harmless, taget practice
-			pos = util.RotateVector({600, 1600}, 1.8),
-			orbitMult = 0.97,
-			orbitAngle = -0.1,
-			typeName = "asteroid_med",
-		},
-		{
-			-- Harmless, taget practice
 			pos = util.RotateVector({400, 1200}, -2.5),
 			orbitMult = 0.99,
-			typeName = "asteroid_big",
+			typeName = "asteroid_med",
 		}
 	},
 	player = {

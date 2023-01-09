@@ -82,7 +82,19 @@ Great minds in an age help progress greatly.
 			orbitMult = 0.95,
 			orbitAngle = -0.05,
 			typeName = "asteroid_big",
-		}
+		},
+		{
+			-- Harmless, taget practice
+			pos = util.RotateVector({400, 1300}, -0.5),
+			orbitMult = 0.98,
+			typeName = "asteroid_med",
+		},
+		{
+			-- Harmless, taget practice
+			pos = {-1400, 300},
+			orbitMult = 1.05,
+			typeName = "asteroid_big",
+		},
 	},
 	player = {
 		pos = {-300, -500},
