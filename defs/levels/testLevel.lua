@@ -18,7 +18,7 @@ local def = {
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = "asteroid_med",
+			typeName = {"asteroid_med", "asteroid_med", "asteroid_med", "asteroid_big", "monolith"},
 		},
 	},
 	shipSpawn = {
@@ -34,7 +34,7 @@ local def = {
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = "smuggler",
+			typeName = {"smuggler"},
 		},
 		{
 			timeMin = 5.5 * SPAWN_TIME_MULT,
@@ -48,7 +48,7 @@ local def = {
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = "police",
+			typeName = {"police"},
 		},
 	},
 	planets = {

@@ -162,7 +162,7 @@ local function CheckEnemyTypeSpawn(spawnData, spawnIndex, dt, timerTable, spawnF
 		local toSpawn = {
 			pos = pos,
 			velocity = velocity,
-			typeName = spawnData.typeName,
+			typeName = util.SampleList(spawnData.typeName),
 		}
 		spawnFunc(toSpawn)
 		timerTable[spawnIndex] = timerTable[spawnIndex] + spawnData.timeMin + math.random()*spawnData.timeRand

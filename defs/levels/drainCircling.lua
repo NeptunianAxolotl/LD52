@@ -19,7 +19,7 @@ local def = {
 			forceTop = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = "asteroid_med",
+			typeName = {"asteroid_med", "asteroid_med", "asteroid_med", "asteroid_big"},
 		},
 		{
 			timeMin = 1.5 * SPAWN_TIME_MULT,
@@ -34,7 +34,7 @@ local def = {
 			forceBottom = true,
 			spawnRange = 0.3,
 			spawnOffset = 0.15,
-			typeName = "asteroid_med",
+			typeName = {"asteroid_med", "asteroid_med", "asteroid_med", "asteroid_big"},
 		},
 		{
 			timeMin = 3 * SPAWN_TIME_MULT,
@@ -48,7 +48,7 @@ local def = {
 			forceLeft = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = "asteroid_med",
+			typeName = {"asteroid_med", "asteroid_med", "asteroid_med", "asteroid_big"},
 		},
 		{
 			timeMin = 3 * SPAWN_TIME_MULT,
@@ -62,7 +62,7 @@ local def = {
 			forceRight = true,
 			spawnRange = 0.3,
 			spawnOffset = 0.15,
-			typeName = "asteroid_med",
+			typeName = {"asteroid_med", "asteroid_med", "asteroid_med", "asteroid_big"},
 		},
 	},
 	planets = {

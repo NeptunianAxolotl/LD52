@@ -37,7 +37,7 @@ local def = {
 		{
 			pos = {1100, -750},
 			orbitMult = 0.65,
-			typeName = "asteroid_big",
+			typeName = {"asteroid_big"},
 		}
 	},
 	player = {
