@@ -206,8 +206,8 @@ local function DrawAbductScore(name, humanName, planetImage, goal, planetScore, 
 	
 	for i = 1, #guyTypeList do
 		local guyType = guyTypeList[i]
-		if (planetScore and (planetScore[guyType] or 0) > 0) or goal[guyType] then
-			offset = DrawGuyTypeScore(guyType, (planetScore and planetScore[guyType]) or 0, goal[guyType] or 0, xOffset, offset, guyStack)
+		if (planetScore and (planetScore[guyType] or 0) > 0) or (goal and goal[guyType]) then
+			offset = DrawGuyTypeScore(guyType, (planetScore and planetScore[guyType]) or 0, (goal and goal[guyType]) or 0, xOffset, offset, guyStack)
 		end
 	end
 	offset = offset + 100 - guyStack
