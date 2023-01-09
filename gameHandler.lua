@@ -20,7 +20,6 @@ local greyColor = {0.4, 0.4, 0.4, 1}
 -- Updating
 --------------------------------------------------
 
-
 function api.AddAbduct(abductType, abductPlanet)
 	self.abductScore[abductPlanet] = self.abductScore[abductPlanet] or {}
 	self.abductScore[abductPlanet][abductType] = (self.abductScore[abductPlanet][abductType] or 0) + 1
@@ -36,8 +35,12 @@ function api.ToggleMenu()
 end
 
 function api.MousePressed(x, y)
-	local windowX, windowY = love.window.getMode()
-	local drawPos = self.world.ScreenToInterface({windowX, 0})
+	if self.hovered == "Menu" then
+		self.world.ToggleMenu()
+	end
+	if self.hovered == "Restart" then
+		self.world.Restart()
+	end
 end
 
 function api.GetViewRestriction()
@@ -109,7 +112,7 @@ local function DrawRightInterface()
 	local planetImages = TerrainHandler.GetPlanetImages()
 	local goal = TerrainHandler.GetLevelData().goal
 	
-	local offset = 55
+	local offset = 45
 	local xOffset = 1650
 	offset = PrintLine("Requirements", 3, xOffset, offset)
 	
@@ -126,7 +129,17 @@ local function DrawRightInterface()
 	end
 end
 
+local function DrawTopLeftInterface()
+	
+end
+
 local function DrawBottomLeftInterface()
+	local mousePos = self.world.GetMousePositionInterface()
+	local _, won, lost = self.world.GetGameOver()
+	
+	self.hovered = InterfaceUtil.DrawButton(80, 905, 135, 60, mousePos, "Menu")
+	self.hovered = InterfaceUtil.DrawButton(80, 830, 135, 60, mousePos, "Restart", false, lost) or self.hovered
+	self.hovered = InterfaceUtil.DrawButton(80, 755, 135, 60, mousePos, "Next", not won, won) or self.hovered
 	
 end
 
@@ -144,7 +157,7 @@ if self.world.GetPaused() then
 		love.graphics.rectangle("line", overX, overY, overWidth, overHeight*1.12, 8, 8, 16)
 		
 		Font.SetSize(1)
-		love.graphics.setColor(0, 0, 0, 1)
+		love.graphics.setColor(1, 1, 1, 1)
 		love.graphics.printf("Paused", overX, overY + overHeight * 0.04, overWidth, "center")
 		
 		Font.SetSize(3)
@@ -173,6 +186,7 @@ end
 
 function api.DrawInterface()
 	DrawRightInterface()
+	DrawTopLeftInterface()
 	DrawBottomLeftInterface()
 	DrawMenu()
 end

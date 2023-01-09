@@ -26,6 +26,10 @@ function api.SetMenuState(newState)
 	self.menuState = newState
 end
 
+function api.ToggleMenu()
+	self.menuState = not self.menuState
+end
+
 function api.GetPaused()
 	return self.paused or self.menuState
 end
@@ -94,14 +98,14 @@ function api.KeyPressed(key, scancode, isRepeat)
 end
 
 function api.MousePressed(x, y, button)
+	if GameHandler.MousePressed(x, y, button) then
+		return
+	end
 	if api.GetPaused() then
 		return
 	end
 	local uiX, uiY = self.interfaceTransform:inverse():transformPoint(x, y)
 	
-	if GameHandler.MousePressed(x, y, button) then
-		return
-	end
 	if api.GetGameOver() then
 		return -- No doing actions
 	end

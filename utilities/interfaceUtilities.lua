@@ -132,6 +132,45 @@ function api.DrawSmoothNumberBar(name, color, backgroundCol, pos, size)
 end
 
 --------------------------------------------------
+-- Buttons
+--------------------------------------------------
+
+function api.DrawButton(x, y, width, height, mousePos, text, disabled, flash)
+	local hovered = (not disabled) and util.PosInRectangle(mousePos, x, y, width, height)
+	
+	if disabled then
+		love.graphics.setColor(Global.PANEL_DISABLE_COL[1], Global.PANEL_DISABLE_COL[2], Global.PANEL_DISABLE_COL[3], 1)
+	elseif hovered then
+		love.graphics.setColor(Global.PANEL_HIGHLIGHT_COL[1], Global.PANEL_HIGHLIGHT_COL[2], Global.PANEL_HIGHLIGHT_COL[3], 1)
+	else
+		love.graphics.setColor(Global.PANEL_COL[1], Global.PANEL_COL[2], Global.PANEL_COL[3], 1)
+	end
+	love.graphics.setLineWidth(4)
+	love.graphics.rectangle("fill", x, y, width, height, 4, 4, 16)
+	
+	Font.SetSize(3)
+	if disabled then
+		love.graphics.setColor(Global.TEXT_DISABLE_COL[1], Global.TEXT_DISABLE_COL[2], Global.TEXT_DISABLE_COL[3], 1)
+	elseif hovered then
+		love.graphics.setColor(Global.TEXT_HIGHLIGHT_COL[1], Global.TEXT_HIGHLIGHT_COL[2], Global.TEXT_HIGHLIGHT_COL[3], 1)
+	else
+		love.graphics.setColor(Global.TEXT_COL[1], Global.TEXT_COL[2], Global.TEXT_COL[3], 1)
+	end
+	love.graphics.printf(text, x, y + 8, width, "center")
+	
+	if disabled then
+		love.graphics.setColor(Global.OUTLINE_DISABLE_COL[1], Global.OUTLINE_DISABLE_COL[2], Global.OUTLINE_DISABLE_COL[3], 1)
+	elseif hovered then
+		love.graphics.setColor(Global.OUTLINE_HIGHLIGHT_COL[1], Global.OUTLINE_HIGHLIGHT_COL[2], Global.OUTLINE_HIGHLIGHT_COL[3], 1)
+	else
+		love.graphics.setColor(Global.OUTLINE_COL[1], Global.OUTLINE_COL[2], Global.OUTLINE_COL[3], 1)
+	end
+	love.graphics.setLineWidth(8)
+	love.graphics.rectangle("line", x, y, width, height, 4, 4, 16)
+	return hovered and text
+end
+
+--------------------------------------------------
 -- Updating
 --------------------------------------------------
 
@@ -140,6 +179,7 @@ function api.Update(dt)
 		UpdateSmoothNumber(dt, self.smoothNumberList[i])
 	end
 	self.barDt = self.barDt + dt
+	self.animDt = self.animDt + dt
 end
 
 function api.Initialize()
@@ -147,6 +187,7 @@ function api.Initialize()
 		smoothNumbers = {},
 		smoothNumberList = {},
 		barDt = 0,
+		animDt = 0,
 	}
 end
 

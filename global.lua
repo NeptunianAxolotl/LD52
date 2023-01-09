@@ -1,8 +1,18 @@
 
 local globals = {
 	BACK_COL = {0/255, 0/255, 0/255},
+	
 	OUTLINE_COL = {0.2, 0.2, 0.2},
 	PANEL_COL = {0.53, 0.53, 0.55},
+	TEXT_COL = {1, 1, 1},
+	
+	OUTLINE_DISABLE_COL = {0.2 * 0.5, 0.2 * 0.5, 0.2 * 0.5},
+	PANEL_DISABLE_COL = {0.53 * 0.5, 0.53 * 0.5, 0.55 * 0.5},
+	TEXT_DISABLE_COL = {1 * 0.8, 1 * 0.8, 1 * 0.8},
+	
+	OUTLINE_HIGHLIGHT_COL = {0.2 * 1.2, 0.2 * 1.2, 0.2 * 1.2},
+	PANEL_HIGHLIGHT_COL = {0.53 * 1.2, 0.53 * 1.2, 0.55 * 1.2},
+	TEXT_HIGHLIGHT_COL = {1, 1, 1},
 	
 	MASTER_VOLUME = 0.75,
 	MUSIC_VOLUME = 0.4,
