@@ -140,6 +140,8 @@ function api.DrawButton(x, y, width, height, mousePos, text, disabled, flash)
 	
 	if disabled then
 		love.graphics.setColor(Global.PANEL_DISABLE_COL[1], Global.PANEL_DISABLE_COL[2], Global.PANEL_DISABLE_COL[3], 1)
+	elseif (flash and (self.animDt%Global.BUTTON_FLASH_PERIOD < Global.BUTTON_FLASH_PERIOD/2)) then
+		love.graphics.setColor(Global.PANEL_FLASH_COL[1], Global.PANEL_FLASH_COL[2], Global.PANEL_FLASH_COL[3], 1)
 	elseif hovered then
 		love.graphics.setColor(Global.PANEL_HIGHLIGHT_COL[1], Global.PANEL_HIGHLIGHT_COL[2], Global.PANEL_HIGHLIGHT_COL[3], 1)
 	else
@@ -151,6 +153,8 @@ function api.DrawButton(x, y, width, height, mousePos, text, disabled, flash)
 	Font.SetSize(3)
 	if disabled then
 		love.graphics.setColor(Global.TEXT_DISABLE_COL[1], Global.TEXT_DISABLE_COL[2], Global.TEXT_DISABLE_COL[3], 1)
+	elseif (flash and (self.animDt%Global.BUTTON_FLASH_PERIOD < Global.BUTTON_FLASH_PERIOD/2)) then
+		love.graphics.setColor(Global.TEXT_FLASH_COL[1], Global.TEXT_FLASH_COL[2], Global.TEXT_FLASH_COL[3], 1)
 	elseif hovered then
 		love.graphics.setColor(Global.TEXT_HIGHLIGHT_COL[1], Global.TEXT_HIGHLIGHT_COL[2], Global.TEXT_HIGHLIGHT_COL[3], 1)
 	else
@@ -160,11 +164,14 @@ function api.DrawButton(x, y, width, height, mousePos, text, disabled, flash)
 	
 	if disabled then
 		love.graphics.setColor(Global.OUTLINE_DISABLE_COL[1], Global.OUTLINE_DISABLE_COL[2], Global.OUTLINE_DISABLE_COL[3], 1)
+	elseif (flash and (self.animDt%Global.BUTTON_FLASH_PERIOD < Global.BUTTON_FLASH_PERIOD/2)) then
+		love.graphics.setColor(Global.OUTLINE_FLASH_COL[1], Global.OUTLINE_FLASH_COL[2], Global.OUTLINE_FLASH_COL[3], 1)
 	elseif hovered then
 		love.graphics.setColor(Global.OUTLINE_HIGHLIGHT_COL[1], Global.OUTLINE_HIGHLIGHT_COL[2], Global.OUTLINE_HIGHLIGHT_COL[3], 1)
 	else
 		love.graphics.setColor(Global.OUTLINE_COL[1], Global.OUTLINE_COL[2], Global.OUTLINE_COL[3], 1)
 	end
+	
 	love.graphics.setLineWidth(8)
 	love.graphics.rectangle("line", x, y, width, height, 4, 4, 16)
 	return hovered and text
