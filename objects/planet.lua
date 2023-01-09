@@ -314,6 +314,7 @@ local function New(self, physicsWorld)
 		if self.smuggleAbductionProgress then
 			self.smuggleAbductionProgress = self.smuggleAbductionProgress - 2*dt
 			if self.smuggleAbductionProgress < 0 then
+				SoundHandler.StopSound("abduct_enemy")
 				self.smuggleAbductionProgress = false
 			end
 		end

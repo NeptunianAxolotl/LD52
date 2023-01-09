@@ -1,5 +1,5 @@
 return {
 	file = "resources/sounds/shoot_planet.mp3",
-	volMult = 0.82 * Global.MUSIC_VOLUME,
+	volMult = 0.82 * Global.SFX_VOLUME,
 	duration = 0.25,
 }

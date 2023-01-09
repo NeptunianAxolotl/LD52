@@ -1,5 +1,5 @@
 return {
 	file = "resources/sounds/accelerate_a.mp3",
-	volMult = 0.45 * Global.MUSIC_VOLUME,
+	volMult = 0.28 * Global.SFX_VOLUME,
 	duration = 2.9,
 }
