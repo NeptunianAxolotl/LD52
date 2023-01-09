@@ -84,8 +84,9 @@ local function New(self, physicsWorld)
 	
 	self.baseDrawRotation = math.pi*2
 	self.ageDrawRotation = math.pi*2
-	self.planetDrawBase = self.def.forcePlanetType or util.SampleList(planetImageList)
+	self.planetDrawBase = self.def.forcePlanetType or TerrainHandler.GetUnusedPlanetType() or util.SampleList(planetImageList)
 	self.humanName = self.def.humanName or util.SampleList(planetNameDefs[self.planetDrawBase]) or "name issue"
+	TerrainHandler.UsePlanetType(self.planetDrawBase)
 	
 	function self.Destroy()
 		if self.isDead then
@@ -111,7 +112,7 @@ local function New(self, physicsWorld)
 	end
 	
 	function self.IsGuyAppearing()
-		return GetGuyTimeRemaining() < 0.5
+		return GetGuyTimeRemaining() < Global.GUY_FADE_IN_TIME
 	end
 	
 	function self.GetAngle()
@@ -136,6 +137,10 @@ local function New(self, physicsWorld)
 	
 	function self.IsGuyAvailible(abductionId)
 		return ((not self.smuggleAbductionProgress) or (self.smuggleAbductionId == abductionId)) and (self.guyProgress >= 1)
+	end
+	
+	local function IsBeingAbducted()
+		return self.smuggleAbductionProgress or (PlayerHandler.GetAbductPlanet() == self.def.name)
 	end
 	
 	function self.CheckShoot(dt)
@@ -239,7 +244,7 @@ local function New(self, physicsWorld)
 			end
 			self.ageProgress = self.ageProgress + dt * ageSpeed
 			if self.ageProgress > 1 then
-				if self.smuggleAbductionProgress or (PlayerHandler.GetAbductPlanet() == self.def.name) then
+				if IsBeingAbducted() then
 					self.ageProgress = self.ageProgress - dt * ageSpeed
 				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					if Global.GUY_AGE_END_DELAY then
@@ -311,7 +316,7 @@ local function New(self, physicsWorld)
 		local x, y = self.body:getWorldCenter()
 		local angle = self.body:getAngle()
 		drawQueue:push({y=-2; f=function()
-			love.graphics.setColor(1, 1, 1, 0.6)
+			love.graphics.setColor(1, 1, 1, 0.5)
 			if self.ageProgress > 0 then
 				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*math.min(1, self.ageProgress), math.pi*1.5, 32)
 			end
@@ -334,18 +339,26 @@ local function New(self, physicsWorld)
 				end
 			love.graphics.pop()
 		
-			if ageGuys[self.age] and self.IsGuyAppearing() and self.IsGuyAvailible() then
+			if ageGuys[self.age] and not IsBeingAbducted() then
 				local timeRemaining = GetGuyTimeRemaining()
-				local period = 0.5
-				local offset = 0.7
-				if self.guyAgeEndRemovalTime then
-					period = (0.4 * (0.5 + 0.6 * self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime)))
-					offset = 0.7 * (self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime))
+				if self.IsGuyAppearing() then
+					local period = 0.5
+					local offset = 0.7
+					if self.guyAgeEndRemovalTime then
+						period = (0.4 * (0.5 + 0.6 * self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime)))
+						offset = 0.7 * (self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime))
+					end
+					local alpha = (self.animTime%period) / period
+					local fadeIn = math.min(1, (Global.GUY_FADE_IN_TIME - timeRemaining)/Global.GUY_FADE_IN_TIME)
+					alpha = 0.5 * 0.3 * (math.sin(alpha * 2 * math.pi) + 1) + offset
+					Resources.DrawImage("guyglow", x, y, 0, alpha * fadeIn, self.def.radius)
+					Resources.DrawImage(ageGuys[self.age], x, y, 0, (offset / 0.7 + (1 - offset / 0.7) * alpha) * fadeIn, self.def.radius)
 				end
-				local alpha = (self.animTime%period) / period
-				alpha = 0.5 * 0.3 * (math.sin(alpha * 2 * math.pi) + 1) + offset
-				Resources.DrawImage("guyglow", x, y, 0, alpha * math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
-				Resources.DrawImage(ageGuys[self.age], x, y, 0, (offset / 0.7 + (1 - offset / 0.7) * alpha) * math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
+				if self.guyProgress > 0 and self.guyProgress < 1 then
+					local fadeIn = math.max(0, math.min(1, (Global.GUY_FADE_IN_TIME - timeRemaining)/Global.GUY_FADE_IN_TIME))
+					love.graphics.setColor(1, 1, 1, 0.6 * (1 - fadeIn))
+					love.graphics.arc("fill", "pie", x, y, self.def.radius * 0.6, math.pi*1.5 + math.pi*2*math.min(1, self.guyProgress), math.pi*1.5, 32)
+				end
 			end
 			
 			--Font.SetSize(3)

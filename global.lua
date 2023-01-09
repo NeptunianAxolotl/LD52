@@ -60,7 +60,9 @@ local globals = {
 	WRAP_ALPHA_SIZE = 35,
 	PLANET_RADIUS = 110,
 	
-	INIT_LEVEL = "testLevel",
+	GUY_FADE_IN_TIME = 1.2,
+	
+	INIT_LEVEL = "level1",
 	DRAW_PHYSICS = false,
 	DRAW_ITEM_COUNTS = true,
 	
