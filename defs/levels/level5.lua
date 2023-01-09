@@ -4,7 +4,9 @@ local SPAWN_TIME_MULT = 0.95
 local def = {
 	humanName = "Cooperation",
 	description = [[
-The Gorlaxians have an undeveloped planet in their system and have agreed to look the other way. They can take care of themselves.
+The Gorlaxians have an undeveloped planet in their system and have agreed to look the other way.
+
+They assure us they don't need protection.
 
 Just don't bomb them with an asteroid.  It would be terrible if you eliminated potential competition.  Er, I mean, harmed innocent people.
 ]],

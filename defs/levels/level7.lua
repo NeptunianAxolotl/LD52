@@ -6,7 +6,7 @@ local def = {
 	description = [[
 Someone tipped off the space police. Don't worry, their missiles only stun.
 
-Fortunately, they blow up when shot, just like everything else.
+Fortunately, they blow up when shot, like most things.
 
 To make matters worse, the planet's going backwards. We blame the space police.
 ]],

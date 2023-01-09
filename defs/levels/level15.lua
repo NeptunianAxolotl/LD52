@@ -4,9 +4,9 @@ local SPAWN_TIME_MULT = 3.5
 local def = {
 	humanName = "Detritus",
 	description = [[
-Some joker seeded this planet in the path of an industrial matter dump.  An illegal dump, full of smugglers.
+Some joker seeded a planet in the path of an industrial matter dump.  A highly illegal dump, full of smugglers.
 
-Just see what you can salvage here.
+Just salvage what you can.  So, ideally, all of it.
 ]],
 	prevLevel = "level14",
 	nextLevel = "level16",
@@ -34,14 +34,14 @@ Just see what you can salvage here.
 				"asteroid_med", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big", "asteroid_huge", "monolith"
 			},
 			spawnRateFunc = function ()
-				return 20 * (20 / (20 + GameHandler.CountObject("asteroid")))
+				return 20 * (25 / (25 + GameHandler.CountObject("asteroid")))
 			end,
 		},
 	},
 	shipSpawn = {
 		{
-			timeMin = 3,
-			timeRand = 9,
+			timeMin = 1.5,
+			timeRand = 5,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,

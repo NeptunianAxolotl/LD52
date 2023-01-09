@@ -1,5 +1,5 @@
 
-local SPAWN_TIME_MULT = 0.8
+local SPAWN_TIME_MULT = 0.68
 local ENEMY_TIME_MULT = 0.8
 
 local def = {
@@ -49,8 +49,8 @@ Be sure not to let any planet advance too far, at least before being harvested.
 			end,
 		},
 		{
-			timeMin = 60 * SPAWN_TIME_MULT,
-			timeRand = 20 * SPAWN_TIME_MULT,
+			timeMin = 50 * SPAWN_TIME_MULT,
+			timeRand = 50 * SPAWN_TIME_MULT,
 			speedMin = 5,
 			speedMax = 20,
 			orbitMult = 0.6,
@@ -68,8 +68,8 @@ Be sure not to let any planet advance too far, at least before being harvested.
 	},
 	shipSpawn = {
 		{
-			timeMin = 8 * ENEMY_TIME_MULT,
-			timeRand = 12 * ENEMY_TIME_MULT,
+			timeMin = 3 * ENEMY_TIME_MULT,
+			timeRand = 6 * ENEMY_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -87,7 +87,7 @@ Be sure not to let any planet advance too far, at least before being harvested.
 				if pastCount == 0 then
 					return 4 -- Spawn quickly first time
 				end
-				return 1 - 0.6 * (count / (count + 8))
+				return 1 - 0.85 * (count / (count + 3))
 			end,
 		},
 		{

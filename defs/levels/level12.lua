@@ -4,9 +4,11 @@ local SPAWN_TIME_MULT = 1.8
 local def = {
 	humanName = "Passing Through",
 	description = [[
-Your guess is as good as ours.  Just make quota before whatever happens, happens.
+Your guess is as good as ours.  Just harvest enough from the planet before whatever happens, happens.
 
 At least there are barely any asteroids.
+
+For now.
 ]],
 	prevLevel = "level11",
 	nextLevel = "level13",

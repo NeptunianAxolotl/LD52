@@ -7,6 +7,8 @@ local def = {
 We've found a buyer for some more modern thinkers.  Apparently watching Classical-era philosophers argue got old.
 
 They want three of them this time, so it's harder for them to reach a consensus.  There might even be fisticuffs!
+
+Great minds pursue progress, so wait until the planet is ripe.
 ]],
 	prevLevel = "level3",
 	nextLevel = "level5",

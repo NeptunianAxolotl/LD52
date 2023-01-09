@@ -4,9 +4,9 @@ local SPAWN_TIME_MULT = 1
 local def = {
 	humanName = "Sophistication",
 	description = [[
-Our catalogue has expanded to offer a more adventurous fare.  You will have to guide the planet through the ages.
+Our catalogue has expanded to offer more adventurous fare.  You will have to guide the planet through the ages.
 
-Demand for the classics remains strong. If you miss the window, then, well, some light phaser fire should work.
+Demand for the classics remains strong. If you miss the window, then, well, hold Space, Z or Enter to shoot.
 ]],
 	prevLevel = "level1",
 	nextLevel = "level3",

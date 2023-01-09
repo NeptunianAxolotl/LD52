@@ -6,7 +6,7 @@ local def = {
 	description = [[
 Protect the planet and harvest the people.  Watch out for the asteroids!
 
-WSAD/Arrow Keys to move. X/Numpad 0 to brake. Space/Z to shoot.
+WSAD/Arrow Keys to move. X/Numpad 0 to brake. Space/Enter/Z to shoot.
 
 Shoot the asteroids, or nudge them out of the way with your ship if you're feeling adventurous.
 
