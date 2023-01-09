@@ -39,6 +39,7 @@ function api.SetAbducting(guyType, planetName, linkedBody, linkedRadius)
 	if self.abducting then
 		return false
 	end
+	SoundHandler.PlaySound("abduct")
 	self.abducting = true
 	self.abductProgress = 0
 	self.abductType = guyType

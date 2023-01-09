@@ -5,6 +5,7 @@ local def = {
 	damage = 2,
 	planetDamage = 0.15,
 	image = "bullet_modern_triangle",
+	deadSound = "shoot_asteroid",
 	homingForce = 150,
 	minDampening = 0.35,
 }

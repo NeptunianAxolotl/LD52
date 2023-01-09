@@ -7,6 +7,7 @@ local def = {
 	shipDamage = 0.5,
 	image = "monolith",
 	planetDeathAnim = "monolith_use",
+	deadSound = "asteroid_in_sun",
 	angleDampen = 0.02,
 	bounce = 0.1,
 }

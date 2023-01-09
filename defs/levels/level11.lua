@@ -29,6 +29,23 @@ This system is  ripe for the taking. Unfortunately, this makes it hotly conteste
 				return (count + 30) / (count + 4) * (1 - (count + 3) / (count + 50))
 			end,
 		},
+		{
+			timeMin = 50,
+			timeRand = 30,
+			speedMin = 20,
+			speedMax = 70,
+			orbitMult = 0.7,
+			orbitMultRand = 0.3,
+			orbitOtherDirChance = 0.2,
+			topBotChance = 0.4,
+			avoidOrbitOverWrap = true,
+			spawnRange = 0.6,
+			typeName = {"monolith"},
+			spawnRateFunc = function ()
+				local count = GameHandler.CountObject("monolith")
+				return 1 - 0.7 * (count / (count + 6))
+			end,
+		},
 	},
 	shipSpawn = {
 		{

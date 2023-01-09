@@ -31,6 +31,7 @@ local function SpawnBullet(physicsWorld, body)
 	
 	body:applyForce(recolForce[1], recolForce[2])
 	
+	SoundHandler.PlaySound("enemy_bullet")
 	local bulletData = {
 		pos = spawnPos,
 		velocity = spawnVel,
@@ -133,6 +134,7 @@ local function New(self, physicsWorld)
 		
 		self.drawMove = {}
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
+			SoundHandler.PlaySoundAutoLoop("accelerate_a")
 			self.thrustDrawRamp = math.min(1, (self.thrustDrawRamp or 0.3) + 15*dt)
 			self.drawMove[#self.drawMove + 1] = {"p_thrust", self.thrustDrawRamp}
 			buildTurnRamp = true
@@ -141,12 +143,15 @@ local function New(self, physicsWorld)
 			local forceVec = util.PolarToCart(accel, angle)
 			self.body:applyForce(forceVec[1], forceVec[2])
 		elseif self.thrustDrawRamp then
+			SoundHandler.StopSound("accelerate_a")
 			self.thrustDrawRamp = self.thrustDrawRamp - 18*dt
 			if self.thrustDrawRamp < 0.3 then
 				self.thrustDrawRamp = false
 			else
 				self.drawMove[#self.drawMove + 1] = {"p_thrust", self.thrustDrawRamp}
 			end
+		else
+			SoundHandler.StopSound("accelerate_a")
 		end
 		
 		if self.bulletStock < Global.BULLET_STOCKPILE then
@@ -161,7 +166,8 @@ local function New(self, physicsWorld)
 		if self.shootCooldown >= 0 then
 			self.shootCooldown = self.shootCooldown - dt
 		end
-		if self.shootCooldown < 0 and self.bulletStock > 0 and (love.keyboard.isDown("space") or love.keyboard.isDown("return") or love.keyboard.isDown("kpenter")) then
+		if self.shootCooldown < 0 and self.bulletStock > 0 and 
+				(love.keyboard.isDown("space") or love.keyboard.isDown("return") or love.keyboard.isDown("kpenter") or love.keyboard.isDown("z")) then
 			if TerrainHandler.CanShoot() then
 				SpawnBullet(physicsWorld, self.body)
 				self.shootCooldown = Global.SHOOT_COOLDOWN
@@ -170,7 +176,8 @@ local function New(self, physicsWorld)
 		end
 		
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)
-		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") then
+		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") or love.keyboard.isDown("x") or love.keyboard.isDown("kp0") then
+			SoundHandler.PlaySoundAutoLoop("brake_a")
 			self.drawMove[#self.drawMove + 1] = "p_slow"
 			buildTurnRamp = true
 			local vx, vy = self.body:getLinearVelocity()
@@ -181,6 +188,8 @@ local function New(self, physicsWorld)
 			local forceVec = util.Mult(force, util.Unit({vx, vy}))
 			self.body:applyForce(forceVec[1], forceVec[2])
 			self.body:setLinearDamping(Global.BRAKE_DAMPEN)
+		else
+			SoundHandler.StopSound("brake_a")
 		end
 		
 		local turnAmount = false

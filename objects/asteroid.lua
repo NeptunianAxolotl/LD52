@@ -101,6 +101,7 @@ local function New(self, physicsWorld)
 	
 	function self.Update(dt)
 		if self.isDead then
+			SoundHandler.PlaySound(self.def.deadSound or "asteroid_explode")
 			if self.wantSplit and self.def.splitTo then
 				local bx, by = self.body:getWorldCenter()
 				local vx, vy = self.body:getLinearVelocity()

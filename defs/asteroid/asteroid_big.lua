@@ -7,6 +7,7 @@ local def = {
 	health = 2,
 	shipDamage = 2,
 	asteroidAmount = 1,
+	deadSound = "asteroid_in_sun",
 }
 
 return def

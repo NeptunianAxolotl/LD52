@@ -6,6 +6,7 @@ local def = {
 	planetDamage = 0.1,
 	guyDamage = 0.05,
 	image = "bullet_police",
+	deadSound = "shoot_asteroid",
 	stasisEffect = {
 		duration = 1,
 		accelReduce = 0.95,

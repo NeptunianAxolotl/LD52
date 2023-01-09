@@ -44,6 +44,7 @@ function api.Collision(aData, bData)
 		return true
 	end
 	if aData.objType == "playerShip" and bData.objType == "bullet" then
+		SoundHandler.PlaySound("get_shot")
 		if bData.def.stasisEffect then
 			aData.ApplyStasis(bData.def.stasisEffect)
 		end

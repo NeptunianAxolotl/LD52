@@ -85,9 +85,6 @@ function api.Initialize(newCosmos)
 	self = {}
 	cosmos = newCosmos
 	initialDelay = 0
-	for i = 1, #trackList do
-		SoundHandler.LoadSound(trackList[i])
-	end
 end
 
 return api

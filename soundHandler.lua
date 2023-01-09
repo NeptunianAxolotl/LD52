@@ -52,6 +52,14 @@ function api.PlaySound(name, id, fadeIn, fadeOut, delay, loop, wantedVolume, pla
 	return soundData
 end
 
+function api.PlaySoundAutoLoop(name, id)
+	local soundData = api.LoadSound(name, id)
+	if soundData.source:isPlaying() then
+		return
+	end
+	api.PlaySound(name, id)
+end
+
 function api.StopSound(name, id, instant, delay)
 	if id then
 		id = name .. (id or 1)
@@ -59,7 +67,7 @@ function api.StopSound(name, id, instant, delay)
 		id = name
 	end
 	local soundData = IterableMap.Get(sounds, id)
-	if not soundData then
+	if not (soundData and soundData.source:isPlaying()) then
 		return
 	end
 	soundData.want = 0
@@ -118,6 +126,9 @@ function api.Initialize()
 		soundData.source:stop()
 	end
 	sounds = sounds or IterableMap.New()
+	for name, _ in pairs(soundFiles) do
+		api.LoadSound(name)
+	end
 end
 
 return api

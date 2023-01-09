@@ -27,6 +27,7 @@ local function New(self, physicsWorld)
 		if self.isDead then
 			return
 		end
+		SoundHandler.PlaySound(self.def.deadSound or "shoot_planet")
 		local bx, by = self.body:getWorldCenter()
 		for i = 1, 5 do
 			EffectsHandler.SpawnEffect(

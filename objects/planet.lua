@@ -34,6 +34,7 @@ local shootParameters = {
 		typeName = "modern_bullet",
 		projSpeed = 220,
 		spawnRadius = 20,
+		sound = "fire_bullet",
 	},
 	[8] = {
 		range = 380,
@@ -42,6 +43,7 @@ local shootParameters = {
 		typeName = "space_bullet",
 		projSpeed = 420,
 		spawnRadius = 15,
+		sound = "enemy_bullet_soft",
 	},
 }
 
@@ -123,6 +125,7 @@ local function New(self, physicsWorld)
 		if not ageGuys[self.age] then
 			return false
 		end
+		local first = (not self.smuggleAbductionProgress)
 		self.smuggleAbductionProgress = (self.smuggleAbductionProgress or 0) + newProgress
 		self.smuggleAbductionId = abductionId
 		if self.smuggleAbductionProgress >= 1 then
@@ -130,9 +133,9 @@ local function New(self, physicsWorld)
 			self.guyAgeEndRemovalTime = false
 			self.guyGapTime = self.def.guyGap
 			self.smuggleAbductionProgress = false
-			return false, false, true
+			return false, false, true, first
 		end
-		return self.smuggleAbductionProgress, ageGuys[self.age]
+		return self.smuggleAbductionProgress, ageGuys[self.age], false, first
 	end
 	
 	function self.IsGuyAvailible(abductionId)
@@ -148,6 +151,7 @@ local function New(self, physicsWorld)
 			return
 		end
 		local shootDef = shootParameters[self.age]
+		SoundHandler.PlaySound(shootDef.sound)
 		
 		self.reloadProgress = (self.reloadProgress or 0) + dt * shootDef.reloadSpeed * (self.def.shootRateMult or 1)
 		if self.reloadProgress < 1 then
@@ -197,6 +201,7 @@ local function New(self, physicsWorld)
 		if self.ageProgress < 0 then
 			 -- Can only go down one age per damage instance.
 			self.age = self.age - 1
+			SoundHandler.PlaySound("age_down")
 			self.ageProgress = math.max(0, self.ageProgress + 1)
 			if ageGuys[self.age] and self.IsGuyAppearing() then
 				self.guyGapTime = self.def.guyGap
@@ -257,6 +262,7 @@ local function New(self, physicsWorld)
 					self.guyAgeEndRemovalTime = false
 					if self.age < self.def.maxAge then
 						self.age = self.age + 1
+						SoundHandler.PlaySound("age_up")
 						self.ageProgress = self.ageProgress - 1
 					else
 						self.ageProgress = oldProgress

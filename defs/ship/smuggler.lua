@@ -92,7 +92,10 @@ local function DoAbduction(self, dt, foundPlanet)
 	end
 	
 	self.abductionId = self.abductionId or math.random()
-	local progress, abType, finished = foundPlanet.AddSmuggleAbductionProgress(2.35*dt, self.abductionId)
+	local progress, abType, finished, newAbduct = foundPlanet.AddSmuggleAbductionProgress(2.35*dt, self.abductionId)
+	if newAbduct then
+		SoundHandler.PlaySound("abduct_enemy")
+	end
 	self.abductionProgress = progress
 	self.abductType = abType
 	if self.abductionProgress then

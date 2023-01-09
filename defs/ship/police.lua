@@ -69,6 +69,8 @@ local function DoShooting(self, dt)
 			otherBody = smuggler.body
 		end
 	end
+	
+	SoundHandler.PlaySound("fire_bullet")
 	planetUtils.ShootAtBody(otherBody, self.body, "police_bullet", 600, 85)
 	self.shootProgress = 0
 end
