@@ -26,6 +26,9 @@ Fixture Category Returns the categories the fixture belongs to. Added
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
 			typeName = {"asteroid_med", "asteroid_med", "asteroid_med", "asteroid_big", "monolith"},
+			spawnRateFunc = function ()
+				return 20 * (20 / (20 + GameHandler.CountObject("asteroid")))
+			end,
 		},
 	},
 	shipSpawn = {
@@ -41,7 +44,7 @@ Fixture Category Returns the categories the fixture belongs to. Added
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
 			spawnOffset = -0.15,
-			typeName = {"smuggler"},
+			typeName = {"smuggler_slow"},
 		},
 		{
 			timeMin = 1.5 * SPAWN_TIME_MULT,

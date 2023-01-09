@@ -18,8 +18,64 @@ local greyColor = {0.4, 0.4, 0.4, 1}
 local greyFlashColor = {0.7, 0.7, 0.7, 1}
 
 --------------------------------------------------
--- Updating
+-- Utilities/progression
 --------------------------------------------------
+
+local function FilterToAsteroid(data)
+	return data.def.typeName ~= "monolith"
+end
+
+local function FilterToMonolith(data)
+	return data.def.typeName == "monolith"
+end
+
+local function FilterToPolice(data)
+	return not data.def.abductRange
+end
+
+local function FilterToSmuggler(data)
+	return not not data.def.abductRange
+end
+
+local function FilterToLowTech(data)
+	return data.age >= 2 and data.age <= 4
+end
+
+local function FilterToHighTech(data)
+	return data.age >= 5 and data.age <= 7
+end
+
+local function FilterToSpaceAge(data)
+	return data.age == 8
+end
+
+local countableTypes = {
+	"asteroid",
+	"monolith",
+	"police",
+	"smuggler",
+	"lowTech",
+	"highTech",
+	"spaceAge",
+}
+function api.CountObject(objType)
+	if objType == "asteroid" then
+		return IterableMap.FilterCount(EnemyHandler.GetAsteroids(), FilterToAsteroid)
+	elseif objType == "monolith" then
+		return IterableMap.FilterCount(EnemyHandler.GetAsteroids(), FilterToMonolith)
+	elseif objType == "police" then
+		return IterableMap.FilterCount(EnemyHandler.GetShips(), FilterToPolice)
+	elseif objType == "smuggler" then
+		return IterableMap.FilterCount(EnemyHandler.GetShips(), FilterToSmuggler)
+	elseif objType == "lowTech" then
+		return IterableMap.FilterCount(TerrainHandler.GetPlanets(), FilterToLowTech)
+	elseif objType == "highTech" then
+		return IterableMap.FilterCount(TerrainHandler.GetPlanets(), FilterToHighTech)
+	elseif objType == "spaceAge" then
+		return IterableMap.FilterCount(TerrainHandler.GetPlanets(), FilterToSpaceAge)
+	end
+	return false
+end
 
 function api.AddAbduct(abductType, abductPlanet)
 	self.abductScore[abductPlanet] = self.abductScore[abductPlanet] or {}
@@ -78,9 +134,13 @@ local function PrintLine(text, size, x, y, align, width)
 	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.printf(text, x, y, width or 240, align or "left")
 	if size == 1 then
-		return y + 30
+		return y + 60
 	elseif size == 2 then
-		return y + 40
+		return y + 60
+	elseif size == 3 then
+		return y + 60
+	elseif size == 4 then
+		return y + 25
 	end
 	return y + 60
 end
@@ -176,7 +236,7 @@ local function DrawBottomLeftInterface()
 end
 
 local function DrawMenu()
-if self.world.GetPaused() then
+	if self.world.GetPaused() then
 		local overX = 700
 		local overWidth = 500
 		local overY = 350
@@ -206,6 +266,19 @@ Toggle music
 Reset the level
 Next level
 Previous level]], overX + 210, overY + overHeight * 0.3 , 350, "left")
+	end
+end
+
+local function DrawDebug()
+	if not Global.DRAW_ITEM_COUNTS then
+		return
+	end
+	
+	local offset = 45
+	local xOffset = 310
+	for i = 1, #countableTypes do
+		local name = countableTypes[i]
+		offset = PrintLine(name .. ": " .. api.CountObject(name), 4, xOffset, offset)
 	end
 end
 
@@ -243,6 +316,7 @@ function api.DrawInterface()
 	DrawTopLeftInterface()
 	DrawBottomLeftInterface()
 	DrawMenu()
+	DrawDebug()
 end
 
 function api.Initialize(parentWorld)

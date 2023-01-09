@@ -97,7 +97,11 @@ local function CheckEnemyTypeSpawn(spawnData, spawnIndex, dt, timerTable, spawnF
 	if not timerTable[spawnIndex] then
 		timerTable[spawnIndex] = spawnData.timeMin + math.random()*spawnData.timeRand
 	end
-	timerTable[spawnIndex] = timerTable[spawnIndex] - dt
+	local rate = dt
+	if spawnData.spawnRateFunc then
+		rate = rate * spawnData.spawnRateFunc()
+	end
+	timerTable[spawnIndex] = timerTable[spawnIndex] - rate
 	if timerTable[spawnIndex] < 0 then
 		local spawnMin = 0.5 - (spawnData.spawnRange or 1) * 0.5
 		local spawnPosFactor = (spawnMin + (spawnData.spawnRange or 1) * math.random()) + (spawnData.spawnOffset or 0)

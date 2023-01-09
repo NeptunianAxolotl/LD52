@@ -62,6 +62,7 @@ local globals = {
 	
 	INIT_LEVEL = "testLevel",
 	DRAW_PHYSICS = false,
+	DRAW_ITEM_COUNTS = true,
 	
 	AGE_IMAGE = {
 		false,

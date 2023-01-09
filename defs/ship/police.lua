@@ -12,12 +12,13 @@ local function AddIfExists(v1, v2)
 end
 
 local function DoMovement(self)
+	local avoidMod = self.GetSpeedMod() * self.def.avoidMult
 	local speedMod = self.GetSpeedMod() * self.def.speedMult
 	
 	local netForce = false
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * speedMod, TerrainHandler.GetSunRadius() + 250, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * speedMod, Global.PLANET_RADIUS + 150, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * speedMod, 110, false))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4500 * avoidMod, TerrainHandler.GetSunRadius() + 350, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * avoidMod, Global.PLANET_RADIUS + 150, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * avoidMod, 110, false))
 	
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * speedMod, false, false))
@@ -88,6 +89,7 @@ local def = {
 	turnRate = 60000,
 	range = 900,
 	fireSpeed = 1/2,
+	avoidMult = 1.1,
 	speedMult = 1,
 	
 	DoBehaviour = PoliceBehaviour,
