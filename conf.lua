@@ -1,5 +1,5 @@
 function love.conf(t)
-	t.window.title = "LD52"
+	t.window.title = "Seeds of Civilisation"
 	t.window.width = 1280
 	t.window.height = 768
 	--t.window.fullscreen = true -- Do not fullscreen since we lack an exit button.
@@ -10,4 +10,3 @@ function love.conf(t)
 	--t.window.fullscreen = true 
 	--t.window.fullscreentype = "desktop" 
 end
-

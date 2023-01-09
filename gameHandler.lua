@@ -250,10 +250,10 @@ local function DrawBottomLeftInterface()
 	local mousePos = self.world.GetMousePositionInterface()
 	local won, lost = api.CheckGoalSatisfaction()
 	
-	self.hovered = InterfaceUtil.DrawButton(65, 905, 165, 60, mousePos, "Menu")
-	self.hovered = InterfaceUtil.DrawButton(65, 830, 165, 60, mousePos, "Restart", false, lost) or self.hovered
+	self.hovered = InterfaceUtil.DrawButton(60, 905, 165, 60, mousePos, "Menu")
+	self.hovered = InterfaceUtil.DrawButton(60, 830, 165, 60, mousePos, "Restart", false, lost) or self.hovered
 	if self.world.GetCosmos().TestSwitchLevel(true) then
-		self.hovered = InterfaceUtil.DrawButton(65, 755, 165, 60, mousePos, "Continue", not won, won, true) or self.hovered
+		self.hovered = InterfaceUtil.DrawButton(60, 755, 165, 60, mousePos, "Continue", not won, won, true) or self.hovered
 	end
 end
 
@@ -261,8 +261,8 @@ local function DrawMenu()
 	if self.world.GetPaused() then
 		local overX = 700
 		local overWidth = 500
-		local overY = 350
-		local overHeight = 300
+		local overY = 285
+		local overHeight = 425
 		love.graphics.setColor(Global.PANEL_COL[1], Global.PANEL_COL[2], Global.PANEL_COL[3], 1)
 		love.graphics.setLineWidth(4)
 		love.graphics.rectangle("fill", overX, overY, overWidth, overHeight*1.12, 8, 8, 16)
@@ -280,14 +280,22 @@ P or Esc:
 Ctrl+M:
 Ctrl+R:
 Ctrl+N:
-Ctrl+P:]], overX + 30, overY + overHeight * 0.3 , 175, "right")
+Ctrl+P:
+Ctrl+S:]], overX + 30, overY + overHeight * 0.26 , 175, "right")
 
 		love.graphics.printf([[
 Open menu
 Toggle music
 Reset the level
 Next level
-Previous level]], overX + 210, overY + overHeight * 0.3 , 350, "left")
+Previous level
+Take screenshot]], overX + 210, overY + overHeight * 0.26 , 350, "left")
+
+	local screenDir = love.filesystem.getSaveDirectory()
+	if screenDir then
+		Font.SetSize(4)
+		love.graphics.printf("(" .. screenDir .. "/screenshots)", overX + 15, overY + 380, 470)
+	end
 	end
 end
 
