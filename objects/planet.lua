@@ -344,14 +344,14 @@ local function New(self, physicsWorld)
 			if ageGuys[self.age] and self.IsGuyAppearing() and self.IsGuyAvailible() then
 				local timeRemaining = GetGuyTimeRemaining()
 				--Resources.DrawImage("guyglow", x, y, 0, math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
-				local period = 0.4
-				local offset = 0.5
+				local period = 0.5
+				local offset = 0.7
 				if self.guyAgeEndRemovalTime then
 					period = (0.4 * (0.5 + 0.6 * self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime)))
 					offset = 0.5 * (self.guyAgeEndRemovalTime / (5 + self.guyAgeEndRemovalTime))
 				end
 				local alpha = (self.animTime%period) / period
-				alpha = 0.25 * (math.sin(alpha * 2 * math.pi) + 1) + offset
+				alpha = 0.5 * 0.3 * (math.sin(alpha * 2 * math.pi) + 1) + offset
 				Resources.DrawImage(ageGuys[self.age], x, y, 0, alpha * math.min(1, (0.5 - timeRemaining)/0.5), self.def.radius)
 			end
 			
