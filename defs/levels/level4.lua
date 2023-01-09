@@ -27,7 +27,7 @@ Great Minds increase the rate of advancement while they remain on the planet.
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 18) / (count + 7)
+				return (count + 18) / (count + 7) * (1 - (count + 3) / (count + 20))
 			end,
 		},
 	},

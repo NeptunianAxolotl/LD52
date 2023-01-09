@@ -25,41 +25,11 @@ Our client wants one Great Mind of each type from both planets. The Minds work b
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 30) / (count + 7)
+				return (count + 30) / (count + 7) * (1 - (count + 3) / (count + 50))
 			end,
 		},
 	},
 	shipSpawn = {
-		{
-			timeMin = 50,
-			timeRand = 30,
-			speedMin = 0,
-			speedMax = 20,
-			orbitMult = 0.8,
-			orbitMultRand = 0.1,
-			orbitOtherDirChance = 0.2,
-			topBotChance = 0,
-			avoidOrbitOverWrap = false,
-			spawnRange = 0.7,
-			spawnOffset = 0,
-			typeName = {"smuggler_slow"},
-			spawnRateFunc = function ()
-				local count = GameHandler.CountObject("smuggler")
-				local pastCount = GameHandler.CountObject("smuggler_total")
-				local techCount = GameHandler.CountObject("highTech")
-				if pastCount == 0 then
-					if techCount == 1 then
-						return 1.5
-					end
-				end
-				if count == 0 then
-					return 1 * (1 + techCount*0.5)
-				elseif count == 1 then
-					return 0.5 * (1 + techCount*0.5)
-				end
-				return 0.2
-			end,
-		},
 	},
 	planets = {
 		{
@@ -112,7 +82,7 @@ Our client wants one Great Mind of each type from both planets. The Minds work b
 	sun = {
 		alignX = 0.5,
 		alignY = 0.5,
-		radius = 160,
+		radius = 175,
 		image = "sun",
 	},
 	asteroids = {

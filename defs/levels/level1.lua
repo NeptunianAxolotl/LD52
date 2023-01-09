@@ -37,7 +37,7 @@ Move once two have been selected.
 				if count < 2 then
 					return 4
 				end
-				return ((count + 9) / (count + 3))
+				return ((count + 9) / (count + 3)) * (1 - (count + 3) / (count + 20))
 			end,
 		},
 	},

@@ -1,23 +1,23 @@
 
-local SPAWN_TIME_MULT = 0.85
+local SPAWN_TIME_MULT = 0.95
 
 local def = {
-	humanName = "Widdershins",
+	humanName = "Well Aged",
 	description = [[
-Someone tipped off the space police. Their stun weaponary is quite the annoyance.
+This planet was left a bit too long to harvest.
 
-To make matters worse, there is something wrong with this system.
+Nothing an asteroid won't solve.
 ]],
-	prevLevel = "level6",
-	nextLevel = "level8",
-	gravity = 22,
-	starCount = 900,
+	prevLevel = "level8",
+	nextLevel = "level10",
+	gravity = 18,
+	starCount = 750,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
 			timeRand = 5 * SPAWN_TIME_MULT,
-			speedMin = 5,
-			speedMax = 20,
+			speedMin = 50,
+			speedMax = 250,
 			orbitMult = 0.6,
 			orbitMultRand = 0.4,
 			orbitOtherDirChance = 0.2,
@@ -30,42 +30,36 @@ To make matters worse, there is something wrong with this system.
 				return (count + 20) / (count + 7) * (1 - (count + 3) / (count + 50))
 			end,
 		},
-	},
-	shipSpawn = {
 		{
-			timeMin = 20,
-			timeRand = 5,
-			speedMin = 0,
+			timeMin = 60 * SPAWN_TIME_MULT,
+			timeRand = 20 * SPAWN_TIME_MULT,
+			speedMin = 5,
 			speedMax = 20,
-			orbitMult = 0.8,
-			orbitMultRand = 0.1,
+			orbitMult = 0.6,
+			orbitMultRand = 0.4,
 			orbitOtherDirChance = 0.2,
-			topBotChance = 0,
-			avoidOrbitOverWrap = false,
-			spawnRange = 0.7,
-			spawnOffset = 0,
-			typeName = {"police_slow"},
+			topBotChance = 0.1,
+			avoidOrbitOverWrap = true,
+			spawnRange = 0.4,
+			typeName = {"asteroid_huge"},
 			spawnRateFunc = function ()
-				local count = GameHandler.CountObject("police")
-				local pastCount = GameHandler.CountObject("police_total")
-				local techCount = GameHandler.CountObject("highTech")
-				if pastCount == 0 then
-					return 5
-				end
-				return 1 - 0.5 * (count / (count + 2))
+				local count = GameHandler.CountObject("asteroid")
+				return (count + 20) / (count + 7) * (1 - (count + 3) / (count + 50))
 			end,
 		},
+	},
+	shipSpawn = {
 	},
 	planets = {
 		{
 			name = "planet1",
-			pos = util.RotateVector({-1100, 0}, 4.5),
+			pos = util.RotateVector({-950, 0}, 2.5),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
 			ageProgress = 0.5,
-			orbitMult = -1,
-			age = "stone",
-			maxAge = "modern",
+			orbitMult = 0.98,
+			age = "space",
+			maxAge = "space",
 			shootRateMult = 1,
 			earlyAgeSpeed = 1/Global.EARLY_AGE_SECONDS,
 			lateAgeSpeed = 1/Global.LATE_AGE_SECONDS,
@@ -77,33 +71,37 @@ To make matters worse, there is something wrong with this system.
 	},
 	goal = {
 		planet1 = {
-			philosopher = 1,
-			inventor = 2,
+			inventor = 3,
 			scientist = 3,
 		},
 	},
 	sun = {
 		alignX = 0.5,
 		alignY = 0.5,
-		radius = 160,
+		radius = 180,
 		image = "sun",
 	},
 	asteroids = {
 		{
-			pos = util.RotateVector({-1000, 0}, 3.2),
+			pos = util.RotateVector({1350, 0}, 3.5),
 			orbitMult = 1.05,
 			typeName = "asteroid_med",
 		},
 		{
-			pos = util.RotateVector({600, 1450}, 0.7),
+			pos = util.RotateVector({1200, 0}, 1.4),
 			orbitMult = 0.95,
 			orbitAngle = -0.2,
 			typeName = "asteroid_med",
 		},
 		{
-			pos = util.RotateVector({1200, -400}, 5.4),
-			orbitMult = 0.9,
+			pos = util.RotateVector({1700, 0}, 3.7),
+			orbitMult = 1.05,
 			typeName = "asteroid_big",
+		},
+		{
+			pos = util.RotateVector({1800, 0}, 0.4),
+			orbitMult = 1.2,
+			typeName = "asteroid_huge",
 		},
 		{
 			pos = {350, 1450},
@@ -111,7 +109,7 @@ To make matters worse, there is something wrong with this system.
 			typeName = "asteroid_big",
 		},
 		{
-			pos = util.RotateVector({400, 1200}, -1.5),
+			pos = util.RotateVector({980, 0}, 2.4),
 			orbitMult = 0.99,
 			typeName = "asteroid_med",
 		}

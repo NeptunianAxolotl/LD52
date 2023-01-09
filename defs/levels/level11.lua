@@ -1,17 +1,16 @@
 
-local SPAWN_TIME_MULT = 0.95
+local SPAWN_TIME_MULT = 3
+local ENEMY_TIME_MULT = 0.7
 
 local def = {
-	humanName = "Cooperation",
+	humanName = "Confluence",
 	description = [[
-The Gorlaxians have an undeveloped planet in their system and have agreed to look the other way.
-
-They can take care of themselves.
+This system is  ripe for the taking. Unfortunately, this makes it hotly contested.
 ]],
-	prevLevel = "level4",
-	nextLevel = "level6",
-	gravity = 17,
-	starCount = 860,
+	prevLevel = "level10",
+	nextLevel = "level12",
+	gravity = 25,
+	starCount = 1900,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
@@ -23,18 +22,18 @@ They can take care of themselves.
 			orbitOtherDirChance = 0.2,
 			topBotChance = 0.05,
 			avoidOrbitOverWrap = true,
-			spawnRange = 0.8,
+			spawnRange = 0.9,
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 20) / (count + 5) * (1 - (count + 3) / (count + 20))
+				return (count + 30) / (count + 4) * (1 - (count + 3) / (count + 50))
 			end,
 		},
 	},
 	shipSpawn = {
 		{
-			timeMin = 50,
-			timeRand = 30,
+			timeMin = 20 * ENEMY_TIME_MULT,
+			timeRand = 5 * ENEMY_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -44,35 +43,50 @@ They can take care of themselves.
 			avoidOrbitOverWrap = false,
 			spawnRange = 0.9,
 			spawnOffset = 0,
-			typeName = {"smuggler_slow"},
+			typeName = {"smuggler_slow", "smuggler"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("smuggler")
 				local pastCount = GameHandler.CountObject("smuggler_total")
 				local techCount = GameHandler.CountObject("highTech")
 				if pastCount == 0 then
-					if techCount == 1 then
-						return 1.5
-					end
+					return 4 -- Spawn quickly first time
 				end
-				if count == 0 then
-					return 1 * (1 + techCount*0.5)
-				elseif count == 1 then
-					return 0.5 * (1 + techCount*0.5)
+				return 1 - 0.6 * (count / (count + 8))
+			end,
+		},
+		{
+			timeMin = 20 * ENEMY_TIME_MULT,
+			timeRand = 5 * ENEMY_TIME_MULT,
+			speedMin = 0,
+			speedMax = 20,
+			orbitMult = 0.8,
+			orbitMultRand = 0.1,
+			orbitOtherDirChance = 0.2,
+			topBotChance = 0,
+			avoidOrbitOverWrap = false,
+			spawnRange = 0.7,
+			spawnOffset = 0,
+			typeName = {"police_slow", "police_slow", "police"},
+			spawnRateFunc = function ()
+				local count = GameHandler.CountObject("police")
+				local pastCount = GameHandler.CountObject("police_total")
+				local techCount = GameHandler.CountObject("highTech")
+				if pastCount == 0 then
+					return 5
 				end
-				return 0.2
+				return 1 - 0.6 * (count / (count + 8))
 			end,
 		},
 	},
 	planets = {
 		{
-			name = "planet1",
-			humanName = "Gorlax II",
-			pos = util.RotateVector({-1400, 0}, 1),
+			name = "planet2",
+			pos = util.RotateVector({-1150, 0}, 2),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
-			ageProgress = 0,
-			orbitMult = 0.95,
-			age = "space",
+			ageProgress = 0.5,
+			orbitMult = 1.02,
+			age = "stone",
 			maxAge = "space",
 			shootRateMult = 1,
 			earlyAgeSpeed = 1/Global.EARLY_AGE_SECONDS,
@@ -83,14 +97,14 @@ They can take care of themselves.
 			fillLastAge = false,
 		},
 		{
-			name = "planet2",
-			pos = util.RotateVector({-900, 0}, 3),
+			name = "planet1",
+			pos = util.RotateVector({-700, 0}, 4),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
-			ageProgress = 0,
-			orbitMult = 0.95,
-			age = "bronze",
-			maxAge = "modern",
+			ageProgress = 0.5,
+			orbitMult = 1.02,
+			age = "stone",
+			maxAge = "space",
 			shootRateMult = 1,
 			earlyAgeSpeed = 1/Global.EARLY_AGE_SECONDS,
 			lateAgeSpeed = 1/Global.LATE_AGE_SECONDS,
@@ -101,36 +115,36 @@ They can take care of themselves.
 		},
 	},
 	goal = {
+		planet1 = {
+			inventor = 1,
+			scientist = 2,
+		},
 		planet2 = {
-			philosopher = 3,
-			inventor = 2,
-			scientist = 1
-		}
+			philosopher = 2,
+			inventor = 1,
+		},
 	},
 	sun = {
 		alignX = 0.5,
 		alignY = 0.5,
-		radius = 160,
+		radius = 175,
 		image = "sun",
 	},
 	asteroids = {
 		{
-			pos = {800, -500},
-			orbitMult = 1.2,
-			orbitAngle = 0.1,
+			pos = util.RotateVector({-1000, 0}, 5),
+			orbitMult = 1.05,
+			typeName = "asteroid_med",
+		},
+		{
+			pos = {350, 1450},
+			orbitMult = 0.98,
 			typeName = "asteroid_big",
 		},
 		{
-			pos = {1200, 500},
-			orbitMult = 1,
-			orbitAngle = 0.2,
-			typeName = "asteroid_big",
-		},
-		{
-			pos = {-800, -700},
-			orbitMult = 0.9,
-			orbitAngle = 0.1,
-			typeName = "asteroid_big",
+			pos = util.RotateVector({400, 1200}, -1.5),
+			orbitMult = 0.99,
+			typeName = "asteroid_med",
 		}
 	},
 	player = {

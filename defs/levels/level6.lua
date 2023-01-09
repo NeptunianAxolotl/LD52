@@ -29,7 +29,7 @@ Nudge the monoliths onto the planet to help things along.
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 10) / (count + 5)
+				return (count + 10) / (count + 5) * (1 - (count + 3) / (count + 20))
 			end,
 		},
 		{
