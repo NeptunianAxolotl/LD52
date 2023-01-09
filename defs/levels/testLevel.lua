@@ -30,7 +30,7 @@ Fixture Category Returns the categories the fixture belongs to. Added
 	},
 	shipSpawn = {
 		{
-			timeMin = 5.5 * SPAWN_TIME_MULT,
+			timeMin = 1.5 * SPAWN_TIME_MULT,
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
@@ -44,7 +44,7 @@ Fixture Category Returns the categories the fixture belongs to. Added
 			typeName = {"smuggler"},
 		},
 		{
-			timeMin = 5.5 * SPAWN_TIME_MULT,
+			timeMin = 1.5 * SPAWN_TIME_MULT,
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,

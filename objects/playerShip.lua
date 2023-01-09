@@ -132,14 +132,21 @@ local function New(self, physicsWorld)
 		local buildTurnRamp = false
 		
 		self.drawMove = {}
-		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-			self.drawMove[#self.drawMove + 1] = "p_thrust"
+			self.thrustDrawRamp = math.min(1, (self.thrustDrawRamp or 0.3) + 15*dt)
+			self.drawMove[#self.drawMove + 1] = {"p_thrust", self.thrustDrawRamp}
 			buildTurnRamp = true
 			local angle = self.body:getAngle()
 			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 120)) * self.GetSpeedMod()
 			local forceVec = util.PolarToCart(accel, angle)
 			self.body:applyForce(forceVec[1], forceVec[2])
+		elseif self.thrustDrawRamp then
+			self.thrustDrawRamp = self.thrustDrawRamp - 18*dt
+			if self.thrustDrawRamp < 0.3 then
+				self.thrustDrawRamp = false
+			else
+				self.drawMove[#self.drawMove + 1] = {"p_thrust", self.thrustDrawRamp}
+			end
 		end
 		
 		if self.bulletStock < Global.BULLET_STOCKPILE then
@@ -215,7 +222,11 @@ local function New(self, physicsWorld)
 				love.graphics.rotate(angle)
 				
 				for i = 1, #self.drawMove do
-					Resources.DrawImage(self.drawMove[i], 0, 0, 0, alpha, scaleFactor)
+					if type(self.drawMove[i]) == "table" then
+						Resources.DrawImage(self.drawMove[i][1], 0, 0, 0, alpha, scaleFactor * self.drawMove[i][2])
+					else
+						Resources.DrawImage(self.drawMove[i], 0, 0, 0, alpha, scaleFactor)
+					end
 				end
 				Resources.DrawImage("ship", 0, 0, 0, alpha, scaleFactor)
 				if self.stasisProgress then

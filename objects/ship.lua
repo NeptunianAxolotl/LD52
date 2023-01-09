@@ -105,14 +105,22 @@ local function New(self, physicsWorld)
 		TerrainHandler.ApplyGravity(self.body)
 		TerrainHandler.UpdateSpeedLimit(self.body, false, self.def.minDampening)
 		
+		self.drawMove = {}
 		self.def.DoBehaviour(self, dt)
 		
 		if self.targetAngle then
 			local turnAngle = util.AngleSubtractShortest(self.targetAngle, self.body:getAngle())
+			local magnitude = math.min(1, math.abs(turnAngle))
 			if turnAngle > 0 then
-				self.body:applyTorque(self.def.turnRate * math.min(1, math.abs(turnAngle)))
+				self.body:applyTorque(self.def.turnRate * magnitude)
+				if magnitude > 0.2 then
+					self.drawMove[#self.drawMove + 1] = "police_right"
+				end
 			else
-				self.body:applyTorque(-1*self.def.turnRate * math.min(1, math.abs(turnAngle)))
+				self.body:applyTorque(-1*self.def.turnRate * magnitude)
+				if magnitude > 0.2 then
+					self.drawMove[#self.drawMove + 1] = "police_left"
+				end
 			end
 		end
 		
@@ -134,6 +142,13 @@ local function New(self, physicsWorld)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
+				for i = 1, #self.drawMove do
+					if type(self.drawMove[i]) == "table" then
+						Resources.DrawImage(self.drawMove[i][1], 0, 0, 0, alpha, self.def.scaleFactor * self.drawMove[i][2])
+					else
+						Resources.DrawImage(self.drawMove[i], 0, 0, 0, alpha, self.def.scaleFactor)
+					end
+				end
 				Resources.DrawImage(self.def.image, 0, 0, 0, alpha, self.def.scaleFactor)
 				if self.stasisProgress then
 					Resources.DrawImage("stasis", 0, 0, 0, alpha * 0.5 * (1 - self.stasisProgress * self.stasisProgress), self.def.scaleFactor)

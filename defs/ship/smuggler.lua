@@ -65,6 +65,15 @@ local function DoMovement(self)
 	else
 		self.targetAngle = false
 	end
+	
+	local mag = util.AbsVal(netForce)
+	if mag > 80 * self.def.speedMult then
+		self.drawMove[#self.drawMove + 1] = {
+			"smuggler_thrust",
+			math.min(1, mag / 240)
+		}
+	end
+	
 	return goodPlanetObj
 end
 

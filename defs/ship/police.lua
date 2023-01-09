@@ -32,6 +32,14 @@ local function DoMovement(self)
 	else
 		self.targetAngle = false
 	end
+	
+	local mag = util.AbsVal(netForce)
+	if mag > 120 * self.def.speedMult then
+		self.drawMove[#self.drawMove + 1] = {
+			"police_thrust",
+			math.min(1, mag / 320)
+		}
+	end
 end
 
 local function DoShooting(self, dt)

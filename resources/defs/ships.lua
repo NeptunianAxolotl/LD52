@@ -8,6 +8,10 @@ local toAdd = {
 	"p_left",
 	"p_right",
 	"p_slow",
+	"police_thrust",
+	"smuggler_thrust",
+	"police_left",
+	"police_right",
 }
 
 local scale = {
