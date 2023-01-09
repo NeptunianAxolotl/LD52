@@ -33,8 +33,8 @@ They can take care of themselves.
 	},
 	shipSpawn = {
 		{
-			timeMin = 30,
-			timeRand = 15,
+			timeMin = 50,
+			timeRand = 30,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -51,7 +51,7 @@ They can take care of themselves.
 				local techCount = GameHandler.CountObject("highTech")
 				if pastCount == 0 then
 					if techCount == 1 then
-						return 3
+						return 1.5
 					end
 				end
 				if count == 0 then
