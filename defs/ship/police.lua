@@ -13,7 +13,7 @@ end
 
 local function DoMovement(self)
 	local netForce = false
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 450, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), TerrainHandler.GetSunRadius() + 250, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * self.GetSpeedMod(), Global.PLANET_RADIUS + 150, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * self.GetSpeedMod(), 110, false))
 	

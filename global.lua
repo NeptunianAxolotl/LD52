@@ -40,7 +40,7 @@ local globals = {
 	GUY_AGE_END_DELAY = 10,
 	
 	WRAP_ALPHA_SIZE = 35,
-	PLANET_RADIUS = 100,
+	PLANET_RADIUS = 110,
 	
 	INIT_LEVEL = "testLevel",
 	DRAW_PHYSICS = false,

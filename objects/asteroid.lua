@@ -44,6 +44,9 @@ local function New(self, physicsWorld)
 	self.body:setAngularVelocity(math.random()*3 - 1.5)
 	self.fixture:setFriction(0.6)
 	self.fixture:setRestitution(0.6)
+	if self.def.angleDampen then
+		self.body:setAngularDamping(self.def.angleDampen)
+	end
 	
 	self.damage = 0
 	

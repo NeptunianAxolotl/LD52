@@ -21,15 +21,15 @@ end
 
 local function DoMovement(self)
 	local netForce = false
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), 550, true))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4000 * self.GetSpeedMod(), TerrainHandler.GetSunRadius() + 300, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -5000 * self.GetSpeedMod(), Global.PLANET_RADIUS + 125, true))
 	
 	if self.abductionProgress and not netForce then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -1000 * self.GetSpeedMod(), 650, true))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * self.GetSpeedMod(), 450, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1200 * self.GetSpeedMod(), 500, true))
 	else
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -300 * self.GetSpeedMod(), 650, true))
-		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -300 * self.GetSpeedMod(), 450, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -400 * self.GetSpeedMod(), 450, true))
 	end
 	
 	local goodPlanetForce, goodPlanetObj = false
