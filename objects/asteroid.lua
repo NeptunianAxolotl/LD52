@@ -60,6 +60,7 @@ local function New(self, physicsWorld)
 		end
 		local bx, by = self.body:getWorldCenter()
 		if self.def.planetDeathAnim and deathType == "planet" then
+			SoundHandler.PlaySound("monolith_use")
 			local angle = self.body:getAngle()
 			local vx, vy = other.body:getLinearVelocity()
 			EffectsHandler.SpawnEffect(
@@ -73,6 +74,7 @@ local function New(self, physicsWorld)
 				}
 			)
 		else
+			SoundHandler.PlaySound(self.def.deadSound or "asteroid_explode")
 			for i = 1, 12 do
 				EffectsHandler.SpawnEffect(
 					"fireball_explode",
@@ -101,7 +103,6 @@ local function New(self, physicsWorld)
 	
 	function self.Update(dt)
 		if self.isDead then
-			SoundHandler.PlaySound(self.def.deadSound or "asteroid_explode")
 			if self.wantSplit and self.def.splitTo then
 				local bx, by = self.body:getWorldCenter()
 				local vx, vy = self.body:getLinearVelocity()

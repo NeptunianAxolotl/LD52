@@ -316,7 +316,9 @@ function api.Initialize(cosmos, levelData)
 	Camera.Initialize({
 		minScale = 1000,
 		initPos = {0, 0},
+		initScale = 900
 	})
+	UpdateCamera()
 end
 
 return api

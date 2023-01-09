@@ -7,7 +7,7 @@ local def = {
 	description = [[
 This system is ripe for the taking. Unfortunately, this makes it hotly contested.
 
-Just...shoot anything that moves, okay?
+Just...shoot anything that moves, okay? And try to avoid knocking any planets into the sun.
 ]],
 	prevLevel = "level10",
 	nextLevel = "level12",
