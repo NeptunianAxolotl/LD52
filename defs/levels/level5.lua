@@ -84,7 +84,7 @@ They can take care of themselves.
 		},
 		{
 			name = "planet2",
-			pos = util.RotateVector({-950, 0}, 3),
+			pos = util.RotateVector({-900, 0}, 3),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
 			ageProgress = 0,

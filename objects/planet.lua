@@ -28,15 +28,15 @@ local ageGuys = {
 
 local shootParameters = {
 	[7] = {
-		range = 600,
+		range = 620,
 		reloadSpeed = 1/8,
 		checkRate = 0.33,
 		typeName = "modern_bullet",
-		projSpeed = 250,
+		projSpeed = 220,
 		spawnRadius = 20,
 	},
 	[8] = {
-		range = 420,
+		range = 440,
 		reloadSpeed = 1/0.45,
 		checkRate = 0.33,
 		typeName = "space_bullet",
