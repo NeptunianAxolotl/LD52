@@ -242,15 +242,16 @@ local function New(self, physicsWorld)
 			if self.IsGuyAvailible() and ageGuys[self.age] then
 				ageSpeed = ageSpeed * self.def.guyAgeBoost
 			end
+			local oldProgress = self.ageProgress
 			self.ageProgress = self.ageProgress + dt * ageSpeed
-			if self.ageProgress > 1 then
+			if self.ageProgress >= 1 then
 				if IsBeingAbducted() then
-					self.ageProgress = self.ageProgress - dt * ageSpeed
+					self.ageProgress = oldProgress
 				elseif self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0 then
 					if Global.GUY_AGE_END_DELAY then
 						self.guyAgeEndRemovalTime = (self.guyAgeEndRemovalTime or Global.GUY_AGE_END_DELAY) - dt
 					end
-					self.ageProgress = self.ageProgress - dt * ageSpeed
+					self.ageProgress = oldProgress
 				else
 					self.guyProgress = 0
 					self.guyAgeEndRemovalTime = false
@@ -258,7 +259,7 @@ local function New(self, physicsWorld)
 						self.age = self.age + 1
 						self.ageProgress = self.ageProgress - 1
 					else
-						self.ageProgress = self.ageProgress - dt * ageSpeed
+						self.ageProgress = oldProgress
 					end
 				end
 			end
@@ -315,16 +316,20 @@ local function New(self, physicsWorld)
 	function self.Draw(drawQueue)
 		local x, y = self.body:getWorldCenter()
 		local angle = self.body:getAngle()
-		drawQueue:push({y=-2; f=function()
-			love.graphics.setColor(1, 1, 1, 0.5)
-			if self.ageProgress > 0 then
-				if self.ageProgress >= 1 then
-					love.graphics.circle("fill", x, y, self.def.radius * 1.4, 32)
-				else
-					love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*math.min(1, self.ageProgress), math.pi*1.5, 32)
+		
+		if self.ageProgress < 1 or (IsBeingAbducted()) or (self.IsGuyAppearing() and (self.guyAgeEndRemovalTime or 1) > 0) then
+			drawQueue:push({y=-2; f=function()
+				love.graphics.setColor(1, 1, 1, 0.5)
+				if self.ageProgress > 0 then
+					if self.ageProgress > 0.99 then
+						love.graphics.circle("fill", x, y, self.def.radius * 1.4, 32)
+					else
+						love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*math.min(1, self.ageProgress), math.pi*1.5, 32)
+					end
 				end
-			end
-		end})
+			end})
+		end
+		
 		drawQueue:push({y=2; f=function()
 			love.graphics.push()
 				love.graphics.translate(x, y)

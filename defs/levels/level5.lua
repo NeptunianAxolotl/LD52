@@ -23,7 +23,7 @@ They can take care of themselves.
 			orbitOtherDirChance = 0.2,
 			topBotChance = 0.05,
 			avoidOrbitOverWrap = true,
-			spawnRange = 0.9,
+			spawnRange = 0.8,
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")

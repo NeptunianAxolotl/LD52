@@ -42,7 +42,7 @@ Great Minds increase the rate of advancement while they remain on the planet.
 			orbitOtherDirChance = 0.2,
 			topBotChance = 0,
 			avoidOrbitOverWrap = false,
-			spawnRange = 0.9,
+			spawnRange = 0.7,
 			spawnOffset = 0,
 			typeName = {"smuggler_slow"},
 			spawnRateFunc = function ()
