@@ -70,11 +70,6 @@ function api.SetGameOver(hasWon, overType)
 	end
 end
 
-function api.SetPaused(newPause, force)
-	self.paused = newPause
-	self.forcePaused = force
-end
-
 --------------------------------------------------
 -- Input
 --------------------------------------------------
@@ -84,10 +79,10 @@ function api.KeyPressed(key, scancode, isRepeat)
 		return
 	end
 	if key == "escape" then
-		self.paused = not self.paused
+		api.ToggleMenu()
 	end
 	if key == "p" then
-		self.paused = not self.paused
+		api.ToggleMenu()
 	end
 	if api.GetGameOver() then
 		return -- No doing actions

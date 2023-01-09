@@ -135,8 +135,8 @@ end
 -- Buttons
 --------------------------------------------------
 
-function api.DrawButton(x, y, width, height, mousePos, text, disabled, flash)
-	local hovered = (not disabled) and util.PosInRectangle(mousePos, x, y, width, height)
+function api.DrawButton(x, y, width, height, mousePos, text, disabled, flash, canHoverDisabled)
+	local hovered = ((not disabled) or canHoverDisabled) and util.PosInRectangle(mousePos, x, y, width, height)
 	
 	if disabled then
 		love.graphics.setColor(Global.PANEL_DISABLE_COL[1], Global.PANEL_DISABLE_COL[2], Global.PANEL_DISABLE_COL[3], 1)

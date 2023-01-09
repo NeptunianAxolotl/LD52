@@ -50,6 +50,15 @@ function api.SwitchLevel(goNext)
 	World.Initialize(api, self.curLevelData)
 end
 
+function api.TestSwitchLevel(goNext)
+	local nameKey = (goNext and "nextLevel") or "prevLevel"
+	local newLevelName = LevelDefs[self.inbuiltLevelName][nameKey]
+	if not newLevelName then
+		return false
+	end
+	return true
+end
+
 --------------------------------------------------
 -- Draw
 --------------------------------------------------

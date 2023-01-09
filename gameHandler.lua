@@ -15,6 +15,7 @@ local guyTypeList = {
 }
 
 local greyColor = {0.4, 0.4, 0.4, 1}
+local greyFlashColor = {0.7, 0.7, 0.7, 1}
 
 --------------------------------------------------
 -- Updating
@@ -26,26 +27,46 @@ function api.AddAbduct(abductType, abductPlanet)
 end
 
 --------------------------------------------------
--- API
+-- Goals
 --------------------------------------------------
 
-function api.ToggleMenu()
-	self.menuOpen = not self.menuOpen
-	self.world.SetMenuState(self.menuOpen)
+local function DoesPlanetHasPendingGoals(name, have, need)
+	if not need then
+		return false
+	end
+	if not have then
+		return true
+	end
+	for i = 1, #guyTypeList do
+		local guy = guyTypeList[i]
+		if (have[guy] or 0) < (need[guy] or 0) then
+			return true
+		end
+	end
+	return false
 end
 
-function api.MousePressed(x, y)
-	if self.hovered == "Menu" then
-		self.world.ToggleMenu()
-	end
-	if self.hovered == "Restart" then
-		self.world.Restart()
-	end
+local function IsPlanetDead(name)
+	local planetData = TerrainHandler.GetPlanet(name)
+	return (not planetData) or (planetData.age == 1)
 end
 
-function api.GetViewRestriction()
-	local pointsToView = {{0, 0}, {800, 800}}
-	return pointsToView
+function api.CheckGoalSatisfaction()
+	local planetNames = TerrainHandler.GetPlanetNames()
+	local goal = TerrainHandler.GetLevelData().goal
+	
+	local won, lost = true, false
+	for i = 1, #planetNames do
+		local name = planetNames[i]
+		if DoesPlanetHasPendingGoals(name, self.abductScore[name], goal[name]) then
+			won = false
+			if IsPlanetDead(name) then
+				lost = true
+				break
+			end
+		end
+	end
+	return won, lost
 end
 
 --------------------------------------------------
@@ -72,7 +93,11 @@ local function DrawGuyTypeScore(guyType, have, need, xOffset, offset, guyStack)
 	local offsetEachTime = math.min(55, 165 / (toDraw - 1))
 	xOffset = xOffset + 35
 	for i = 1, toDraw do
-		Resources.DrawImage(guyType, xOffset, offset + 22, 0, 1, 60, (have < i and greyColor))
+		local color = (have < i and greyColor)
+		if color and (self.hovered == "Continue") and (self.animDt%0.4 < 0.2) then
+			color = greyFlashColor
+		end
+		Resources.DrawImage(guyType, xOffset, offset + 22, 0, 1, 60, color)
 		xOffset = xOffset + offsetEachTime
 	end
 	return offset + guyStack
@@ -135,12 +160,13 @@ end
 
 local function DrawBottomLeftInterface()
 	local mousePos = self.world.GetMousePositionInterface()
-	local _, won, lost = self.world.GetGameOver()
+	local won, lost = api.CheckGoalSatisfaction()
 	
-	self.hovered = InterfaceUtil.DrawButton(80, 905, 135, 60, mousePos, "Menu")
-	self.hovered = InterfaceUtil.DrawButton(80, 830, 135, 60, mousePos, "Restart", false, lost) or self.hovered
-	self.hovered = InterfaceUtil.DrawButton(80, 755, 135, 60, mousePos, "Next", not won, won) or self.hovered
-	
+	self.hovered = InterfaceUtil.DrawButton(65, 905, 165, 60, mousePos, "Menu")
+	self.hovered = InterfaceUtil.DrawButton(65, 830, 165, 60, mousePos, "Restart", false, lost) or self.hovered
+	if self.world.GetCosmos().TestSwitchLevel(true) then
+		self.hovered = InterfaceUtil.DrawButton(65, 755, 165, 60, mousePos, "Continue", not won, won, true) or self.hovered
+	end
 end
 
 local function DrawMenu()
@@ -166,15 +192,36 @@ P or Esc:
 Ctrl+M:
 Ctrl+R:
 Ctrl+N:
-Ctrl+P:]], overX + 30, overY + overHeight * 0.3 , 170, "right")
+Ctrl+P:]], overX + 30, overY + overHeight * 0.3 , 175, "right")
 
 		love.graphics.printf([[
-toggle menu
-toggle music
-reset the level
-next level
-previous level]], overX + 210, overY + overHeight * 0.3 , 350, "left")
+Open menu
+Toggle music
+Reset the level
+Next level
+Previous level]], overX + 210, overY + overHeight * 0.3 , 350, "left")
 	end
+end
+
+--------------------------------------------------
+-- API
+--------------------------------------------------
+
+function api.MousePressed(x, y)
+	if self.hovered == "Menu" then
+		self.world.ToggleMenu()
+	end
+	if self.hovered == "Restart" then
+		self.world.Restart()
+	end
+	if self.hovered == "Continue" and api.CheckGoalSatisfaction() then
+		self.world.GetCosmos().SwitchLevel(true)
+	end
+end
+
+function api.GetViewRestriction()
+	local pointsToView = {{0, 0}, {800, 800}}
+	return pointsToView
 end
 
 --------------------------------------------------
@@ -182,6 +229,7 @@ end
 --------------------------------------------------
 
 function api.Update(dt)
+	self.animDt = self.animDt + dt
 end
 
 function api.DrawInterface()
@@ -195,6 +243,7 @@ function api.Initialize(parentWorld)
 	self = {
 		abductScore = {},
 		world = parentWorld,
+		animDt = 0
 	}
 	
 end

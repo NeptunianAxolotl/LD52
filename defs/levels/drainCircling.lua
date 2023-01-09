@@ -87,6 +87,8 @@ local def = {
 	},
 	asteroids = {
 	},
+	goal = {
+	},
 	player = {
 		pos = {-300, -500},
 		orbitMult = -0.95,

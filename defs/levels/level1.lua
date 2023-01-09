@@ -15,14 +15,15 @@ local def = {
 	},
 	planets = {
 		{
+			name = "Planet 1",
 			pos = {-1000, 0},
 			radius = 95,
 			density = 150,
-			age = "stone",
+			age = "classical",
 			maxAge = "space",
 			ageSpeed = 1/20,
 			guySpeed = 1/6,
-			guyGap = 8,
+			guyGap = 0,
 			guyAgeBoost = 1.5,
 			fillLastAge = false,
 		},
@@ -38,6 +39,11 @@ local def = {
 			pos = {1100, -750},
 			orbitMult = 0.65,
 			typeName = "asteroid_big",
+		}
+	},
+	goal = {
+		["Planet 1"] = {
+			philosopher = 2,
 		}
 	},
 	player = {
