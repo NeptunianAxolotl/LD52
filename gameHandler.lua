@@ -149,7 +149,7 @@ end
 
 local function PrintLine(text, size, x, y, align, width)
 	Font.SetSize(size)
-	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.setColor(Global.TEXT_COL[1], Global.TEXT_COL[2], Global.TEXT_COL[3], 1)
 	love.graphics.printf(text, x, y, width or 240, align or "left")
 	if size == 1 then
 		return y + 60
@@ -271,7 +271,7 @@ local function DrawMenu()
 		love.graphics.rectangle("line", overX, overY, overWidth, overHeight*1.12, 8, 8, 16)
 		
 		Font.SetSize(1)
-		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.setColor(Global.TEXT_COL[1], Global.TEXT_COL[2], Global.TEXT_COL[3], 1)
 		love.graphics.printf("Paused", overX, overY + overHeight * 0.04, overWidth, "center")
 		
 		Font.SetSize(3)

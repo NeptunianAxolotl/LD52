@@ -274,7 +274,7 @@ local function New(self, physicsWorld)
 		end
 		
 		if ageGuys[self.age] and (self.guyGapTime or 0) <= 0 then
-			if self.guyProgress < 1 then
+			if self.guyProgress < 1 and (not IsBeingAbducted()) then
 				self.guyProgress = self.guyProgress + dt * self.def.guySpeed
 			end
 		else
