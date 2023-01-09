@@ -1,5 +1,5 @@
 
-local SPAWN_TIME_MULT = 0.75
+local SPAWN_TIME_MULT = 0.85
 
 local def = {
 	humanName = "Widdershins",

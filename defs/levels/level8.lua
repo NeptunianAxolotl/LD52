@@ -1,5 +1,5 @@
 
-local SPAWN_TIME_MULT = 1
+local SPAWN_TIME_MULT = 0.95
 
 local def = {
 	humanName = "System X",
@@ -25,7 +25,7 @@ Our client wants one Great Mind of each type from both planets. The Minds work b
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 20) / (count + 7)
+				return (count + 30) / (count + 7)
 			end,
 		},
 	},

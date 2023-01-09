@@ -8,7 +8,7 @@ Fly to the planet and collect the person.
 
 WSAD to move
 ]],
-	nextLevel = "level1",
+	nextLevel = "level0_a",
 	gravity = 10,
 	starCount = 350,
 	noShooting = true,

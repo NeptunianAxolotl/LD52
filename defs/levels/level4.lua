@@ -1,5 +1,5 @@
 
-local SPAWN_TIME_MULT = 1.2
+local SPAWN_TIME_MULT = 1.35
 
 local def = {
 	humanName = "Science Victory",
@@ -27,14 +27,14 @@ Great Minds increase the rate of advancement while they remain on the planet.
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 20) / (count + 7)
+				return (count + 18) / (count + 7)
 			end,
 		},
 	},
 	shipSpawn = {
 		{
-			timeMin = 50,
-			timeRand = 30,
+			timeMin = 70,
+			timeRand = 40,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -84,7 +84,7 @@ Great Minds increase the rate of advancement while they remain on the planet.
 	},
 	goal = {
 		planet1 = {
-			scientist = 4
+			scientist = 3
 		}
 	},
 	sun = {

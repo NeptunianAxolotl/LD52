@@ -16,9 +16,9 @@ Great minds in an age help progress greatly.
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
 			timeRand = 5 * SPAWN_TIME_MULT,
-			speedMin = 10,
-			speedMax = 35,
-			orbitMult = 0.7,
+			speedMin = 20,
+			speedMax = 70,
+			orbitMult = 0.6,
 			orbitMultRand = 0.3,
 			orbitOtherDirChance = 0.3,
 			topBotChance = 0,
@@ -27,7 +27,7 @@ Great minds in an age help progress greatly.
 			typeName = {"asteroid_big", "asteroid_big", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				return (count + 12) / (count + 3) * (1 - (count + 3) / (count + 15))
+				return (count + 18) / (count + 3) * (1 - (count + 3) / (count + 20))
 			end,
 		},
 	},
@@ -36,7 +36,7 @@ Great minds in an age help progress greatly.
 	planets = {
 		{
 			name = "planet1",
-			pos = util.RotateVector({-500, 0}, -1),
+			pos = util.RotateVector({-480, 0}, -1),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
 			ageProgress = 0.5,
@@ -55,7 +55,7 @@ Great minds in an age help progress greatly.
 	goal = {
 		planet1 = {
 			philosopher = 2,
-			inventor = 2
+			inventor = 1
 		}
 	},
 	sun = {
@@ -81,7 +81,7 @@ Great minds in an age help progress greatly.
 			pos = {-800, -700},
 			orbitMult = 0.95,
 			orbitAngle = -0.05,
-			typeName = "asteroid_big",
+			typeName = "asteroid_huge",
 		},
 		{
 			-- Harmless, taget practice

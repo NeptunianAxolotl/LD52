@@ -2,7 +2,7 @@
 local SPAWN_TIME_MULT = 1
 
 local def = {
-	humanName = "Caretaker",
+	humanName = "Armageddon",
 	description = [[
 First planet.
 
@@ -15,29 +15,31 @@ Don't shoot the planet.
 
 Move once two have been selected.
 ]],
-	nextLevel = "level2",
-	prevLevel = "level0_a",
-	gravity = 15,
+	nextLevel = "level1",
+	prevLevel = "level0",
+	gravity = 16,
 	starCount = 750,
 	asteroidSpawn = {
 		{
-			timeMin = 10 * SPAWN_TIME_MULT,
-			timeRand = 5 * SPAWN_TIME_MULT,
+			timeMin = 20 * SPAWN_TIME_MULT,
+			timeRand = 8 * SPAWN_TIME_MULT,
 			speedMin = 2,
 			speedMax = 6,
-			orbitMult = 0.5,
+			orbitMult = 0.75,
 			orbitMultRand = 0.2,
 			orbitOtherDirChance = 0,
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
-			spawnRange = 0.5,
+			spawnRange = 0.4,
 			typeName = {"asteroid_big", "asteroid_med", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				if count < 2 then
-					return 4
+				if count < 1 then
+					return 3
+				elseif count <= 2 then
+					return 1
 				end
-				return ((count + 9) / (count + 3))
+				return 0.2
 			end,
 		},
 	},
@@ -46,11 +48,11 @@ Move once two have been selected.
 	planets = {
 		{
 			name = "planet1",
-			pos = {-1000, 0},
+			pos = util.RotateVector({-1000, 0}, -1.5),
 			radius = Global.PLANET_RADIUS,
 			density = 150,
-			ageProgress = 0.15,
-			age = "stone",
+			ageProgress = 0.5,
+			age = "iron",
 			maxAge = "classical",
 			shootRateMult = 1,
 			earlyAgeSpeed = 1/Global.EARLY_AGE_SECONDS,
@@ -63,7 +65,7 @@ Move once two have been selected.
 	},
 	goal = {
 		planet1 = {
-			philosopher = 2
+			philosopher = 1
 		}
 	},
 	sun = {
@@ -75,36 +77,16 @@ Move once two have been selected.
 	asteroids = {
 		{
 			-- Designed to hit the planet early
-			pos = util.RotateVector({-1000, 0}, 2.5),
+			pos = util.RotateVector({-1000, 0}, 1.5),
 			orbitMult = -1.005,
-			typeName = "asteroid_med",
-		},
-		{
-			-- Designed to hit the planet in the middle
-			pos = util.RotateVector({600, 1450}, 0.98),
-			orbitMult = 0.95,
-			orbitAngle = -0.2,
-			typeName = "asteroid_med",
-		},
-		{
-			-- Designed to hit the planet in the classical age
-			pos = util.RotateVector({1200, -400}, 2.2),
-			orbitMult = 0.7,
-			orbitAngle = -0.2,
 			typeName = "asteroid_big",
 		},
 		{
-			-- Harmless, taget practice
-			pos = {350, 1450},
-			orbitMult = 0.98,
-			typeName = "asteroid_big",
-		},
-		{
-			-- Harmless, taget practice
-			pos = util.RotateVector({400, 1200}, -2.5),
-			orbitMult = 0.99,
+			-- Designed to hit the planet early
+			pos = util.RotateVector({-1000, 0}, 2),
+			orbitMult = -1.002,
 			typeName = "asteroid_med",
-		}
+		},
 	},
 	player = {
 		pos = {-300, -500},

@@ -64,7 +64,7 @@ local globals = {
 	SUN_ROTATE_FACTOR = 0.2,
 	
 	GUY_SECONDS = 10,
-	EARLY_AGE_SECONDS = 12,
+	EARLY_AGE_SECONDS = 10,
 	LATE_AGE_SECONDS = 50,
 	
 	INIT_LEVEL = "level0",

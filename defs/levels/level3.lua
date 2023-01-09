@@ -1,5 +1,5 @@
 
-local SPAWN_TIME_MULT = 1.3
+local SPAWN_TIME_MULT = 1.35
 
 local def = {
 	humanName = "Competition",
@@ -14,8 +14,8 @@ There is a smuggler
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
 			timeRand = 5 * SPAWN_TIME_MULT,
-			speedMin = 5,
-			speedMax = 20,
+			speedMin = 50,
+			speedMax = 120,
 			orbitMult = 0.8,
 			orbitMultRand = 0.3,
 			orbitOtherDirChance = 0.2,
@@ -80,14 +80,14 @@ There is a smuggler
 	},
 	goal = {
 		planet1 = {
-			philosopher = 3,
-			inventor = 3
+			philosopher = 2,
+			inventor = 2
 		}
 	},
 	sun = {
 		alignX = 0.5,
 		alignY = 0.5,
-		radius = 160,
+		radius = 170,
 		image = "sun",
 	},
 	asteroids = {
