@@ -131,7 +131,10 @@ local function New(self, physicsWorld)
 		local speed = math.sqrt(vx*vx + vy*vy)
 		local buildTurnRamp = false
 		
+		self.drawMove = {}
+		
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
+			self.drawMove[#self.drawMove + 1] = "p_thrust"
 			buildTurnRamp = true
 			local angle = self.body:getAngle()
 			local accel = Global.ACCEL_MULT * (2 - speed / (speed + 120)) * self.GetSpeedMod()
@@ -159,6 +162,7 @@ local function New(self, physicsWorld)
 		
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)
 		if emergencyStop or love.keyboard.isDown("s") or love.keyboard.isDown("down") then
+			self.drawMove[#self.drawMove + 1] = "p_slow"
 			buildTurnRamp = true
 			local vx, vy = self.body:getLinearVelocity()
 			local force = -1 * Global.BRAKE_MULT * self.GetSpeedMod()
@@ -172,8 +176,10 @@ local function New(self, physicsWorld)
 		
 		local turnAmount = false
 		if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+			self.drawMove[#self.drawMove + 1] = "p_left"
 			turnAmount = -1
 		elseif love.keyboard.isDown("d") or love.keyboard.isDown("right") then
+			self.drawMove[#self.drawMove + 1] = "p_right"
 			turnAmount = 1
 		end
 		if turnAmount or buildTurnRamp then
@@ -208,6 +214,9 @@ local function New(self, physicsWorld)
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
+				for i = 1, #self.drawMove do
+					Resources.DrawImage(self.drawMove[i], 0, 0, 0, alpha, scaleFactor)
+				end
 				Resources.DrawImage("ship", 0, 0, 0, alpha, scaleFactor)
 				if self.stasisProgress then
 					Resources.DrawImage("stasis", 0, 0, 0, alpha * 0.5 * (1 - self.stasisProgress * self.stasisProgress), scaleFactor)

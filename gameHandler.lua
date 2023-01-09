@@ -160,7 +160,7 @@ local function DrawTopLeftInterface()
 	local xOffset = 0
 	offset = PrintLine(levelData.humanName, 3, xOffset, offset, "center", 280)
 	
-	offset = PrintLine(levelData.description or "missing description", 4, xOffset + 20, offset + 20, "left", 255)
+	offset = PrintLine(levelData.description or "missing description", 4, xOffset + 20, offset + 8, "left", 255)
 	
 end
 
