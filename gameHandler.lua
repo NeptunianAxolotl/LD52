@@ -54,6 +54,8 @@ local countableTypes = {
 	"monolith",
 	"police",
 	"smuggler",
+	"police_total",
+	"smuggler_total",
 	"lowTech",
 	"highTech",
 	"spaceAge",
@@ -67,6 +69,10 @@ function api.CountObject(objType)
 		return IterableMap.FilterCount(EnemyHandler.GetShips(), FilterToPolice)
 	elseif objType == "smuggler" then
 		return IterableMap.FilterCount(EnemyHandler.GetShips(), FilterToSmuggler)
+	elseif objType == "police_total" then
+		return EnemyHandler.GetSpawnCount("police")
+	elseif objType == "smuggler_total" then
+		return EnemyHandler.GetSpawnCount("smuggler") + EnemyHandler.GetSpawnCount("smuggler_slow")
 	elseif objType == "lowTech" then
 		return IterableMap.FilterCount(TerrainHandler.GetPlanets(), FilterToLowTech)
 	elseif objType == "highTech" then

@@ -43,7 +43,7 @@ Great minds in an age help progress greatly.
 			orbitMult = 1.18,
 			age = "stone",
 			maxAge = "invention",
-			shootRateMult = 2,
+			shootRateMult = 1,
 			earlyAgeSpeed = 1/12,
 			lateAgeSpeed = 1/50,
 			guySpeed = 1/12,

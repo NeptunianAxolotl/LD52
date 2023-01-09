@@ -72,6 +72,10 @@ function api.GetShips()
 	return self.ships
 end
 
+function api.GetSpawnCount(typeName)
+	return (self.spawnCount[typeName] or 0)
+end
+
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 -- Creation and handling
@@ -168,6 +172,7 @@ local function CheckEnemyTypeSpawn(spawnData, spawnIndex, dt, timerTable, spawnF
 			velocity = velocity,
 			typeName = util.SampleList(spawnData.typeName),
 		}
+		self.spawnCount[toSpawn.typeName] = (self.spawnCount[toSpawn.typeName] or 0) + 1
 		spawnFunc(toSpawn)
 		timerTable[spawnIndex] = timerTable[spawnIndex] + spawnData.timeMin + math.random()*spawnData.timeRand
 	end
@@ -223,6 +228,7 @@ function api.Initialize(world, levelIndex, mapDataOverride)
 		asteroidCreateQueue = false,
 		shipTimer = {},
 		asteroidTimer = {},
+		spawnCount = {},
 	}
 end
 

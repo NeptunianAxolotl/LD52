@@ -53,7 +53,7 @@ Move once two have been selected.
 			ageProgress = 0.25,
 			age = "stone",
 			maxAge = "classical",
-			shootRateMult = 2,
+			shootRateMult = 1,
 			earlyAgeSpeed = 1/12,
 			lateAgeSpeed = 1/50,
 			guySpeed = 1/12,
