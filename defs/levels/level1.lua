@@ -31,12 +31,12 @@ Move once two have been selected.
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.4,
-			typeName = {"asteroid_big"},
+			typeName = {"asteroid_big", "asteroid_med", "asteroid_med"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("asteroid")
-				if count == 0 then
+				if count < 1 then
 					return 3
-				elseif count <= 1 then
+				elseif count <= 2 then
 					return 1
 				end
 				return 0.2
@@ -77,22 +77,29 @@ Move once two have been selected.
 	asteroids = {
 		{
 			-- Designed to hit the planet in the classical age
-			pos = util.RotateVector({1200, -400}, -1.85),
+			pos = util.RotateVector({1200, -400}, -1.95),
 			orbitMult = 0.75,
 			orbitAngle = -0.38,
 			typeName = "asteroid_big",
 		},
 		{
+			-- Designed to hit the planet earlt
+			pos = util.RotateVector({-1000, 0}, 2.5),
+			orbitMult = -1.005,
+			typeName = "asteroid_med",
+		},
+		{
 			-- Harmless, taget practice
-			pos = {350, 1200},
+			pos = {350, 1450},
 			orbitMult = 0.98,
 			typeName = "asteroid_big",
 		},
 		{
 			-- Harmless, taget practice
-			pos = util.RotateVector({400, 1200}, 3),
+			pos = util.RotateVector({600, 1600}, 1.8),
 			orbitMult = 0.97,
-			typeName = "asteroid_big",
+			orbitAngle = -0.1,
+			typeName = "asteroid_med",
 		},
 		{
 			-- Harmless, taget practice
