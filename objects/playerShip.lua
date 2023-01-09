@@ -162,9 +162,11 @@ local function New(self, physicsWorld)
 			self.shootCooldown = self.shootCooldown - dt
 		end
 		if self.shootCooldown < 0 and self.bulletStock > 0 and (love.keyboard.isDown("space") or love.keyboard.isDown("return") or love.keyboard.isDown("kpenter")) then
-			SpawnBullet(physicsWorld, self.body)
-			self.shootCooldown = Global.SHOOT_COOLDOWN
-			self.bulletStock = self.bulletStock - 1
+			if TerrainHandler.CanShoot() then
+				SpawnBullet(physicsWorld, self.body)
+				self.shootCooldown = Global.SHOOT_COOLDOWN
+				self.bulletStock = self.bulletStock - 1
+			end
 		end
 		
 		local emergencyStop = CheckEmergencyStop(physicsWorld, self.body)

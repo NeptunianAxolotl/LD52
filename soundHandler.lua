@@ -35,7 +35,6 @@ function api.LoadSound(name, id)
 end
 
 function api.PlaySound(name, id, fadeIn, fadeOut, delay, loop, wantedVolume, playAtZero)
-	print("PlaySound", name)
 	local soundData = api.LoadSound(name, id)
 	soundData.source:setLooping(loop and true or false)
 	

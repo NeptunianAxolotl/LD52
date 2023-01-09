@@ -65,9 +65,8 @@ function api.Update(dt)
 			end
 			trackRunning = true
 			currentTrackRemaining = soundFiles[trackList[4]].duration
-			print("currentTrackRemaining", currentTrackRemaining)
 			for i = 1, #trackList do
-				playingSounds[i] = SoundHandler.PlaySound(trackList[i], false, false, false, false, false, (i == maxTech and 1) or 0, true)
+				playingSounds[i] = SoundHandler.PlaySound(trackList[i], false, 1, 1, false, false, (i == maxTech and 1) or 0, true)
 			end
 		elseif trackRunning then
 			for i = 1, #trackList do

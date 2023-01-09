@@ -2,7 +2,7 @@
 local SPAWN_TIME_MULT = 1
 
 local def = {
-	humanName = "Orientation",
+	humanName = "Caretaker",
 	description = [[
 First planet.
 
@@ -16,6 +16,7 @@ Don't shoot the planet.
 Move once two have been selected.
 ]],
 	nextLevel = "level2",
+	prevLevel = "level0",
 	gravity = 15,
 	starCount = 750,
 	asteroidSpawn = {
@@ -85,6 +86,18 @@ Move once two have been selected.
 			-- Harmless, taget practice
 			pos = {350, 1200},
 			orbitMult = 0.98,
+			typeName = "asteroid_big",
+		},
+		{
+			-- Harmless, taget practice
+			pos = util.RotateVector({400, 1200}, 3),
+			orbitMult = 0.97,
+			typeName = "asteroid_big",
+		},
+		{
+			-- Harmless, taget practice
+			pos = util.RotateVector({400, 1200}, -2.5),
+			orbitMult = 0.99,
 			typeName = "asteroid_big",
 		}
 	},

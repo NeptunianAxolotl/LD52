@@ -48,9 +48,7 @@ There is a smuggler
 				local pastCount = GameHandler.CountObject("smuggler_total")
 				local techCount = GameHandler.CountObject("highTech")
 				if pastCount == 0 then
-					if techCount == 1 then
-						return 4 -- Spawn quickly first time
-					end
+					return 4 -- Spawn quickly first time
 				end
 				if count == 0 then
 					return 1 * (1 + techCount*0.5)
