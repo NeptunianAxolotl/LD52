@@ -59,24 +59,6 @@ local planetImageList = {
 	"planet4",
 }
 
-local ageImages = {
-	false,
-	"stone1",
-	"stone2",
-	"stone3",
-	"classicalage",
-	"victorianage",
-	"modernage",
-	"spaceage",
-}
-
-local deadImage = {
-	planet1 = "planet1_dead",
-	planet2 = "planet2_dead",
-	planet3 = "planet3_dead",
-	planet4 = "planet4_dead",
-}
-
 local function New(self, physicsWorld)
 	-- pos
 	self.animTime = 0
@@ -128,6 +110,10 @@ local function New(self, physicsWorld)
 	
 	function self.IsGuyAppearing()
 		return GetGuyTimeRemaining() < 0.5
+	end
+	
+	function self.GetAngle()
+		return self.body:getAngle()
 	end
 	
 	function self.AddSmuggleAbductionProgress(newProgress, abductionId)
@@ -315,24 +301,24 @@ local function New(self, physicsWorld)
 	end
 	
 	function self.Draw(drawQueue)
-		drawQueue:push({y=0; f=function()
-			local x, y = self.body:getWorldCenter()
-			local angle = self.body:getAngle()
-			
+		local x, y = self.body:getWorldCenter()
+		local angle = self.body:getAngle()
+		drawQueue:push({y=-2; f=function()
 			love.graphics.setColor(1, 1, 1, 0.6)
 			if self.ageProgress <= 1 then
 				love.graphics.arc("fill", "pie", x, y, self.def.radius * 1.4, math.pi*1.5 + math.pi*2*self.ageProgress, math.pi*1.5, 32)
 			end
-			
+		end})
+		drawQueue:push({y=2; f=function()
 			love.graphics.push()
 				love.graphics.translate(x, y)
 				love.graphics.rotate(angle)
 				
-				if ageImages[self.age] then
+				if Global.AGE_IMAGE[self.age] then
 					Resources.DrawImage(self.planetDrawBase, 0, 0, self.baseDrawRotation, false, self.def.radius)
-					Resources.DrawImage(ageImages[self.age], 0, 0, self.ageDrawRotation, false, self.def.radius)
+					Resources.DrawImage(Global.AGE_IMAGE[self.age], 0, 0, self.ageDrawRotation, false, self.def.radius)
 				else
-					Resources.DrawImage(planetImageList[self.planetDrawBase], 0, 0, self.ageDrawRotation, false, self.def.radius)
+					Resources.DrawImage(Global.DEAD_IMAGE[self.planetDrawBase], 0, 0, self.ageDrawRotation, false, self.def.radius)
 				end
 				
 				if Global.DRAW_PHYSICS then

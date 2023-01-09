@@ -1,6 +1,7 @@
 
 local globals = {
 	BACK_COL = {0/255, 0/255, 0/255},
+	OUTLINE_COL = {0.2, 0.2, 0.2},
 	PANEL_COL = {0.53, 0.53, 0.55},
 	
 	MASTER_VOLUME = 0.75,
@@ -14,7 +15,7 @@ local globals = {
 	
 	WORLD_WIDTH = 4500,
 	WORLD_HEIGHT = 3200,
-	UI_SPACE = 650,
+	UI_SPACE = 850,
 	
 	GRAVITY_MULT = 700000,
 	SPEED_LIMIT = 1800,
@@ -45,6 +46,23 @@ local globals = {
 	
 	INIT_LEVEL = "testLevel",
 	DRAW_PHYSICS = false,
+	
+	AGE_IMAGE = {
+		false,
+		"stone1",
+		"stone2",
+		"stone3",
+		"classicalage",
+		"victorianage",
+		"modernage",
+		"spaceage",
+	},
+	DEAD_IMAGE = {
+		planet1 = "planet1_dead",
+		planet2 = "planet2_dead",
+		planet3 = "planet3_dead",
+		planet4 = "planet4_dead",
+	},
 }
 
 return globals
