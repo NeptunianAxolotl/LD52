@@ -68,9 +68,9 @@ local globals = {
 	EARLY_AGE_SECONDS = 10,
 	LATE_AGE_SECONDS = 50,
 	
-	INIT_LEVEL = "level0",
+	INIT_LEVEL = "level16",
 	DRAW_PHYSICS = false,
-	DRAW_ITEM_COUNTS = true,
+	DRAW_ITEM_COUNTS = false,
 	DEBUG_PLANET_NAME = false,
 	
 	AGE_IMAGE = {

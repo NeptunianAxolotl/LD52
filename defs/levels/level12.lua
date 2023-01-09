@@ -4,14 +4,14 @@ local SPAWN_TIME_MULT = 1.8
 local def = {
 	humanName = "Passing Through",
 	description = [[
-Your guess is as good as ours.  Just harvest enough from the planet before whatever happens, happens.
+Your guess is as good as ours.  Just make quota before whatever happens, happens.
 
-At there are barely any asteroids.
+At least there are barely any asteroids.
 ]],
 	prevLevel = "level11",
 	nextLevel = "level13",
 	gravity = 16,
-	starCount = 650,
+	starCount = 520,
 	asteroidSpawn = {
 		{
 			timeMin = 10 * SPAWN_TIME_MULT,
@@ -34,7 +34,7 @@ At there are barely any asteroids.
 	shipSpawn = {
 		{
 			timeMin = 50,
-			timeRand = 30,
+			timeRand = 15,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -83,7 +83,7 @@ At there are barely any asteroids.
 	},
 	goal = {
 		planet1 = {
-			philosopher = 2,
+			philosopher = 3,
 			inventor = 2,
 			scientist = 2,
 		},

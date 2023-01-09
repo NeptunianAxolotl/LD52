@@ -71,6 +71,13 @@ function api.ViewResize(width, height)
 	World.ViewResize(width, height)
 end
 
+function api.TakeScreenshot()
+	love.filesystem.createDirectory("screenshots")
+	print("working", love.filesystem.getWorkingDirectory())
+	print("save", love.filesystem.getSaveDirectory())
+	love.graphics.captureScreenshot("screenshots/screenshot_" .. math.floor(math.random()*100000) .. "_.png")
+end
+
 --------------------------------------------------
 -- Input
 --------------------------------------------------

@@ -50,13 +50,6 @@ function api.GetCosmos()
 	return self.cosmos
 end
 
-function api.TakeScreenshot()
-	love.filesystem.createDirectory("screenshots")
-	print("working", love.filesystem.getWorkingDirectory())
-	print("save", love.filesystem.getSaveDirectory())
-	love.graphics.captureScreenshot("screenshots/screenshot_" .. math.floor(math.random()*100000) .. "_.png")
-end
-
 function api.SetGameOver(hasWon, overType)
 	if self.gameWon or self.gameLost or TerrainHandler.InEditMode() then
 		return
