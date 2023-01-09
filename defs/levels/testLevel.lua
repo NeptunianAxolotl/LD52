@@ -55,6 +55,8 @@ local def = {
 	planets = {
 		{
 			name = "Planet 1",
+			humanName = "FORCED",
+			forcePlanetType = "planet1",
 			pos = {-1000, 0},
 			radius = Global.PLANET_RADIUS,
 			density = 150,

@@ -103,7 +103,7 @@ local function DrawGuyTypeScore(guyType, have, need, xOffset, offset, guyStack)
 	return offset + guyStack
 end
 
-local function DrawAbductScore(name, planetImage, goal, planetScore, xOffset, offset, guyStack)
+local function DrawAbductScore(name, humanName, planetImage, goal, planetScore, xOffset, offset, guyStack)
 	if not (planetScore or goal) then
 		return offset
 	end
@@ -119,7 +119,7 @@ local function DrawAbductScore(name, planetImage, goal, planetScore, xOffset, of
 	else
 		Resources.DrawImage(Global.DEAD_IMAGE[planetImage], xOffset + 20, offset + 22, 0, 1, 20, greyColor)
 	end
-	offset = PrintLine(name, 3, xOffset + 60, offset)
+	offset = PrintLine(humanName, 3, xOffset + 60, offset)
 	offset = offset + 15
 	
 	for i = 1, #guyTypeList do
@@ -133,7 +133,7 @@ local function DrawAbductScore(name, planetImage, goal, planetScore, xOffset, of
 end
 
 local function DrawRightInterface()
-	local planetNames = TerrainHandler.GetPlanetNames()
+	local planetNames, planetHumanNames = TerrainHandler.GetPlanetNames()
 	local planetImages = TerrainHandler.GetPlanetImages()
 	local goal = TerrainHandler.GetLevelData().goal
 	
@@ -150,7 +150,7 @@ local function DrawRightInterface()
 	
 	for i = 1, #planetNames do
 		local name = planetNames[i]
-		offset = DrawAbductScore(name, planetImages[i], goal[name], self.abductScore[name], xOffset, offset, guyStack)
+		offset = DrawAbductScore(name, planetHumanNames[i], planetImages[i], goal[name], self.abductScore[name], xOffset, offset, guyStack)
 	end
 end
 

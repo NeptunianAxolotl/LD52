@@ -2,6 +2,7 @@
 local Resources = require("resourceHandler")
 local Font = require("include/font")
 local planetUtils = require("utilities/planetUtils")
+local planetNameDefs = require("defs/planetNames")
 
 local ageNames = {
 	"Dead",
@@ -83,7 +84,8 @@ local function New(self, physicsWorld)
 	
 	self.baseDrawRotation = math.pi*2
 	self.ageDrawRotation = math.pi*2
-	self.planetDrawBase = self.def.image or util.SampleList(planetImageList)
+	self.planetDrawBase = self.def.forcePlanetType or util.SampleList(planetImageList)
+	self.humanName = self.def.humanName or util.SampleList(planetNameDefs[self.planetDrawBase]) or "name issue"
 	
 	function self.Destroy()
 		if self.isDead then
