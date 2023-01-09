@@ -49,8 +49,8 @@ This system is  ripe for the taking. Unfortunately, this makes it hotly conteste
 	},
 	shipSpawn = {
 		{
-			timeMin = 20 * ENEMY_TIME_MULT,
-			timeRand = 5 * ENEMY_TIME_MULT,
+			timeMin = 30 * ENEMY_TIME_MULT,
+			timeRand = 12 * ENEMY_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -68,7 +68,7 @@ This system is  ripe for the taking. Unfortunately, this makes it hotly conteste
 				if pastCount == 0 then
 					return 4 -- Spawn quickly first time
 				end
-				return 1 - 0.6 * (count / (count + 8))
+				return 1 - 0.6 * (count / (count + 6))
 			end,
 		},
 		{
