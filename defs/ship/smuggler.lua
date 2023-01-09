@@ -84,6 +84,9 @@ local function DoAbduction(self, dt, foundPlanet)
 	if not foundPlanet.IsGuyAvailible(self.abductionId) then
 		return
 	end
+	if self.stasisProgress then
+		return
+	end
 	
 	local bx, by = self.body:getWorldCenter()
 	local ox, oy = foundPlanet.body:getWorldCenter()

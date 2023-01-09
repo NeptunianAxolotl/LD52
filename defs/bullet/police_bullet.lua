@@ -8,7 +8,7 @@ local def = {
 	image = "bullet_police",
 	deadSound = "shoot_asteroid",
 	stasisEffect = {
-		duration = 1,
+		duration = 1.2,
 		accelReduce = 0.95,
 		turnReduce = 0.65,
 	},
