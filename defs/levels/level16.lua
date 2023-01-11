@@ -68,7 +68,7 @@ Something tells me we won't have to worry about retirement after this.
 		},
 		{
 			timeMin = 4,
-			timeRand = 7,
+			timeRand = 6,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -85,7 +85,7 @@ Something tells me we won't have to worry about retirement after this.
 				if pastCount <= 2 then
 					return 5 - pastCount
 				end
-				return 1 - 0.5 * (count / (count + 4))
+				return 1 - 0.5 * (count / (count + 5))
 			end,
 		},
 	},
