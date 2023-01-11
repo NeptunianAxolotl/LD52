@@ -149,7 +149,7 @@ local function New(self, physicsWorld)
 						Resources.DrawImage(self.drawMove[i], 0, 0, 0, alpha, self.def.scaleFactor)
 					end
 				end
-				Resources.DrawImage(self.def.image, 0, 0, 0, alpha, self.def.scaleFactor)
+				Resources.DrawImageOrAnimation(self.def.image, 0, 0, self.animTime, 0, alpha, self.def.scaleFactor)
 				if self.stasisProgress then
 					Resources.DrawImage("stasis", 0, 0, 0, alpha * 0.5 * (1 - self.stasisProgress * self.stasisProgress), self.def.scaleFactor)
 				end

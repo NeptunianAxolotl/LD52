@@ -2,9 +2,6 @@ local images = {}
 
 local toAdd = {
 	"ship",
-	"police",
-	"policea",
-	"policeb",
 	"smuggler",
 	"p_thrust",
 	"p_left",
