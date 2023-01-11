@@ -67,6 +67,7 @@ function api.Update(dt)
 		self.playerShip.Update(dt)
 	end
 	if self.abducting then
+		self.animationTimer = self.animationTimer + dt
 		self.abductProgress = self.abductProgress + dt*Global.ABDUCT_SPEED
 		if self.abductProgress > 1 then
 			self.abducting = false
@@ -110,7 +111,7 @@ function api.Draw(drawQueue)
 			local abductPos = util.Add(self.abductPos, util.Mult(self.abductProgress * shipDist, toShip))
 			
 			drawQueue:push({y=10; f=function()
-				Resources.DrawImage(self.abductType, abductPos[1], abductPos[2], 0, 1, self.abductRadius*(1 - self.abductProgress))
+				Resources.DrawAnimation(self.abductType .. "_abduct", abductPos[1], abductPos[2], self.animationTimer, 0, 1, self.abductRadius*(1 - self.abductProgress))
 				
 				love.graphics.setColor(255/255, 216/255, 0/255, 0.6)
 				love.graphics.polygon("fill", sX, sY, planetLeft[1], planetLeft[2], planetRight[1], planetRight[2])

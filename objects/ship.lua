@@ -166,7 +166,7 @@ local function New(self, physicsWorld)
 				abductPos = util.Add(abductPos, util.Mult(self.abductionProgress * shipDist, toShip))
 				
 				drawQueue:push({y=10; f=function()
-					Resources.DrawImage(self.abductType, abductPos[1], abductPos[2], 0, 1, self.abductionPlanet.def.radius*(1 - self.abductionProgress))
+					Resources.DrawAnimation(self.abductType .. "_abduct", abductPos[1], abductPos[2], self.animTime, 0, 1, self.abductionPlanet.def.radius*(1 - self.abductionProgress))
 					
 					love.graphics.setColor(235/255, 140/255, 129/255, 0.72)
 					love.graphics.polygon("fill", sX, sY, planetLeft[1], planetLeft[2], planetRight[1], planetRight[2])

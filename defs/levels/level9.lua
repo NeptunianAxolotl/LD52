@@ -70,7 +70,7 @@ Nothing an asteroid or three won't solve.
 					if spaceCount > 0 then
 						return 0
 					end
-					return 100 - pastCount*92
+					return 100 - pastCount*85
 				end
 				return 1 - 0.5 * (count / (count + 1))
 			end,

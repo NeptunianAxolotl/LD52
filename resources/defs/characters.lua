@@ -4,9 +4,6 @@ local toAdd = {
 	"philosopher",
 	"inventor",
 	"scientist",
-	"philosopher_surprise",
-	"inventor_surprise",
-	"scientist_surprise",
 }
 
 for i = 1, #toAdd do
