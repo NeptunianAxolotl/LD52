@@ -30,16 +30,15 @@ local function DoMovement(self)
 	
 	if netForce then
 		self.targetAngle = util.Angle(netForce)
+		local mag = util.AbsVal(netForce)
+		if mag > 120 * self.def.speedMult then
+			self.drawMove[#self.drawMove + 1] = {
+				"police_thrust",
+				math.min(1, mag / 320)
+			}
+		end
 	else
 		self.targetAngle = false
-	end
-	
-	local mag = util.AbsVal(netForce)
-	if mag > 120 * self.def.speedMult then
-		self.drawMove[#self.drawMove + 1] = {
-			"police_thrust",
-			math.min(1, mag / 320)
-		}
 	end
 end
 
