@@ -50,7 +50,6 @@ Just salvage what you can.  So, ideally, all of it.
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
-			spawnOffset = -0.15,
 			typeName = {"smuggler"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("smuggler")
@@ -73,7 +72,6 @@ Just salvage what you can.  So, ideally, all of it.
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
-			spawnOffset = -0.15,
 			typeName = {"police"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("police")

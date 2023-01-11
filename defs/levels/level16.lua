@@ -59,8 +59,7 @@ Something tells me we won't have to worry about retirement after this.
 			orbitMultBothDirections = 0,
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
-			spawnRange = 0.3,
-			spawnOffset = -0.15,
+			spawnRange = 0.5,
 			typeName = {"smuggler", "smuggler_slow"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("smuggler")
@@ -68,8 +67,8 @@ Something tells me we won't have to worry about retirement after this.
 			end,
 		},
 		{
-			timeMin = 2,
-			timeRand = 6.5,
+			timeMin = 4,
+			timeRand = 7,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -77,17 +76,16 @@ Something tells me we won't have to worry about retirement after this.
 			orbitMultBothDirections = 0,
 			topBotChance = 0,
 			avoidOrbitOverWrap = true,
-			spawnRange = 0.3,
-			spawnOffset = -0.15,
+			spawnRange = 0.5,
 			typeName = {"police", "police", "police_slow"},
 			spawnRateFunc = function ()
 				local count = GameHandler.CountObject("police")
 				local pastCount = GameHandler.CountObject("police_total")
 				local techCount = GameHandler.CountObject("highTech")
-				if pastCount == 0 then
-					return 5
+				if pastCount <= 2 then
+					return 5 - pastCount
 				end
-				return 1 - 0.85 * (count / (count + 2))
+				return 1 - 0.5 * (count / (count + 4))
 			end,
 		},
 	},

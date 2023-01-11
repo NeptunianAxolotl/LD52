@@ -49,6 +49,32 @@ Nothing an asteroid or three won't solve.
 		},
 	},
 	shipSpawn = {
+		{
+			timeMin = 60,
+			timeRand = 30,
+			speedMin = 0,
+			speedMax = 20,
+			orbitMult = 0.8,
+			orbitMultRand = 0.1,
+			orbitOtherDirChance = 0.2,
+			topBotChance = 0,
+			avoidOrbitOverWrap = false,
+			spawnRange = 0.7,
+			spawnOffset = 0,
+			typeName = {"police_slow"},
+			spawnRateFunc = function ()
+				local count = GameHandler.CountObject("police")
+				local pastCount = GameHandler.CountObject("police_total")
+				local spaceCount = GameHandler.CountObject("spaceAge")
+				if pastCount <= 1 then
+					if spaceCount > 0 then
+						return 0
+					end
+					return 100 - pastCount*92
+				end
+				return 1 - 0.5 * (count / (count + 1))
+			end,
+		},
 	},
 	planets = {
 		{
