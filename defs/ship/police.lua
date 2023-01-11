@@ -18,7 +18,8 @@ local function DoMovement(self)
 	local netForce = false
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "sun", -4500 * avoidMod, TerrainHandler.GetSunRadius() + 350, true))
 	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "planet", -3000 * avoidMod, Global.PLANET_RADIUS + 150, true))
-	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -1000 * avoidMod, 110, false))
+	netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "asteroid", -600 * avoidMod, 500, true))
+		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "bullet", -350 * speedMod, 400, true))
 	
 	if (not netForce) or util.AbsVal(netForce) < 1500 then
 		netForce = AddIfExists(netForce, planetUtils.ForceTowardsClosest(self.body, "player", 320 * speedMod, false, false))
