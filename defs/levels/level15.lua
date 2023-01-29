@@ -1,5 +1,6 @@
 
-local SPAWN_TIME_MULT = 3.5
+local SPAWN_TIME_MULT = 4
+local SHIP_SPAWN_MULT = 2
 
 local def = {
 	humanName = "Detritus",
@@ -10,7 +11,7 @@ Just salvage what you can.  So, ideally, all of it.
 ]],
 	prevLevel = "level14",
 	nextLevel = "level16",
-	gravity = 60,
+	gravity = 45,
 	starCount = 980,
 	asteroidSpawn = {
 		{
@@ -18,20 +19,28 @@ Just salvage what you can.  So, ideally, all of it.
 			timeRand = 0.8 * SPAWN_TIME_MULT,
 			speedMin = 0,
 			speedMax = 20,
-			orbitMult = 0.8,
+			orbitMult = 1.8,
 			orbitMultRand = 0.1,
+			spawnAngleTweak = 0.29,
 			orbitMultBothDirections = 0,
 			topBotChance = 1,
 			avoidOrbitOverWrap = true,
 			spawnRange = 0.3,
-			spawnOffset = -0.16,
+			spawnOffset = -0.3,
 			typeName = {
 				"asteroid_small", "asteroid_med", "asteroid_small", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big","asteroid_med",
 				"asteroid_small","asteroid_med", "asteroid_small","asteroid_med", "asteroid_small", "asteroid_big", "asteroid_small", "asteroid_med",
 				"asteroid_small", "asteroid_med", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big", "asteroid_big", "asteroid_small",
 				"asteroid_med", "asteroid_small", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big","asteroid_med", "asteroid_small",
 				"asteroid_med", "asteroid_small","asteroid_med", "asteroid_small", "asteroid_med", "asteroid_small", "asteroid_med", "asteroid_small",
-				"asteroid_med", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big", "asteroid_huge", "monolith"
+				"asteroid_med", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big",
+				"asteroid_huge", "monolith", "monolith", "monolith", "monolith", "monolith",
+				"asteroid_small", "asteroid_med", "asteroid_small", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big","asteroid_med",
+				"asteroid_small","asteroid_med", "asteroid_small","asteroid_med", "asteroid_small", "asteroid_big", "asteroid_small", "asteroid_med",
+				"asteroid_small", "asteroid_med", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big", "asteroid_big", "asteroid_small",
+				"asteroid_med", "asteroid_small", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big","asteroid_med", "asteroid_small",
+				"asteroid_med", "asteroid_small","asteroid_med", "asteroid_small", "asteroid_med", "asteroid_small", "asteroid_med", "asteroid_small",
+				"asteroid_med", "asteroid_med", "asteroid_big", "asteroid_big", "asteroid_big",
 			},
 			spawnRateFunc = function ()
 				return 20 * (25 / (25 + GameHandler.CountObject("asteroid")))
@@ -40,8 +49,8 @@ Just salvage what you can.  So, ideally, all of it.
 	},
 	shipSpawn = {
 		{
-			timeMin = 1.5,
-			timeRand = 5,
+			timeMin = 2.5 * SHIP_SPAWN_MULT,
+			timeRand = 7 * SHIP_SPAWN_MULT,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -58,12 +67,12 @@ Just salvage what you can.  So, ideally, all of it.
 				if pastCount == 0 then
 					return 4 -- Spawn quickly first time
 				end
-				return 1 - 0.6 * (count / (count + 4))
+				return 0.7 - 0.2 * (count / (count + 4))
 			end,
 		},
 		{
-			timeMin = 8,
-			timeRand = 20,
+			timeMin = 8 * SHIP_SPAWN_MULT,
+			timeRand = 20 * SHIP_SPAWN_MULT,
 			speedMin = 0,
 			speedMax = 20,
 			orbitMult = 0.8,
@@ -87,7 +96,7 @@ Just salvage what you can.  So, ideally, all of it.
 	planets = {
 		{
 			name = "planet1",
-			pos = {-950, 350},
+			pos = {-1050, 420},
 			radius = Global.PLANET_RADIUS,
 			density = 150,
 			ageProgress = 0.5,
@@ -113,7 +122,7 @@ Just salvage what you can.  So, ideally, all of it.
 	sun = {
 		alignX = 0.5,
 		alignY = 0.5,
-		radius = 220,
+		radius = 250,
 		image = "sun",
 	},
 	asteroids = {

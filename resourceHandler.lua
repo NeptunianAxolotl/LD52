@@ -342,7 +342,6 @@ function api.DrawImageOrAnimation(name, x, y, progress, rotation, alpha, scale, 
 	elseif self.images[name] then
 		api.DrawImage(name, x, y, rotation, alpha, scale, color)
 	end
-	print("Invalid DrawImageOrAnimation ", name)
 end
 
 --------------------------------------------------

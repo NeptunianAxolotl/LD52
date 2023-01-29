@@ -168,6 +168,9 @@ local function CheckEnemyTypeSpawn(spawnData, spawnIndex, dt, timerTable, spawnF
 			end
 		end
 		
+		if spawnData.spawnAngleTweak then
+			velocity = util.RotateVector(velocity, spawnData.spawnAngleTweak)
+		end
 		local toSpawn = {
 			pos = pos,
 			velocity = velocity,
