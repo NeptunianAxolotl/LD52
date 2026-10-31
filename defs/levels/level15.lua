@@ -114,9 +114,8 @@ Just salvage what you can.  So, ideally, all of it.
 	},
 	goal = {
 		planet1 = {
-			philosopher = 1,
+			philosopher = 2,
 			inventor = 1,
-			scientist = 1,
 		}
 	},
 	sun = {
