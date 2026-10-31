@@ -1,6 +1,6 @@
 
 local SPAWN_TIME_MULT = 4
-local SHIP_SPAWN_MULT = 2
+local SHIP_SPAWN_MULT = 1.2
 
 local def = {
 	humanName = "Detritus",
@@ -114,9 +114,9 @@ Just salvage what you can.  So, ideally, all of it.
 	},
 	goal = {
 		planet1 = {
-			philosopher = 3,
-			inventor = 3,
-			scientist = 3,
+			philosopher = 1,
+			inventor = 1,
+			scientist = 1,
 		}
 	},
 	sun = {
